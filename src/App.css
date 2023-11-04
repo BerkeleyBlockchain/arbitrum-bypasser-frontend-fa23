@@ -1,5 +1,10 @@
-.App {
-  text-align: center;
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+
+body, .App {
+  font-family: 'Inter', sans-serif;
+  background-color: rgba(0, 0, 0, 0.65); /* Black with 30% opacity */
+  min-height: 100vh; /* Make sure it covers the full height of the viewport */
+  margin: 0; /* Remove default margin */
 }
 
 .App-logo {
