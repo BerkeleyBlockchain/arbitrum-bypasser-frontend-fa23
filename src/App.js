@@ -1,8 +1,39 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import './App.css';
 import { FaTwitter, FaDiscord, FaSearch, FaFilter, FaExchangeAlt } from 'react-icons/fa';
 
 function App() {
+  const [fromNetwork, setFromNetwork] = useState('Ethereum Mainnet');
+  const [toNetwork, setToNetwork] = useState('Interstellar Mainnet');
+  const [ethAmount, setEthAmount] = useState('1.5');
+  const [connectedAccount, setConnectedAccount] = useState(null);
+
+  useEffect(() => {
+    checkMetaMask();
+  }, []);
+
+  function checkMetaMask() {
+    if (typeof window.ethereum !== 'undefined') {
+      console.log('MetaMask is installed!');
+    } else {
+      console.log('MetaMask is not installed. Please install it.');
+    }
+  }
+
+  async function connectWallet() {
+    try {
+      if (window.ethereum) {
+        const accounts = await window.ethereum.request({ method: 'eth_requestAccounts' });
+        console.log('Connected', accounts[0]);
+        setConnectedAccount(accounts[0]); // Set the connected account
+      } else {
+        alert('Please install MetaMask!');
+      }
+    } catch (error) {
+      console.error(error);
+    }
+  }
+
   return (
     <div className="App">
       <nav className="bg-black text-white p-4 flex justify-between items-center">
@@ -12,15 +43,18 @@ function App() {
             Transactions
           </button>
         </div>
-        <h1 className="text-2xl font-bold">Your Logo Here</h1>
         <div className="flex items-center">
           <FaTwitter className="text-white ml-4 mr-2" size={24} />
           <FaDiscord className="text-white mx-2" size={24} />
-          <button className="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded ml-2">
+          <button
+            onClick={connectWallet}
+            className="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded ml-2"
+          >
             Connect Wallet
           </button>
         </div>
       </nav>
+
       <div className="text-white text-center mt-32 mb-8">
         <h2 className="text-4xl font-bold mb-8">Execute Transactions from your ETH account</h2>
         <div className="inline-flex justify-center items-center w-full px-4 py-3 rounded-lg bg-gray-800" style={{ maxWidth: '800px', backgroundColor: 'rgba(17, 19, 24, 1)' }}>
@@ -36,27 +70,58 @@ function App() {
           </button>
         </div>
       </div>
+
       <div className="flex justify-center items-start mt-8 mb-8">
         <div className="relative inline-block w-full px-6 py-6 rounded-lg bg-gray-800 shadow-lg" style={{ maxWidth: '800px', backgroundColor: 'rgba(17, 19, 24, 1)' }}>
-          {/* ... transaction card content */}
+          
           <div className="flex items-center text-sm font-medium">
             <div className="w-1/2 text-left">
-              <p className="text-white"><span style={{ color: 'rgba(99, 117, 146, 1)' }}>From:</span> Ethereum Mainnet</p>
-              <div className="mt-3 px-4 py-2 rounded shadow flex items-center justify-center" style={{ backgroundColor: 'rgba(25, 29, 36, 1)' }}>
-                <p className="text-white">1.5 ETH</p>
+              <div className="mb-3">
+                <span className="text-white" style={{ color: 'rgba(99, 117, 146, 1)' }}>From:</span>
+                <select 
+                  value={fromNetwork} 
+                  onChange={e => setFromNetwork(e.target.value)}
+                  className="ml-2 bg-gray-700 text-white rounded p-1"
+                >
+                  <option value="Ethereum Mainnet">Ethereum Mainnet</option>
+                  <option value="Binance Smart Chain">Binance Smart Chain</option>
+                  <option value="Polygon">Polygon</option>
+                  <option value="Solana">Solana</option>
+                </select>
               </div>
-              <p className="text-white mt-2"><span style={{ color: 'rgba(99, 117, 146, 1)' }}>Balance: 0.5 </span> <span className="text-blue-500">MAX</span></p>
+              
+              <div className="mt-3 px-4 py-2 rounded shadow flex items-center justify-center" style={{ backgroundColor: 'rgba(25, 29, 36, 1)' }}>
+                <input 
+                  type="text" 
+                  value={ethAmount}
+                  onChange={e => setEthAmount(e.target.value)}
+                  className="text-white bg-transparent focus:outline-none"
+                />
+                <span className="text-white ml-2">ETH</span>
+              </div>
             </div>
-            <div className="mx-4">
+
+            <div className="mx-4 my-auto">
               <FaExchangeAlt className="text-white text-2xl" />
             </div>
-            <div className="flex-1 text-left">
-              <div className="flex flex-col items-start">
-                <p className="text-white"><span style={{ color: 'rgba(99, 117, 146, 1)' }}>To:</span> Interstellar Mainnet</p>
-                <div className="mt-3 px-4 py-2 rounded shadow flex items-center justify-center w-full" style={{ backgroundColor: 'rgba(25, 29, 36, 1)' }}>
-                  <p className="text-white">1500 IST</p>
-                </div>
-                <p className="text-white mt-2"><span style={{ color: 'rgba(99, 117, 146, 1)' }}>Balance: 0.5 </span> <span className="text-blue-500">MAX</span></p>
+
+            <div className="w-1/2 text-left">
+              <div className="mb-3">
+                <span className="text-white" style={{ color: 'rgba(99, 117, 146, 1)' }}>To:</span>
+                <select 
+                  value={toNetwork} 
+                  onChange={e => setToNetwork(e.target.value)}
+                  className="ml-2 bg-gray-700 text-white rounded p-1"
+                >
+                  <option value="Interstellar Mainnet">Interstellar Mainnet</option>
+                  <option value="Ethereum Mainnet">Ethereum Mainnet</option>
+                  <option value="Binance Smart Chain">Binance Smart Chain</option>
+                  <option value="Polygon">Polygon</option>
+                  <option value="Solana">Solana</option>
+                </select>
+              </div>
+              <div className="mb-3 px-4 py-2 rounded shadow flex items-center justify-center" style={{ backgroundColor: 'rgba(25, 29, 36, 1)' }}>
+                <span className="text-white">1500 IST</span>
               </div>
             </div>
           </div>
