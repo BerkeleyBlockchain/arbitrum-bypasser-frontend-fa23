@@ -79,17 +79,17 @@ function App() {
               <div className="h-8 w-8 bg-blue-600 rounded-full flex items-center justify-center text-white font-bold">1</div>
               <span className="text-xs text-white ml-2">Starting Swap</span>
             </div>
-            <div className="h-16 w-1 bg-blue-600"></div>
+            <div className="h-16 w-1 bg-blue-600" style={{ marginLeft: '15px' }}></div>
             <div className="flex items-center">
               <div className="h-8 w-8 bg-blue-600 rounded-full flex items-center justify-center text-white font-bold">2</div>
               <span className="text-xs text-white ml-2">Crossing Bridge</span>
             </div>
-            <div className="h-16 w-1 bg-blue-600"></div>
+            <div className="h-16 w-1 bg-blue-600" style={{ marginLeft: '15px' }}></div>
             <div className="flex items-center">
               <div className="h-8 w-8 bg-blue-600 rounded-full flex items-center justify-center text-white font-bold">3</div>
               <span className="text-xs text-white ml-2">Approving Transfer</span>
             </div>
-            <div className="h-16 w-1 bg-blue-600"></div>
+            <div className="h-16 w-1 bg-blue-600" style={{ marginLeft: '15px' }}></div>
             <div className="flex items-center">
               <div className="h-8 w-8 bg-blue-600 rounded-full flex items-center justify-center text-white font-bold">4</div>
               <span className="text-xs text-white ml-2">Complete</span>
