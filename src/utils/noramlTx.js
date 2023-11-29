@@ -95,7 +95,7 @@ const main = async () => {
   const l2TxReceipt = await l2Provider.waitForTransaction(l2Txhash);
 
   const status = l2TxReceipt.status;
-  if (status == true) {
+  if (status === true) {
     console.log(`L2 txn executed!!! 🥳 `);
   } else {
     console.log(`L2 txn failed, see if your gas is enough?`);
