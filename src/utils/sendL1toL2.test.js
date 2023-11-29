@@ -7,6 +7,7 @@ const {
   ArbSys__factory,
 } = require("@arbitrum/sdk/dist/lib/abi/factories/ArbSys__factory");
 const { InboxTools } = require("@arbitrum/sdk");
+const { arbLog } = require("arb-shared-dependencies");
 
 /**
  * Set up: instantiate L1 / L2 wallets connected to providers

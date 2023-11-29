@@ -8,7 +8,8 @@ const {
 } = require("@arbitrum/sdk/dist/lib/abi/factories/ArbSys__factory");
 const { InboxTools } = require("@arbitrum/sdk");
 
-const { arbLog, requireEnvVariables } = require("arb-shared-dependencies");
+const { arbLog } = require("arb-shared-dependencies");
+// const { arbLog, requireEnvVariables } = require("arb-shared-dependencies");
 // requireEnvVariables(["DEVNET_PRIVKEY", "L2RPC", "L1RPC"]);
 
 /**
