@@ -1,18 +1,12 @@
 const { providers, Wallet, ethers } = require("ethers");
-const { arbLog, requireEnvVariables } = require("arb-shared-dependencies");
 const {
   getL2Network,
   addDefaultLocalNetwork,
 } = require("@arbitrum/sdk/dist/lib/dataEntities/networks");
-const { InboxTools } = require("@arbitrum/sdk");
 const {
   ArbSys__factory,
 } = require("@arbitrum/sdk/dist/lib/abi/factories/ArbSys__factory");
-
-const {
-  ARB_SYS_ADDRESS,
-} = require("@arbitrum/sdk/dist/lib/dataEntities/constants");
-// requireEnvVariables(["DEVNET_PRIVKEY", "REACT_APP_L2RPC", "REACT_APP_L1RPC"]);
+const { InboxTools } = require("@arbitrum/sdk");
 
 /**
  * Set up: instantiate L1 / L2 wallets connected to providers
@@ -20,6 +14,7 @@ const {
 const walletPrivateKey =
   "0x0af43f1582c473359da6e4cb68e9e78047c3299e359e2c6a15cbce4b679362c4";
 
+// alchemy nodes for testing
 const l1Provider = new providers.JsonRpcProvider(
   "https://eth-goerli.g.alchemy.com/v2/L5s9838qOYy-EynxkD7bDvhs8khd_1-z"
 );
@@ -30,34 +25,39 @@ const l2Provider = new providers.JsonRpcProvider(
 const l1Wallet = new Wallet(walletPrivateKey, l1Provider);
 const l2Wallet = new Wallet(walletPrivateKey, l2Provider);
 
-const main = async () => {
-  await arbLog("DelayedInbox withdraw funds from l2 (L2MSG_signedTx)");
+/**
+ * Main Function Testing
+ */
+const main = async (address, abi_function, parameters) => {
+  await arbLog("DelayedInbox normal contract call (L2MSG_signedTx)");
 
   /**
    * Add the default local network configuration to the SDK
    * to allow this script to run on a local node
    */
   addDefaultLocalNetwork();
-
   const l2Network = await getL2Network(await l2Wallet.getChainId());
-
   const inboxSdk = new InboxTools(l1Wallet, l2Network);
 
   /**
    * Here we have a arbsys abi to withdraw our funds; we'll be setting it by sending it as a message from delayed inbox!!!
    */
+  const desiredAddress = address;
+  const factoryConnection = ArbSys__factory.connect(desiredAddress, l2Provider);
+  const factoryInterface = factoryConnection.interface;
 
-  const arbSys = ArbSys__factory.connect(ARB_SYS_ADDRESS, l2Provider);
-
-  const arbsysIface = arbSys.interface;
-  const calldatal2 = arbsysIface.encodeFunctionData("withdrawEth", [
-    l1Wallet.address,
-  ]);
+  const desiredFunction = abi_function;
+  const desiredParams = parameters;
+  const desiredCallDataL2 = factoryInterface.encodeFunctionData(
+    desiredFunction,
+    desiredParams
+  );
+  const desiredValue = 1;
 
   const transactionl2Request = {
-    data: calldatal2,
-    to: ARB_SYS_ADDRESS,
-    value: 1, // Only set 1 wei since it just a test tutorial, you can set whatever you want in real runtime.
+    data: desiredCallDataL2,
+    to: desiredAddress,
+    value: desiredValue,
   };
 
   /**
@@ -67,33 +67,35 @@ const main = async () => {
 
   const l2Txhash = ethers.utils.parseTransaction(l2SignedTx).hash;
 
-  const resultsL1 = await inboxSdk.sendL2SignedTx(l2SignedTx);
+  const l1Tx = await inboxSdk.sendL2SignedTx(l2SignedTx);
 
-  const inboxRec = await resultsL1.wait();
+  const inboxRec = await l1Tx.wait();
 
-  console.log(`Withdraw txn initiated on L1! 🙌 ${inboxRec.transactionHash}`);
+  console.log(
+    `TXN to send to delayed inbox confirmed on L1! 🙌 ${inboxRec.transactionHash}`
+  );
 
   /**
-   * Now we successfully send the tx to l1 delayed inbox, then we need to wait the tx to be executed on l2
+   * Now we successfully send the tx to l1 delayed inbox, then we need to wait the tx executed on l2
    */
   console.log(
-    `Now we need to wait tx: ${l2Txhash} to be included on l2 (may take 15 minutes, if longer than 1 day, you can use sdk to force include) ....... `
+    `Now we need to wait for tx to be finalized on L2: ${l2Txhash} to be included on l2 (may take 15 minutes) ....... `
   );
 
   const l2TxReceipt = await l2Provider.waitForTransaction(l2Txhash);
 
   const status = l2TxReceipt.status;
   if (status === true) {
-    console.log(
-      `L2 txn executed!!! 🥳 , you can go to https://bridge.arbitrum.io/ to execute your withdrawal and recieve your funds after challenge period!`
-    );
+    console.log(`L2 txn executed!!! 🥳 `);
   } else {
     console.log(`L2 txn failed, see if your gas is enough?`);
     return;
   }
 };
 
-main()
+main("0x0000000000000000000000000000000000000064", "withdrawEth", [
+  l1Wallet.address,
+])
   .then(() => process.exit(0))
   .catch((error) => {
     console.error(error);

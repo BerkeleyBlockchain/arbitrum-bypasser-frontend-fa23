@@ -29,9 +29,12 @@ const l1Wallet = new Wallet(walletPrivateKey, l1Provider);
 const l2Wallet = new Wallet(walletPrivateKey, l2Provider);
 
 /**
- * Main Function Testing
+ * Function to send a transaction to the delayed inbox in L2 via L1
+ * @address string ~ address of the contract
+ * @abi_function  string ~ function name from abi dictionary
+ * @parameters array ~ [value, value, value, ...]
  */
-const main = async (address, abi_function, parameters) => {
+export const sendL1toL2 = async (address, abi_function, parameters) => {
   await arbLog("DelayedInbox normal contract call (L2MSG_signedTx)");
 
   /**
@@ -94,13 +97,6 @@ const main = async (address, abi_function, parameters) => {
     console.log(`L2 txn failed, see if your gas is enough?`);
     return;
   }
-};
 
-main("0x0000000000000000000000000000000000000064", "withdrawEth", [
-  l1Wallet.address,
-])
-  .then(() => process.exit(0))
-  .catch((error) => {
-    console.error(error);
-    process.exit(1);
-  });
+  return l2TxReceipt;
+};
