@@ -8,22 +8,18 @@ const {
 } = require("@arbitrum/sdk/dist/lib/abi/factories/ArbSys__factory");
 const { InboxTools } = require("@arbitrum/sdk");
 
-const { arbLog } = require("arb-shared-dependencies");
-// const { arbLog, requireEnvVariables } = require("arb-shared-dependencies");
-// requireEnvVariables(["DEVNET_PRIVKEY", "L2RPC", "L1RPC"]);
-
 /**
  * Set up: instantiate L1 / L2 wallets connected to providers
  */
 const walletPrivateKey =
-  "0x0af43f1582c473359da6e4cb68e9e78047c3299e359e2c6a15cbce4b679362c4";
+  process.env.REACT_APP_DEVNET_PRIVKEY;
 
 // alchemy nodes for testing
 const l1Provider = new providers.JsonRpcProvider(
-  "https://eth-goerli.g.alchemy.com/v2/L5s9838qOYy-EynxkD7bDvhs8khd_1-z"
+  process.env.REACT_APP_L1RPC
 );
 const l2Provider = new providers.JsonRpcProvider(
-  "https://arb-goerli.g.alchemy.com/v2/8loe5yJ750okSTjFb7WS3bWXrMD8I1FA"
+  process.env.REACT_APP_L2RPC
 );
 
 const l1Wallet = new Wallet(walletPrivateKey, l1Provider);
@@ -36,7 +32,9 @@ const l2Wallet = new Wallet(walletPrivateKey, l2Provider);
  * @parameters array ~ [value, value, value, ...]
  */
 export const sendL1toL2 = async (address, abi_function, parameters) => {
-  await arbLog("DelayedInbox normal contract call (L2MSG_signedTx)");
+  const i = 
+  console.log(i);
+  console.log("DelayedInbox normal contract call (L2MSG_signedTx)");
 
   /**
    * Add the default local network configuration to the SDK
@@ -51,6 +49,7 @@ export const sendL1toL2 = async (address, abi_function, parameters) => {
    */
   const desiredAddress = address;
   const factoryConnection = ArbSys__factory.connect(desiredAddress, l2Provider);
+  console.log(factoryConnection);
   const factoryInterface = factoryConnection.interface;
 
   const desiredFunction = abi_function;
@@ -67,19 +66,27 @@ export const sendL1toL2 = async (address, abi_function, parameters) => {
     value: desiredValue,
   };
 
+  console.log(transactionl2Request);
+
   /**
    * We need extract l2's tx hash first so we can check if this tx executed on l2 later.
    */
   const l2SignedTx = await inboxSdk.signL2Tx(transactionl2Request, l2Wallet);
+  console.log("Signed L2 tx: ", l2SignedTx);
+  return;
 
   const l2Txhash = ethers.utils.parseTransaction(l2SignedTx).hash;
+  console.log(`L2 tx hash: https://goerli.arbiscan.io/tx/${l2Txhash}`);
 
   const l1Tx = await inboxSdk.sendL2SignedTx(l2SignedTx);
+  console.log(
+    `Sent this hash to L1 delayed inbox! https://goerli.etherscan.io/tx/${l1Tx.hash}`
+  );
+  console.log("Waiting for this transaciton to settle on L1...")
 
   const inboxRec = await l1Tx.wait();
-
   console.log(
-    `TXN to send to delayed inbox confirmed on L1! 🙌 ${inboxRec.transactionHash}`
+    `Settled on L1! Address here: 🙌  https://goerli.etherscan.io/tx/${inboxRec.transactionHash}`
   );
 
   /**
