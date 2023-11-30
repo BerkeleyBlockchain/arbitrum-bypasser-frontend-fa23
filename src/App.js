@@ -8,6 +8,11 @@ import {
   FaCheckCircle,
 } from "react-icons/fa";
 import { sendL1toL2 } from "./utils/sendL1toL2";
+import {
+  fetchProtocolList,
+  fetchFunctionList,
+  fetchParamFields,
+} from "./utils/fetchContract";
 
 function App() {
   const [fromNetwork, setFromNetwork] = useState("Ethereum Mainnet");
@@ -32,6 +37,16 @@ function App() {
 
   function handleSwapClick() {
     setIsSwapped(true);
+  }
+
+  async function testing() {
+    // sendL1toL2("0x0000000000000000000000000000000000000064", "withdrawEth", ['0xEbd7E58bd9413C71c76a7D4F641563dC4E05aB94']);
+    // const ok = await fetchProtocolList(false);
+    const ok = await fetchFunctionList(
+      false,
+      "0xE971136E269ee49dcbf42f1C3E65538f97D21A51"
+    );
+    console.log(ok);
   }
 
   async function connectWallet() {
@@ -197,12 +212,10 @@ function App() {
                 onClick={handleSwapClick}
                 className="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-6 rounded-full mx-2"
               >
-                Swap
+                Execute
               </button>
               <button
-                onClick={() => {
-                  sendL1toL2("0x0000000000000000000000000000000000000064", "withdrawEth", ['0xEbd7E58bd9413C71c76a7D4F641563dC4E05aB94']);
-                }}
+                onClick={testing}
                 className="bg-gray-600 hover:bg-blue-700 text-white font-bold py-2 px-6 rounded-full mx-2"
               >
                 Change Protocol
