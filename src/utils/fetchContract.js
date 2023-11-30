@@ -29,4 +29,7 @@ export const fetchFunctionList = async (mainnet_bool, protocol_address) => {
   return map;
 };
 
-export const fetchParamFields = (mainnet_bool, function_list) => {};
+// // return dict of param to empty1
+// export const fetchParamFields = async (mainnet_bool, function_list) => {
+
+// };
