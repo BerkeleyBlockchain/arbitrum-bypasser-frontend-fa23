@@ -25,7 +25,7 @@ export default function SwapPage() {
     });
 
     // convert to ETH and round to 2 decimal places
-    const balanceInEth = (balance / 10 ** 18).toFixed(2);
+    const balanceInEth = (balance / 10 ** 18).toFixed(4);
     console.log('Balance in ETH', balanceInEth);
     setEtherBalance(balanceInEth);
   }
