@@ -1,21 +1,40 @@
-import React, {useState, useEffect} from 'react';
-import { FaTwitter, FaDiscord, FaSearch, FaFilter, FaCheckCircle } from 'react-icons/fa';
+import React, { useEffect, useState } from 'react';
+import { FaCheckCircle, FaFilter, FaSearch } from 'react-icons/fa';
+import { useDispatch, useSelector } from 'react-redux';
 
 import './SwapPage.css';
 
 export default function SwapPage() {
+  const dispatch = useDispatch();
+  const connectedAccount = useSelector(state => state.connectedAccount);
   const [fromNetwork, setFromNetwork] = useState('Ethereum Mainnet');
   const [ethAmount, setEthAmount] = useState('1.5');
-  const [connectedAccount, setConnectedAccount] = useState(null);
   const [formInputOne, setFormInputOne] = useState('');
   const [formInputTwo, setFormInputTwo] = useState('');
   const [isSwapped, setIsSwapped] = useState(false);
-  const [isChosen, setIsChosen] = useState(false);
   const [tokenSymbol, setTokenSymbol] = useState('ETH');
+
+  const [etherBalance, setEtherBalance] = useState(null);
+  // const etherBalance = useSyncExternalStore(getEthBalance, connectedAccount);
+
+  async function getEthBalance(setEtherBalance) {
+    if (!connectedAccount) return;
+    const balance = await window.ethereum.request({
+      method: 'eth_getBalance',
+      params: [connectedAccount, 'latest'],
+    });
+
+    // convert to ETH and round to 2 decimal places
+    const balanceInEth = (balance / 10 ** 18).toFixed(2);
+    console.log('Balance in ETH', balanceInEth);
+    setEtherBalance(balanceInEth);
+  }
+
 
   useEffect(() => {
     checkMetaMask();
-  }, []);
+    getEthBalance(setEtherBalance)
+  }, [connectedAccount]);
 
   function checkMetaMask() {
     if (typeof window.ethereum !== 'undefined') {
@@ -34,14 +53,6 @@ export default function SwapPage() {
     setIsSwapped(true);
   }
 
-  function checkMetaMask() {
-    if (typeof window.ethereum !== 'undefined') {
-      console.log('You have Metamask!');
-    } else {
-      console.log('You do not have Metamask! Please log in.');
-    }
-  }
-
   const tokenHandles = {
     'Ethereum Mainnet': 'ETH',
     'Binance': 'BNB',
@@ -50,41 +61,8 @@ export default function SwapPage() {
     //more should be added here as needed
   };
 
-
-  async function connectWallet() {
-    try {
-      if (window.ethereum) {
-        const accounts = await window.ethereum.request({ method: 'eth_requestAccounts' });
-        console.log('Connected', accounts[0]);
-        setConnectedAccount(accounts[0]);
-      } else {
-        alert('Please install MetaMask!');
-      }
-    } catch (error) {
-      console.error(error);
-    }
-  }
-
   return (
     <div className="App">
-      <nav className="bg-black text-white p-4 flex justify-between items-center">
-        <div className="flex items-center">
-          <button className="bg-gray-700 hover:bg-gray-800 text-white font-bold py-2 px-4 rounded flex items-center">
-            <span className="h-3 w-3 border-2 border-white rounded-full mr-2"></span>
-            Transactions
-          </button>
-        </div>
-        <div className="flex items-center">
-          <FaTwitter className="text-white ml-4 mr-2" size={24} />
-          <FaDiscord className="text-white mx-2" size={24} />
-          <button
-            onClick={connectWallet}
-            className="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded ml-2"
-          >
-            Connect Wallet
-          </button>
-        </div>
-      </nav>
 
       {/* Search Bar Section */}
       <div className="text-white text-center mt-32 mb-8">
@@ -135,10 +113,8 @@ export default function SwapPage() {
                   <span className="text-white ml-2">{tokenSymbol}</span>
                 </div>
                 <div className="text-left text-white text-xs" style={{ color: 'rgba(99, 117, 146, 1)', marginTop: '20px' }}>
-
-                  {/* need to obtain from wallet data  */}
-                  <span>Balance: 0.79 </span>
-                  <span style={{ color: '#3182ce' }}>MAX</span>
+                  {connectedAccount && <span>Balance: {etherBalance} <span style={{ color: '#3182ce' }}>MAX</span></span>}
+                  {!connectedAccount && <span>Connecte wallet to see balance</span>}
                 </div>
                 <hr className="my-4 border-gray-700" style={{ width: 'calc(100% - 20px)' }} />
 
