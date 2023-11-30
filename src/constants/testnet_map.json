@@ -1,0 +1,14 @@
+{
+  "0x2Bfac4CcbA5A619B8DBC106D18AdB12286f8f72d": {
+    "name": "PSYBotRouter",
+    "file": "PSYBotRouter_ABI.json"
+  },
+  "0xE971136E269ee49dcbf42f1C3E65538f97D21A51": {
+    "name": "Pepe",
+    "file": "Pepe_ABI.json"
+  },
+  "0x7238885B5504092a27530F02DE7118C7d305320f": {
+    "name": "TestStorms",
+    "file": "TestStorms_ABI.json"
+  }
+}

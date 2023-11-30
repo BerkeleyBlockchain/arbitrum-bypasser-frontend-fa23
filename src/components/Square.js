@@ -5,7 +5,7 @@ function Square({ name, type, imageLink }) {
   const navigate = useNavigate();
 
   const handleClick = () => {
-    navigate('/transactions', { state: { name } });
+    navigate('/swap', { state: { name } });
   };
 
   return (
