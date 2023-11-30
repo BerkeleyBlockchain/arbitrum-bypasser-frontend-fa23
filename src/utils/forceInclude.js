@@ -7,7 +7,6 @@ const {
   ArbSys__factory,
 } = require("@arbitrum/sdk/dist/lib/abi/factories/ArbSys__factory");
 const { InboxTools } = require("@arbitrum/sdk");
-import { L2Network, getL2Network } from '../src/lib/dataEntities/networks'
 
 
 // ******************* Grab Custom Node RPCS for Eth and Goerli *******************
@@ -35,6 +34,26 @@ async function isBlockEligibleForForceInclusion(blockNumber) {
   const timeElapsed = currentTime - block.timestamp;
   return timeElapsed > DELAY_PERIOD;
 }
+async function main() {
+  // The third element in process.argv is your first command-line argument
+  const blockHash = process.argv[2];
+
+  if (!blockHash) {
+      console.error("Please provide a block hash.");
+      process.exit(1);
+  }
+
+  // Call your forceInclude function here with the blockHash
+  try {
+      await forceInclude(blockHash);
+      console.log("Force include executed successfully.");
+  } catch (error) {
+      console.error("Error during force include:", error.message);
+  }
+}
+
+// Execute the main function
+main();
 
 /**
  * Primary function to send a transaction to the delayed inbox in L2 via L1
@@ -42,7 +61,7 @@ async function isBlockEligibleForForceInclusion(blockNumber) {
  * @param {string} abi_function ~ function name from abi dictionary
  * @param {array} parameters ~ [value, value, value, ...]
  */
-export const forceInclude = async (block) => {
+const forceInclude = async (block) => {
   console.log(`Checking force inclusion for block ${blockNumber}`);
 
   // Check if the block is eligible for force inclusion
@@ -85,3 +104,4 @@ export const forceInclude = async (block) => {
   //expect(messagesReadAfter.toNumber(), 'Message not read').to.eq(
     //startInboxLength.add(1).toNumber()
 };
+module.exports = { forceInclude };
