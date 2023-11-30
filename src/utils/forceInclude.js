@@ -54,10 +54,10 @@ export const forceInclude = async (block) => {
 
   // Initialize InboxTools
   const l2Network = await getL2Network(await l2Wallet.getChainId());
-  const inboxTools = new InboxTools(l1Wallet, l2Network);
+  const inboxSdk = new InboxTools(l1Wallet, l2Network);
 
   // Execute force include
-  const forceInclusionTx = await inboxTools.forceInclude({
+  const forceInclusionTx = await inboxSdk.forceInclude({
     blockNumber: BigNumber.from(blockNumber)
   });
 
