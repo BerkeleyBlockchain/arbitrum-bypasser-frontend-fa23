@@ -17,6 +17,23 @@ const walletPrivateKey = process.env.REACT_APP_DEVNET_PRIVKEY; // might need to 
 const l1Wallet = new Wallet(walletPrivateKey, l1Provider);
 const l2Wallet = new Wallet(walletPrivateKey, l2Provider);
 
+const { BigNumber } = require("ethers");
+
+// Add these constants at the top of your file
+const DELAY_PERIOD = 24 * 60 * 60; // 24 hours in seconds
+
+/**
+ * Check if a block is eligible for force inclusion.
+ * @param {number} blockNumber - The block number to check.
+ * @returns {boolean} True if the block is eligible for force inclusion, false otherwise.
+ */
+async function isBlockEligibleForForceInclusion(blockNumber) {
+  const block = await l1Provider.getBlock(blockNumber);
+  const currentTime = Math.floor(Date.now() / 1000); 
+  const timeElapsed = currentTime - block.timestamp;
+  return timeElapsed > DELAY_PERIOD;
+}
+
 /**
  * Primary function to send a transaction to the delayed inbox in L2 via L1
  * @param {string} address ~ address of the contract
@@ -24,7 +41,31 @@ const l2Wallet = new Wallet(walletPrivateKey, l2Provider);
  * @param {array} parameters ~ [value, value, value, ...]
  */
 export const forceInclude = async (block) => {
-  console.log(`Force Include of just submitted block `);
+  console.log(`Checking force inclusion for block ${blockNumber}`);
+
+  // Check if the block is eligible for force inclusion
+  const isEligible = await isBlockEligibleForForceInclusion(blockNumber);
+  if (!isEligible) {
+    console.log("Block is not eligible for force inclusion.");
+    return;
+  }
+
+  // Initialize InboxTools
+  const l2Network = await getL2Network(process.env.REACT_APP_L2_NETWORK_ID);
+  const inboxTools = new InboxTools(l1Wallet, l2Network);
+
+  // Execute force include
+  const forceInclusionTx = await inboxTools.forceInclude({
+    blockNumber: BigNumber.from(blockNumber)
+  });
+
+  if (!forceInclusionTx) {
+    console.log("No eligible messages for force inclusion.");
+    return;
+  }
+
+  console.log(`Force including messages up to block ${blockNumber}`);
+  await forceInclusionTx.wait();
 
   // the submission time
   // find status
@@ -32,13 +73,13 @@ export const forceInclude = async (block) => {
   // if less than 24 hours exit, otherwise proceed
 
   // ******************* Execute force include *******************
-  const forceInclusionTx = await inboxTools.forceInclude()
+  //const forceInclusionTx = await inboxTools.forceInclude()
 
-  expect(forceInclusionTx, 'Null force inclusion').to.not.be.null
-  await forceInclusionTx!.wait()
+  //expect(forceInclusionTx, 'Null force inclusion').to.not.be.null
+  //await forceInclusionTx!.wait()
 
   const messagesReadAfter = await sequencerInbox.totalDelayedMessagesRead()
 
-  expect(messagesReadAfter.toNumber(), 'Message not read').to.eq(
-    startInboxLength.add(1).toNumber()
+  //expect(messagesReadAfter.toNumber(), 'Message not read').to.eq(
+    //startInboxLength.add(1).toNumber()
 };
