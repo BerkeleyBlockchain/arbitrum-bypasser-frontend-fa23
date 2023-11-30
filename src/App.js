@@ -22,6 +22,7 @@ function App() {
   const [formInputTwo, setFormInputTwo] = useState("");
   const [isSwapped, setIsSwapped] = useState(false);
   const [isChosen, setIsChosen] = useState(false);
+  const [tokenSymbol, setTokenSymbol] = useState("ETH");
 
   useEffect(() => {
     checkMetaMask();
@@ -34,6 +35,11 @@ function App() {
       console.log("MetaMask is not installed. Please install it.");
     }
   }
+
+  useEffect(() => {
+    checkMetaMask();
+    setTokenSymbol(tokenHandles[fromNetwork] || "unknown");
+  }, [fromNetwork]);
 
   function handleSwapClick() {
     setIsSwapped(true);
@@ -48,6 +54,21 @@ function App() {
     );
     console.log(ok);
   }
+  function checkMetaMask() {
+    if (typeof window.ethereum !== "undefined") {
+      console.log("You have Metamask!");
+    } else {
+      console.log("You do not have Metamask! Please log in.");
+    }
+  }
+
+  const tokenHandles = {
+    "Ethereum Mainnet": "ETH",
+    Binance: "BNB",
+    Polygon: "MATIC",
+    Solana: "SOL",
+    //more should be added here as needed
+  };
 
   async function connectWallet() {
     try {
@@ -86,6 +107,7 @@ function App() {
         </div>
       </nav>
 
+      {/* Search Bar Section */}
       <div className="text-white text-center mt-32 mb-8">
         <h2 className="text-4xl font-bold mb-8">
           Execute Transactions from your ETH account
@@ -116,6 +138,7 @@ function App() {
               backgroundColor: "rgba(17, 19, 24, 1)",
             }}
           >
+            {/* Network Selection and Asset Input */}
             <div className="flex items-start text-sm font-medium">
               <div className="w-1/2 text-left">
                 <div className="mb-3">
@@ -131,14 +154,13 @@ function App() {
                     className="ml-2 bg-gray-700 text-white rounded p-1"
                   >
                     <option value="Ethereum Mainnet">Ethereum Mainnet</option>
-                    <option value="Binance Smart Chain">
-                      Binance Smart Chain
-                    </option>
+                    <option value="Binance">Binance</option>
                     <option value="Polygon">Polygon</option>
                     <option value="Solana">Solana</option>
                   </select>
                 </div>
 
+                {/* Amount input and Token Symbols */}
                 <div
                   className="mt-3 px-4 py-2 rounded shadow flex items-center justify-center"
                   style={{
@@ -152,12 +174,13 @@ function App() {
                     onChange={(e) => setEthAmount(e.target.value)}
                     className="text-white bg-transparent focus:outline-none"
                   />
-                  <span className="text-white ml-2">ETH</span>
+                  <span className="text-white ml-2">{tokenSymbol}</span>
                 </div>
                 <div
                   className="text-left text-white text-xs"
                   style={{ color: "rgba(99, 117, 146, 1)", marginTop: "20px" }}
                 >
+                  {/* need to obtain from wallet data  */}
                   <span>Balance: 0.79 </span>
                   <span style={{ color: "#3182ce" }}>MAX</span>
                 </div>
@@ -167,6 +190,7 @@ function App() {
                 />
 
                 <div className="text-left text-white text-xs">
+                  {/* need to obtain from coingecko api */}
                   <p>
                     Rate: 1 ETH = 1915.48 ARB{" "}
                     <span style={{ color: "rgba(99, 117, 146, 1)" }}>
