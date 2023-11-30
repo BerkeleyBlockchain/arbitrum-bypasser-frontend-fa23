@@ -7,6 +7,8 @@ const {
   ArbSys__factory,
 } = require("@arbitrum/sdk/dist/lib/abi/factories/ArbSys__factory");
 const { InboxTools } = require("@arbitrum/sdk");
+import { L2Network, getL2Network } from '../src/lib/dataEntities/networks'
+
 
 // ******************* Grab Custom Node RPCS for Eth and Goerli *******************
 const l1Provider = new providers.JsonRpcProvider(process.env.REACT_APP_L1RPC);
@@ -51,7 +53,7 @@ export const forceInclude = async (block) => {
   }
 
   // Initialize InboxTools
-  const l2Network = await getL2Network(process.env.REACT_APP_L2_NETWORK_ID);
+  const l2Network = await getL2Network(await l2Wallet.getChainId());
   const inboxTools = new InboxTools(l1Wallet, l2Network);
 
   // Execute force include
