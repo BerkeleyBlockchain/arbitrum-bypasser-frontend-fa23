@@ -7,7 +7,7 @@ const {
   ArbSys__factory,
 } = require("@arbitrum/sdk/dist/lib/abi/factories/ArbSys__factory");
 const { InboxTools } = require("@arbitrum/sdk");
-const { arbLog } = require("arb-shared-dependencies");
+// const { arbLog } = require("arb-shared-adependencies");
 
 /**
  * Set up: instantiate L1 / L2 wallets connected to providers
@@ -17,10 +17,10 @@ const walletPrivateKey =
 
 // alchemy nodes for testing
 const l1Provider = new providers.JsonRpcProvider(
-  "https://eth-goerli.g.alchemy.com/v2/L5s9838qOYy-EynxkD7bDvhs8khd_1-z"
+  "https://eth-sepolia.g.alchemy.com/v2/YAXqf4YJGj8gmSSf48H06zsOOd1RC4He"
 );
 const l2Provider = new providers.JsonRpcProvider(
-  "https://arb-goerli.g.alchemy.com/v2/8loe5yJ750okSTjFb7WS3bWXrMD8I1FA"
+  "https://arb-sepolia.g.alchemy.com/v2/vWAnjLmITpyO6myqPJNuxkjBS1nZUFE1"
 );
 
 const l1Wallet = new Wallet(walletPrivateKey, l1Provider);
@@ -30,7 +30,7 @@ const l2Wallet = new Wallet(walletPrivateKey, l2Provider);
  * Main Function Testing
  */
 const main = async (address, abi_function, parameters) => {
-  await arbLog("DelayedInbox normal contract call (L2MSG_signedTx)");
+  // await arbLog("DelayedInbox normal contract call (L2MSG_signedTx)");
 
   /**
    * Add the default local network configuration to the SDK
@@ -44,6 +44,7 @@ const main = async (address, abi_function, parameters) => {
    * Here we have a arbsys abi to withdraw our funds; we'll be setting it by sending it as a message from delayed inbox!!!
    */
   const desiredAddress = address;
+  console.log("Connecting to provider...");
   const factoryConnection = ArbSys__factory.connect(desiredAddress, l2Provider);
   const factoryInterface = factoryConnection.interface;
 
@@ -74,6 +75,8 @@ const main = async (address, abi_function, parameters) => {
 
   const inboxRec = await l1Tx.wait();
 
+  console.log("Sending to delayed inbox on L2...");
+
   console.log(
     `TXN to send to delayed inbox confirmed on L1! 🙌 ${inboxRec.transactionHash}`
   );
@@ -92,6 +95,7 @@ const main = async (address, abi_function, parameters) => {
     console.log(`L2 txn executed!!! 🥳 `);
   } else {
     console.log(`L2 txn failed, see if your gas is enough?`);
+    console.log("")
     return;
   }
 };
