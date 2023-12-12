@@ -58,33 +58,33 @@ export const sendL1toL2 = async (address, abi_function, parameters) => {
   console.log("Signed L2 tx: ", l2SignedTx);
 
   const l2Txhash = ethers.utils.parseTransaction(l2SignedTx).hash; // extract hash to check if tx executed on l2 later
-  console.log(`L2 tx hash: https://goerli.arbiscan.io/tx/${l2Txhash}`);
+  console.log(`L2 tx hash: https://sepolia.arbiscan.io/tx/${l2Txhash}`);
 
   const l1Tx = await inboxSdk.sendL2SignedTx(l2SignedTx);
-  console.log(
-    `Sent this hash to L1 delayed inbox! https://goerli.etherscan.io/tx/${l1Tx.hash}`
-  );
+  console.log(`L1 tx hash created: ${l1Tx.hash}`);
   console.log("Waiting for this transaciton to settle on L1...");
 
   const inboxRec = await l1Tx.wait();
   console.log(
-    `Settled on L1! Address here: 🙌  https://goerli.etherscan.io/tx/${inboxRec.transactionHash}`
+    `Settled on L1! Address here: 🙌  https://sepolia.etherscan.io/tx/${inboxRec.transactionHash}`
   );
 
   // ******************* Waiting for settlement on L2 *******************
   console.log(
     `Now we need to wait for tx to be finalized on L2: ${l2Txhash} to be included on l2 (may take 15 minutes) ....... `
   );
+  // Don't need to wait because this will move to frontend move this secitop
+  return { l1Tx: inboxRec.transactionHash, l2Tx: l2Txhash, l2Status: 0 };
+};
 
-  // TODO: Dont need to wait because this will move to frontend move this secitopn
+// ******************* Checking Transaction Completion *******************
+export const checkTx = async (l2Txhash) => {
   const l2TxReceipt = await l2Provider.waitForTransaction(l2Txhash);
-
   const status = l2TxReceipt.status;
-  if (status === true) {
-    console.log(`L2 txn executed!!! 🥳 `);
+  if (status == true) {
+    console.log(`L2 Txn Accepted!`);
   } else {
-    console.log(`L2 txn failed, see if your gas is enough?`);
-    return;
+    console.log(`L2 Txn Failed...`);
   }
 
   return l2TxReceipt;

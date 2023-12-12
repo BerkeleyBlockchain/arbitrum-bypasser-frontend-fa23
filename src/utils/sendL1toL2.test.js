@@ -54,6 +54,7 @@ const main = async (address, abi_function, parameters) => {
     desiredFunction,
     desiredParams
   );
+  console.log(desiredCallDataL2);
   const desiredValue = 1;
 
   const transactionl2Request = {
@@ -61,6 +62,7 @@ const main = async (address, abi_function, parameters) => {
     to: desiredAddress,
     value: desiredValue,
   };
+  console.log(transactionl2Request);
 
   /**
    * We need extract l2's tx hash first so we can check if this tx executed on l2 later.
@@ -87,7 +89,7 @@ const main = async (address, abi_function, parameters) => {
   );
 
   const l2TxReceipt = await l2Provider.waitForTransaction(l2Txhash);
-
+  console.log(l2TxReceipt);
   const status = l2TxReceipt.status;
   if (status === true) {
     console.log(`L2 txn executed!!! 🥳 `);
