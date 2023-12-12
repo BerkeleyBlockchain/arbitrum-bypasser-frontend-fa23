@@ -24,8 +24,11 @@ const l1Provider = new providers.JsonRpcProvider(
     "https://arb-sepolia.g.alchemy.com/v2/vWAnjLmITpyO6myqPJNuxkjBS1nZUFE1"
   );
 
-const l1Wallet = new Wallet(walletPrivateKey, l1Provider)
-const l2Wallet = new Wallet(walletPrivateKey, l2Provider)
+// const l1Wallet = new Wallet(walletPrivateKey, l1Provider)
+// const l2Wallet = new Wallet(walletPrivateKey, l2Provider)
+
+const l1Wallet = l1Provider.getSigner();
+const l2Wallet = l2Provider.getSigner();
 
 const main = async () => {
   await arbLog('DelayedInbox withdraw funds from l2 (L2MSG_signedTx)')
