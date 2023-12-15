@@ -1,14 +1,56 @@
 {
   "0x2Bfac4CcbA5A619B8DBC106D18AdB12286f8f72d": {
     "name": "PSYBotRouter",
-    "file": "PSYBotRouter_ABI.json"
+    "abi": "PSYBotRouter_ABI.json",
+    "type": "Bot",
+    "image": "https://via.placeholder.com/200"
   },
   "0xE971136E269ee49dcbf42f1C3E65538f97D21A51": {
     "name": "Pepe",
-    "file": "Pepe_ABI.json"
+    "abi": "Pepe_ABI.json",
+    "type": "Token",
+    "image": "https://via.placeholder.com/200"
   },
   "0x7238885B5504092a27530F02DE7118C7d305320f": {
     "name": "TestStorms",
-    "file": "TestStorms_ABI.json"
+    "abi": "TestStorms_ABI.json",
+    "type": "dApp",
+    "image": "https://via.placeholder.com/200"
+  },
+  "1": {
+    "name": "PSYBotRouter",
+    "abi": "PSYBotRouter_ABI.json",
+    "type": "Bot",
+    "image": "https://via.placeholder.com/200"
+  },
+  "2": {
+    "name": "Pepe",
+    "abi": "Pepe_ABI.json",
+    "type": "Token",
+    "image": "https://via.placeholder.com/200"
+  },
+  "3": {
+    "name": "TestStorms",
+    "abi": "TestStorms_ABI.json",
+    "type": "dApp",
+    "image": "https://via.placeholder.com/200"
+  },
+  "4": {
+    "name": "PSYBotRouter",
+    "abi": "PSYBotRouter_ABI.json",
+    "type": "Bot",
+    "image": "https://via.placeholder.com/200"
+  },
+  "5": {
+    "name": "Pepe",
+    "abi": "Pepe_ABI.json",
+    "type": "Token",
+    "image": "https://via.placeholder.com/200"
+  },
+  "6": {
+    "name": "TestStorms",
+    "abi": "TestStorms_ABI.json",
+    "type": "dApp",
+    "image": "https://via.placeholder.com/200"
   }
 }

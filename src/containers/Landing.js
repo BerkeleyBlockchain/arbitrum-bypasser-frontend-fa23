@@ -1,52 +1,11 @@
-import { useState } from "react";
+import { React } from "react";
 import "./Landing.css";
 import Square from "../components/Square";
+import testnetMap from "../constants/testnet_map.json";
 
 export default function Landing() {
-  const squaresData = [
-    {
-      name: "Square 1",
-      type: "DAPP",
-      imageLink: "https://via.placeholder.com/200",
-    },
-    {
-      name: "Square 2",
-      type: "Type B",
-      imageLink: "https://via.placeholder.com/200",
-    },
-    {
-      name: "Square 3",
-      type: "Type C",
-      imageLink: "https://via.placeholder.com/200",
-    },
-    {
-      name: "Square 4",
-      type: "Type D",
-      imageLink: "https://via.placeholder.com/200",
-    },
-    {
-      name: "Square 5",
-      type: "Type E",
-      imageLink: "https://via.placeholder.com/200",
-    },
-    {
-      name: "Square 6",
-      type: "Type F",
-      imageLink: "https://via.placeholder.com/200",
-    },
-  ];
-
-  const [fromNetwork, setFromNetwork] = useState("Ethereum Mainnet");
-  const [ethAmount, setEthAmount] = useState("1.5");
-
-  const [formInputOne, setFormInputOne] = useState("");
-  const [formInputTwo, setFormInputTwo] = useState("");
-  const [isSwapped, setIsSwapped] = useState(false);
-  const [isChosen, setIsChosen] = useState(false);
-
-  function handleSwapClick() {
-    setIsSwapped(true);
-  }
+  const squaresData = testnetMap;
+  console.log(squaresData);
 
   return (
     <div className="landing-bg bg-cover bg-no-repeat text-white min-h-screen pt-24">
@@ -76,14 +35,17 @@ export default function Landing() {
         </div>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
           {/* Repeat this block for each protocol card */}
-          {squaresData.map((square) => (
-            <Square
-              key={square.name}
-              name={square.name}
-              type={square.type}
-              imageLink={square.imageLink}
-            />
-          ))}
+          {Object.entries(squaresData).map(([key, value]) => {
+            return (
+              <Square
+                addy={key}
+                name={value.name}
+                type={value.type}
+                abi={value.abi}
+                image={value.image}
+              />
+            );
+          })}
           {/* ... other protocol cards */}
         </div>
       </div>
