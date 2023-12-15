@@ -1,13 +1,16 @@
 import React, { useEffect, useState } from "react";
 import { FaCheckCircle, FaFilter, FaSearch } from "react-icons/fa";
 import { useDispatch, useSelector } from "react-redux";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 
 import "./SwapPage.css";
 import { sendL1toL2 } from "../utils/sendL1toL2";
 
 export default function SwapPage() {
   const navigate = useNavigate();
+  const location = useLocation();
+  const { addy, name, abi } = location.state;
+  console.log(addy, name, abi);
 
   const dispatch = useDispatch();
   const connectedAccount = useSelector((state) => state.connectedAccount);

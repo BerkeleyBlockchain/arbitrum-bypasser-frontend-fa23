@@ -5,7 +5,6 @@ import testnetMap from "../constants/testnet_map.json";
 
 export default function Landing() {
   const squaresData = testnetMap;
-  console.log(squaresData);
 
   return (
     <div className="landing-bg bg-cover bg-no-repeat text-white min-h-screen pt-24">
@@ -38,6 +37,7 @@ export default function Landing() {
           {Object.entries(squaresData).map(([key, value]) => {
             return (
               <Square
+                key={key}
                 addy={key}
                 name={value.name}
                 type={value.type}
