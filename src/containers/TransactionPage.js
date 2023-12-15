@@ -1,4 +1,5 @@
 import { useState } from "react";
+import "./SwapPage.css";
 
 export default function TransactionPage() {
   const [fromNetwork, setFromNetwork] = useState("Ethereum Mainnet");
@@ -14,7 +15,7 @@ export default function TransactionPage() {
   }
 
   return (
-    <div className="bg-black text-white min-h-screen pt-24">
+    <div className="swap-bg bg-cover bg-no-repeat text-white min-h-screen pt-24">
       <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
         <h1 className="text-5xl font-bold mb-2">
           Execute Transactions from your ETH account

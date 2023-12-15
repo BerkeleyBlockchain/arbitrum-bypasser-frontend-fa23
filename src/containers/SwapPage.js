@@ -88,7 +88,7 @@ export default function SwapPage() {
   };
 
   return (
-    <div className="App">
+    <div className="App swap-bg bg-cover bg-no-repeat">
       {/* Search Bar Section */}
       <div className="text-white text-center mt-32 mb-8">
         <h2 className="text-4xl font-bold mb-8">
