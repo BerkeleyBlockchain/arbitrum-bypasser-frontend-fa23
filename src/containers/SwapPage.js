@@ -1,11 +1,14 @@
 import React, { useEffect, useState } from "react";
 import { FaCheckCircle, FaFilter, FaSearch } from "react-icons/fa";
 import { useDispatch, useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
 
 import "./SwapPage.css";
 import { sendL1toL2 } from "../utils/sendL1toL2";
 
 export default function SwapPage() {
+  const navigate = useNavigate();
+
   const dispatch = useDispatch();
   const connectedAccount = useSelector((state) => state.connectedAccount);
   const [fromNetwork, setFromNetwork] = useState("Ethereum Mainnet");
@@ -17,6 +20,11 @@ export default function SwapPage() {
 
   const [etherBalance, setEtherBalance] = useState(null);
   // const etherBalance = useSyncExternalStore(getEthBalance, connectedAccount);
+
+  const [executeStatus, setExecuteStatus] = useState(false);
+  const [l1Tx, setL1Tx] = useState("");
+  const [l2Tx, setL2Tx] = useState("");
+  const [l2Status, setL2Status] = useState("");
 
   async function getEthBalance(setEtherBalance) {
     if (!connectedAccount) return;
@@ -49,16 +57,26 @@ export default function SwapPage() {
     setTokenSymbol(tokenHandles[fromNetwork] || "unknown");
   }, [fromNetwork]);
 
+  // ******************* Go Back Function *******************
   function handleSwapClick() {
-    setIsSwapped(true);
+    // send back to landing page
+    navigate("/");
   }
 
+  // ******************* Execute Button Function *******************
   async function handleExecuteClick() {
-    const { l1Tx, l2Tx, l2Status } = sendL1toL2(
+    // Change button to buffer
+    const { a, b, c } = await sendL1toL2(
       "0x0000000000000000000000000000000000000064",
       "withdrawEth",
       ["0x3D0AD1BC6023e75B17b36F04CFc0022687E69084"]
     );
+    // Change to swap page
+    setIsSwapped(true);
+
+    setL1Tx(a);
+    setL2Tx(b);
+    setL2Status(c);
   }
 
   const tokenHandles = {
@@ -210,9 +228,9 @@ export default function SwapPage() {
               </button>
               <button
                 onClick={handleSwapClick}
-                className="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-6 rounded-full mx-2"
+                className="bg-gray-600 hover:bg-blue-700 text-white font-bold py-2 px-6 rounded-full mx-2"
               >
-                Return to Protcols (temp swap button)
+                Back to Protocol
               </button>
             </div>
           </div>
