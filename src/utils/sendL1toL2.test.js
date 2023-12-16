@@ -67,6 +67,10 @@ const main = async (address, abi_function, parameters) => {
   /**
    * We need extract l2's tx hash first so we can check if this tx executed on l2 later.
    */
+  console.log(l1Wallet, l2Wallet);
+  console.log(inboxSdk);
+  return;
+
   const l2SignedTx = await inboxSdk.signL2Tx(transactionl2Request, l2Wallet);
 
   const l2Txhash = ethers.utils.parseTransaction(l2SignedTx).hash;
@@ -95,7 +99,7 @@ const main = async (address, abi_function, parameters) => {
     console.log(`L2 txn executed!!! 🥳 `);
   } else {
     console.log(`L2 txn failed, see if your gas is enough?`);
-    console.log("")
+    console.log("");
     return;
   }
 };

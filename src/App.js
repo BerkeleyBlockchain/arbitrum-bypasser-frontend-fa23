@@ -12,12 +12,31 @@ import { metaMaskWallet } from "@rainbow-me/rainbowkit/wallets";
 import { configureChains, createConfig, WagmiConfig } from "wagmi";
 import { sepolia, arbitrumSepolia } from "wagmi/chains";
 import { publicProvider } from "wagmi/providers/public";
+import { jsonRpcProvider } from "@wagmi/core/providers/jsonRpc";
 
 export default function App() {
   const { chains, publicClient } = configureChains(
     [sepolia, arbitrumSepolia],
-    [publicProvider()]
+    [
+      jsonRpcProvider({
+        rpc: (chain) => {
+          if (chain.id === sepolia.id) {
+            return { http: process.env.REACT_APP_L1RPC }; // Use L1 RPC for Sepolia
+          } else if (chain.id === arbitrumSepolia.id) {
+            return { http: process.env.REACT_APP_L2RPC }; // Use L2 RPC for Arbitrum Sepolia
+          }
+          // Fallback or default URL if needed
+          return { http: "https://default-rpc-url.com" };
+        },
+      }),
+    ]
   );
+
+  // When using livenet
+  // const { chains, publicClient } = configureChains(
+  //   [ethereum, arbitrum],
+  //   [publicProvider()]
+  // );
 
   const connectors = connectorsForWallets([
     {

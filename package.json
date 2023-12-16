@@ -9,6 +9,7 @@
     "@testing-library/jest-dom": "^5.17.0",
     "@testing-library/react": "^13.4.0",
     "@testing-library/user-event": "^13.5.0",
+    "@wagmi/core": "^1.4.12",
     "arb-shared-dependencies": "^1.0.0",
     "fs": "^0.0.1-security",
     "react": "^18.2.0",

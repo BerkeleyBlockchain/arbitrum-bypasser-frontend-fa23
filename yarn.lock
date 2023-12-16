@@ -3912,7 +3912,7 @@
     "abitype" "0.8.7"
     "eventemitter3" "^4.0.7"
 
-"@wagmi/core@1.4.12":
+"@wagmi/core@^1.4.12", "@wagmi/core@1.4.12":
   "integrity" "sha512-bLcYmmGgjtl3jAGo8X3Sm6oUwsdjbVxFMu9SWnwHdE4S9JdYeWM57dEhQgq8SYul2yQ7yY2/gimBf1Or0Ky3dQ=="
   "resolved" "https://registry.npmjs.org/@wagmi/core/-/core-1.4.12.tgz"
   "version" "1.4.12"
