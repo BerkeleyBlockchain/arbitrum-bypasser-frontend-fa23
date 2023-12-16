@@ -5,71 +5,62 @@ import { useNavigate, useLocation } from "react-router-dom";
 
 import "./SwapPage.css";
 import { sendL1toL2 } from "../utils/sendL1toL2";
+import { useWalletClient, useBalance } from "wagmi";
+
+import { useConnectModal } from "@rainbow-me/rainbowkit";
 
 export default function SwapPage() {
+  // ******************* Preprocessing to Gate if forced entry *******************
   const navigate = useNavigate();
   const location = useLocation();
-  const { addy, name, abi } = location.state;
+  const { addy, name, abi } = location.state || {};
+
+  useEffect(() => {
+    // Check if addy, name, or abi is null or undefined
+    if (!addy || !name || !abi) {
+      navigate("/"); // Redirect to the home page
+    }
+  }, [addy, name, abi, navigate]);
+
   console.log(addy, name, abi);
 
+  // ******************* State Set up *******************
+  const { openConnectModal } = useConnectModal();
+
   const dispatch = useDispatch();
-  const connectedAccount = useSelector((state) => state.connectedAccount);
-  const [fromNetwork, setFromNetwork] = useState("Ethereum Mainnet");
+  const [functionMethod, setfunctionMethod] = useState("Ethereum Mainnet");
   const [ethAmount, setEthAmount] = useState("1.5");
   const [formInputOne, setFormInputOne] = useState("");
   const [formInputTwo, setFormInputTwo] = useState("");
   const [isSwapped, setIsSwapped] = useState(false);
-  const [tokenSymbol, setTokenSymbol] = useState("ETH");
-
-  const [etherBalance, setEtherBalance] = useState(null);
-  // const etherBalance = useSyncExternalStore(getEthBalance, connectedAccount);
 
   const [executeStatus, setExecuteStatus] = useState(false);
   const [l1Tx, setL1Tx] = useState("");
   const [l2Tx, setL2Tx] = useState("");
   const [l2Status, setL2Status] = useState("");
 
-  async function getEthBalance(setEtherBalance) {
-    if (!connectedAccount) return;
-    const balance = await window.ethereum.request({
-      method: "eth_getBalance",
-      params: [connectedAccount, "latest"],
-    });
-
-    // convert to ETH and round to 2 decimal places
-    const balanceInEth = (balance / 10 ** 18).toFixed(4);
-    console.log("Balance in ETH", balanceInEth);
-    setEtherBalance(balanceInEth);
-  }
-
-  useEffect(() => {
-    checkMetaMask();
-    getEthBalance(setEtherBalance);
-  }, [connectedAccount]);
-
-  function checkMetaMask() {
-    if (typeof window.ethereum !== "undefined") {
-      console.log("MetaMask is installed!");
-    } else {
-      console.log("MetaMask is not installed. Please install it.");
-    }
-  }
-
-  useEffect(() => {
-    checkMetaMask();
-    setTokenSymbol(tokenHandles[fromNetwork] || "unknown");
-  }, [fromNetwork]);
+  // ******************* Get and Create Wallet *******************
+  const publicClient = useWalletClient();
+  const { data: clientData, isSuccess, isError, isLoading } = publicClient;
+  const { data: balance } = useBalance({
+    address: clientData?.account.address,
+  });
 
   // ******************* Go Back Function *******************
   function handleSwapClick() {
-    // send back to landing page
     navigate("/");
   }
 
   // ******************* Execute Button Function *******************
   async function handleExecuteClick() {
     // Change button to buffer
+    if (!isSuccess || isError || isLoading) {
+      openConnectModal(); // Circuit Stop
+      return;
+    }
+
     const { a, b, c } = await sendL1toL2(
+      publicClient,
       "0x0000000000000000000000000000000000000064",
       "withdrawEth",
       ["0x3D0AD1BC6023e75B17b36F04CFc0022687E69084"]
@@ -82,16 +73,8 @@ export default function SwapPage() {
     setL2Status(c);
   }
 
-  const tokenHandles = {
-    "Ethereum Mainnet": "ETH",
-    Binance: "BNB",
-    Polygon: "MATIC",
-    Solana: "SOL",
-    //more should be added here as needed
-  };
-
   return (
-    <div className="App swap-bg bg-cover bg-no-repeat">
+    <div className="swap-bg bg-cover bg-no-repeat text-white min-h-screen pt-24t">
       {/* Search Bar Section */}
       <div className="text-white text-center mt-32 mb-8">
         <h2 className="text-4xl font-bold mb-8">
@@ -134,8 +117,8 @@ export default function SwapPage() {
                     From:
                   </span>
                   <select
-                    value={fromNetwork}
-                    onChange={(e) => setFromNetwork(e.target.value)}
+                    value={functionMethod}
+                    onChange={(e) => setfunctionMethod(e.target.value)}
                     className="ml-2 bg-gray-700 text-white rounded p-1"
                   >
                     <option value="Ethereum Mainnet">Ethereum Mainnet</option>
@@ -159,21 +142,18 @@ export default function SwapPage() {
                     onChange={(e) => setEthAmount(e.target.value)}
                     className="text-white bg-transparent focus:outline-none"
                   />
-                  <span className="text-white ml-2">{tokenSymbol}</span>
                 </div>
                 <div
                   className="text-left text-white text-xs"
                   style={{ color: "rgba(99, 117, 146, 1)", marginTop: "20px" }}
                 >
-                  {connectedAccount && (
+                  {isSuccess && (
                     <span>
-                      Balance: {etherBalance}{" "}
+                      Balance: {balance?.formatted} {balance?.symbol}{" "}
                       <span style={{ color: "#3182ce" }}>MAX</span>
                     </span>
                   )}
-                  {!connectedAccount && (
-                    <span>Connecte wallet to see balance</span>
-                  )}
+                  {!isSuccess && <span>Connect wallet to see balance</span>}
                 </div>
                 <hr
                   className="my-4 border-gray-700"

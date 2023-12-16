@@ -3,7 +3,7 @@
 body,
 .App {
   font-family: "Inter", sans-serif;
-  background-color: rgba(0, 0, 0, 0.65); /* Black with 30% opacity */
+  background-color: rgba(0, 0, 0); /* Black with 30% opacity */
   min-height: 100vh; /* Make sure it covers the full height of the viewport */
   margin: 0; /* Remove default margin */
 }
@@ -37,7 +37,7 @@ body,
 body,
 .Home {
   font-family: "Inter", sans-serif;
-  background-color: rgba(0, 0, 0, 0.65); /* Black with 30% opacity */
+  background-color: rgba(0, 0, 0); /* Black with 30% opacity */
   min-height: 100vh; /* Make sure it covers the full height of the viewport */
   margin: 0; /* Remove default margin */
 }

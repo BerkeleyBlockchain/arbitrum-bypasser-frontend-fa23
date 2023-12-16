@@ -1,4 +1,6 @@
+// Contributors: Tommy, Jay, Dhruv
 const { providers, Wallet, ethers } = require("ethers");
+
 const {
   getL2Network,
   addDefaultLocalNetwork,
@@ -14,16 +16,22 @@ const l2Provider = new providers.JsonRpcProvider(process.env.REACT_APP_L2RPC);
 
 // ******************* instantiate L1 / L2 wallets connected to providers *******************
 const walletPrivateKey = process.env.REACT_APP_DEVNET_PRIVKEY; // might need to change cuz no access to prviate key
-const l1Wallet = new Wallet(walletPrivateKey, l1Provider);
-const l2Wallet = new Wallet(walletPrivateKey, l2Provider);
 
 /**
  * Primary function to send a transaction to the delayed inbox in L2 via L1
+ * @param {Provider} client ~ provider to send transaction
  * @param {string} address ~ address of the contract
  * @param {string} abi_function ~ function name from abi dictionary
  * @param {array} parameters ~ [value, value, value, ...]
  */
-export const sendL1toL2 = async (address, abi_function, parameters) => {
+export const sendL1toL2 = async (client, address, abi_function, parameters) => {
+  const l1Wallet = new Wallet(client, l1Provider);
+  const l2Wallet = new Wallet(client, l2Provider);
+  console.log("L1 Wallet: ", l1Wallet);
+  console.log("L2 Wallet: ", l2Wallet);
+
+  return;
+
   console.log(`Starting transaction from l1 to l2 for ${abi_function}...`);
 
   // ******************* Inbox Set up and Grab L2 Network *******************
