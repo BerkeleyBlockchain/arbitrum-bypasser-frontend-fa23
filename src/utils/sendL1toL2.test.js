@@ -46,6 +46,7 @@ const main = async (address, abi_function, parameters) => {
   const desiredAddress = address;
   console.log("Connecting to provider...");
   const factoryConnection = ArbSys__factory.connect(desiredAddress, l2Provider);
+  console.log(factoryConnection);
   const factoryInterface = factoryConnection.interface;
 
   const desiredFunction = abi_function;

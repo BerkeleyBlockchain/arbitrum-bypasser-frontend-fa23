@@ -38,6 +38,8 @@ export const sendL1toL2 = async (
   abi_function,
   parameters
 ) => {
+  console.log(await l1Signer.getGasPrice());
+  return;
   console.log(`Starting transaction from l1 to l2 for ${abi_function}...`);
 
   // ******************* Inbox Set up and Grab L2 Network *******************
@@ -45,6 +47,7 @@ export const sendL1toL2 = async (
   const l2Network = await getL2Network(arbitrumSepolia.id);
   // In this case the client is functioning as the l1Wallet
   const inboxSdk = new InboxTools(l1Signer, l2Network);
+  console.log(inboxSdk);
 
   // ******************* Setting ArbSys Factory and Interface *******************
   const desiredAddress = address;
