@@ -10,12 +10,12 @@ import {
 } from "@rainbow-me/rainbowkit";
 import { metaMaskWallet } from "@rainbow-me/rainbowkit/wallets";
 import { configureChains, createConfig, WagmiConfig } from "wagmi";
-import { sepolia, mainnet } from "wagmi/chains";
+import { sepolia, arbitrumSepolia } from "wagmi/chains";
 import { publicProvider } from "wagmi/providers/public";
 
 export default function App() {
   const { chains, publicClient } = configureChains(
-    [sepolia],
+    [sepolia, arbitrumSepolia],
     [publicProvider()]
   );
 

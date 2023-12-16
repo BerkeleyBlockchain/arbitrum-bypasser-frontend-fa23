@@ -5,12 +5,15 @@ import { useNavigate, useLocation } from "react-router-dom";
 
 import "./SwapPage.css";
 import { sendL1toL2 } from "../utils/sendL1toL2";
-import { useWalletClient, useBalance } from "wagmi";
-
 import { useConnectModal } from "@rainbow-me/rainbowkit";
 
+import { useWalletClient, useBalance, useAccount } from "wagmi";
+import { sepolia, arbitrumSepolia } from "wagmi/chains";
+
+import { useEthersSigner } from "../utils/convertViem";
+
 export default function SwapPage() {
-  // ******************* Preprocessing to Gate if forced entry *******************
+  // ******************* Preprocessing to Gate Page If forced entry *******************
   const navigate = useNavigate();
   const location = useLocation();
   const { addy, name, abi } = location.state || {};
@@ -22,56 +25,32 @@ export default function SwapPage() {
     }
   }, [addy, name, abi, navigate]);
 
-  console.log(addy, name, abi);
+  console.log("The Protocol for this page is: ", addy, name, abi);
 
   // ******************* State Set up *******************
-  const { openConnectModal } = useConnectModal();
 
-  const dispatch = useDispatch();
+  // const dispatch = useDispatch();
   const [functionMethod, setfunctionMethod] = useState("Ethereum Mainnet");
   const [ethAmount, setEthAmount] = useState("1.5");
   const [formInputOne, setFormInputOne] = useState("");
   const [formInputTwo, setFormInputTwo] = useState("");
   const [isSwapped, setIsSwapped] = useState(false);
 
-  const [executeStatus, setExecuteStatus] = useState(false);
+  // const [executeStatus, setExecuteStatus] = useState(false);
   const [l1Tx, setL1Tx] = useState("");
   const [l2Tx, setL2Tx] = useState("");
   const [l2Status, setL2Status] = useState("");
-
-  // ******************* Get and Create Wallet *******************
-  const publicClient = useWalletClient();
-  const { data: clientData, isSuccess, isError, isLoading } = publicClient;
-  const { data: balance } = useBalance({
-    address: clientData?.account.address,
-  });
 
   // ******************* Go Back Function *******************
   function handleSwapClick() {
     navigate("/");
   }
 
-  // ******************* Execute Button Function *******************
-  async function handleExecuteClick() {
-    // Change button to buffer
-    if (!isSuccess || isError || isLoading) {
-      openConnectModal(); // Circuit Stop
-      return;
-    }
-
-    const { a, b, c } = await sendL1toL2(
-      publicClient,
-      "0x0000000000000000000000000000000000000064",
-      "withdrawEth",
-      ["0x3D0AD1BC6023e75B17b36F04CFc0022687E69084"]
-    );
-    // Change to swap page
-    setIsSwapped(true);
-
-    setL1Tx(a);
-    setL2Tx(b);
-    setL2Status(c);
-  }
+  // ******************* Get and Create Wallet *******************
+  const { address, isConnecting, isDisconnected } = useAccount();
+  const { data: balance } = useBalance({
+    address: address || null,
+  });
 
   return (
     <div className="swap-bg bg-cover bg-no-repeat text-white min-h-screen pt-24t">
@@ -147,13 +126,13 @@ export default function SwapPage() {
                   className="text-left text-white text-xs"
                   style={{ color: "rgba(99, 117, 146, 1)", marginTop: "20px" }}
                 >
-                  {isSuccess && (
+                  {!isDisconnected && (
                     <span>
                       Balance: {balance?.formatted} {balance?.symbol}{" "}
                       <span style={{ color: "#3182ce" }}>MAX</span>
                     </span>
                   )}
-                  {!isSuccess && <span>Connect wallet to see balance</span>}
+                  {isDisconnected && <span>Connect wallet to see balance</span>}
                 </div>
                 <hr
                   className="my-4 border-gray-700"
@@ -203,15 +182,16 @@ export default function SwapPage() {
             </div>
 
             <div className="flex justify-center mt-4">
-              <button
-                onClick={handleExecuteClick}
-                className="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-6 rounded-full mx-2"
-              >
-                Execute
-              </button>
+              <ExecuteButton
+                isDisconnected={isDisconnected}
+                setIsSwapped={setIsSwapped}
+                setL1Tx={setL1Tx}
+                setL2Status={setL2Status}
+                setL2Tx={setL2Tx}
+              />
               <button
                 onClick={handleSwapClick}
-                className="bg-gray-600 hover:bg-blue-700 text-white font-bold py-2 px-6 rounded-full mx-2"
+                className="bg-gray-600 hover:bg-gray-700 text-white font-bold py-2 px-6 rounded-full mx-2"
               >
                 Back to Protocol
               </button>
@@ -370,3 +350,68 @@ export default function SwapPage() {
     </div>
   );
 }
+
+// ******************* Execute Button Function *******************
+export const ExecuteButton = ({
+  isDisconnected,
+  setIsSwapped,
+  setL1Tx,
+  setL2Status,
+  setL2Tx,
+}) => {
+  const { openConnectModal } = useConnectModal();
+
+  const walletClient = useWalletClient();
+  const { data: clientData, isSuccess, isLoading, isError } = walletClient;
+  console.log(walletClient);
+
+  const l1Signer = useEthersSigner({ chainId: sepolia.id });
+  const l2Signer = useEthersSigner({ chainId: arbitrumSepolia.id });
+  console.log(l1Signer);
+  console.log(l2Signer);
+
+  async function handleExecuteClick() {
+    // ******************* Check if Wallet is Connected *******************
+    if (isDisconnected || !isSuccess || isError || isLoading) {
+      openConnectModal(); // Short Circuit
+      return;
+    }
+
+    // ******************* Swap to Arb Sepolia *******************
+    // try {
+    //   await walletClient.data.switchChain({
+    //     id: arbitrumSepolia.id,
+    //   });
+    // } catch (error) {
+    //   console.log(error);
+    //   return; // Short Circuit
+    // }
+
+    // ******************* Convert WalletClient to Signer Object *******************
+    // const l2Signer = useEthersSigner();
+
+    const { l1Tx, l2Tx, l2Status } = await sendL1toL2(
+      l1Signer,
+      l2Signer,
+      walletClient,
+      "0x0000000000000000000000000000000000000064",
+      "withdrawEth",
+      ["0x3D0AD1BC6023e75B17b36F04CFc0022687E69084"]
+    );
+    // Change to swap page
+    // setIsSwapped(true);
+
+    // setL1Tx(l1Tx);
+    // setL2Tx(l2Tx);
+    // setL2Status(l2Status);
+  }
+
+  return (
+    <button
+      onClick={handleExecuteClick}
+      className="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-6 rounded-full mx-2"
+    >
+      Execute
+    </button>
+  );
+};
