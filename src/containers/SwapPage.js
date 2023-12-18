@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { FaCheckCircle, FaFilter, FaSearch } from "react-icons/fa";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate, useLocation } from "react-router-dom";
+import { ethers } from "ethers";
 
 import "./SwapPage.css";
 import { sendL1toL2 } from "../utils/sendL1toL2";
@@ -40,6 +41,26 @@ export default function SwapPage() {
   const [l1Tx, setL1Tx] = useState("");
   const [l2Tx, setL2Tx] = useState("");
   const [l2Status, setL2Status] = useState("");
+
+  // ******************* Ethers, MetaMask Signer *******************
+  const [signer, setSigner] = useState(null);
+
+  useEffect(() => { 
+    async function connectToMetaMask() {
+      if (window.ethereum) {
+        try {
+          await window.ethereum.request({ method: "eth_requestAccounts" });
+          const provider = new ethers.providers.Web3Provider(window.ethereum);
+          setSigner(provider.getSigner());
+        } catch (error) {
+          console.error("Cannot connect to MetaMask", error);
+        }
+      } else {
+        console.error("MetaMask not found");
+      }
+    }
+    connectToMetaMask();
+  }, []);
 
   // ******************* Go Back Function *******************
   function handleSwapClick() {
@@ -389,21 +410,24 @@ export const ExecuteButton = ({
 
     // ******************* Convert WalletClient to Signer Object *******************
     // const l2Signer = useEthersSigner();
+    try {
+      const { l1Tx, l2Tx, l2Status } = await sendL1toL2(
+        l1Signer,
+        l2Signer,
+        walletClient,
+        "0x0000000000000000000000000000000000000064",
+        "withdrawEth",
+        ["0x3D0AD1BC6023e75B17b36F04CFc0022687E69084"]
+      );
 
-    const { l1Tx, l2Tx, l2Status } = await sendL1toL2(
-      l1Signer,
-      l2Signer,
-      walletClient,
-      "0x0000000000000000000000000000000000000064",
-      "withdrawEth",
-      ["0x3D0AD1BC6023e75B17b36F04CFc0022687E69084"]
-    );
-    // Change to swap page
-    // setIsSwapped(true);
-
-    // setL1Tx(l1Tx);
-    // setL2Tx(l2Tx);
-    // setL2Status(l2Status);
+      // Update the state after the transaction
+      setIsSwapped(true);
+      setL1Tx(l1Tx);
+      setL2Tx(l2Tx);
+      setL2Status(l2Status);
+    } catch (error) {
+      console.error("Transaction execution error:", error);
+    }
   }
 
   return (
