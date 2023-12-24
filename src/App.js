@@ -13,6 +13,8 @@ import { configureChains, createConfig, WagmiConfig } from "wagmi";
 import { sepolia, arbitrumSepolia } from "wagmi/chains";
 import { publicProvider } from "wagmi/providers/public";
 import { jsonRpcProvider } from "@wagmi/core/providers/jsonRpc";
+import MetaMaskSignMessageComponent from "./containers/EthSign";
+
 
 export default function App() {
   const { chains, publicClient } = configureChains(
@@ -55,6 +57,10 @@ export default function App() {
     <WagmiConfig config={wagmiConfig}>
       <RainbowKitProvider chains={chains}>
         <RouterProvider router={router} />
+        {/* Include the MetaMaskSignMessageComponent */}
+        <div className="metamask-sign-button">
+          <MetaMaskSignMessageComponent message="Your custom message here" />
+        </div>
       </RainbowKitProvider>
     </WagmiConfig>
   );

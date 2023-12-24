@@ -3,6 +3,8 @@ import { FaDiscord, FaTwitter } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
 import { ConnectButton } from "@rainbow-me/rainbowkit";
 import arbLogo from "../assets/arblogo.svg";
+import MetaMaskSignMessageComponent from "../containers/EthSign";
+
 
 export default function Header() {
   const navigate = useNavigate();
@@ -30,11 +32,12 @@ export default function Header() {
         />
         <button
           onClick={handleTransaction}
-          className="bg-gray-700 hover:bg-gray-800 text-white font-bold py-2 px-4 rounded flex items-center"
+          className="bg-gray-700 hover:bg-gray-800 text-white font-bold py-2 px-4 rounded flex items-center mr-2"
         >
           <span className="h-3 w-3 border-2 border-white rounded-full mr-2"></span>
           Transactions
         </button>
+        <MetaMaskSignMessageComponent message="Your custom message here" />
       </div>
       <div className="flex items-center">
         <FaTwitter
@@ -51,7 +54,7 @@ export default function Header() {
           }}
           size={24}
         />
-        <ConnectButton></ConnectButton>
+        <ConnectButton />
       </div>
     </nav>
   );
