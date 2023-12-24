@@ -1,7 +1,7 @@
 const setup = async () => {
     const signers = await ethers.getSigners()
     const signer = signers[0]
-    const provider = signer.provider!
+    const provider = signer.provider
 
     const arbitrumOne = await getL2Network(42161)
 
