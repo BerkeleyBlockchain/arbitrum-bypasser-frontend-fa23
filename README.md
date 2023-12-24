@@ -1,3 +1,7 @@
+# Adding Inputs to .env file
+
+Make sure to add the relevant https API keys from Alchemy as well as our test private key to the .env file before running. 
+
 # Getting Started with Create React App
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
