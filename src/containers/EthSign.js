@@ -11,7 +11,7 @@ const MetaMaskSignMessageComponent = ({ message }) => {
     try {
       const accounts = await window.ethereum.request({ method: 'eth_requestAccounts' });
       const account = accounts[0];
-      const messageHash = ethers.utils.sha256(ethers.utils.toUtf8Bytes(message)); // Message is encrypted using sha256, this can be changed. 
+      const messageHash = ethers.utils.sha256(ethers.utils.toUtf8Bytes(message)); // Message is encrypted using sha256, this can be changed. personal_sign is used for a regular string
 
       const signature = await window.ethereum.request({
         method: 'eth_sign',

@@ -56,10 +56,6 @@ export default function App() {
     <WagmiConfig config={wagmiConfig}>
       <RainbowKitProvider chains={chains}>
         <RouterProvider router={router} />
-        {/* Include the MetaMaskSignMessageComponent */}
-        <div className="metamask-sign-button">
-          <MetaMaskSignMessageComponent message="Your custom message here" />
-        </div>
       </RainbowKitProvider>
     </WagmiConfig>
   );
