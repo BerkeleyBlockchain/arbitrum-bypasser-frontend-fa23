@@ -1,5 +1,6 @@
 import { useState } from "react";
 import "./SwapPage.css";
+import SearchBar from "./SearchBar";
 
 export default function TransactionPage() {
   const [fromNetwork, setFromNetwork] = useState("Ethereum Mainnet");
@@ -11,9 +12,10 @@ export default function TransactionPage() {
   const [isChosen, setIsChosen] = useState(false);
 
   const [searchQuery, setSearchQuery] = useState("");
-  const [protocols, setProtocols] = useState(["AAVE", "Uniswap", "Compound"]); // Dropdown options
   const [selectedProtocol, setSelectedProtocol] = useState(""); // Selected option
   const [showDropdown, setShowDropdown] = useState(false); // Dropdown visibility
+
+  const [protocols, setProtocols] = useState(["AAVE", "Uniswap", "Compound"]); // Dropdown options
 
   const addProtocol = (newProtocol) => {
     setProtocols(prevProtocols => [...prevProtocols, newProtocol]);
@@ -49,37 +51,7 @@ export default function TransactionPage() {
           Lorem ipsum dolor sit amet, consectetur adipiscing elit.
         </p>
         <div className="flex gap-4 mb-10">
-          <div className="relative flex-1">
-            <input
-              className="w-full p-4 rounded-md"
-              type="search"
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-              onFocus={handleFocus}
-              onBlur={handleBlur}
-              style={{
-                backgroundColor: "transparent",
-                border: "1px solid #4B5563",
-                borderRadius: "18px",
-                padding: "10px 20px",
-                marginRight: "40px",
-              }}
-              placeholder="Search Protocols"
-            />
-            {showDropdown && (
-              <ul className="absolute z-10 w-full bg-black border border-gray-700 rounded-md mt-1">
-                {protocols.filter(p => p.toLowerCase().includes(searchQuery.toLowerCase())).map((protocol) => (
-                  <li
-                    key={protocol}
-                    className="p-2 hover:bg-gray-700 cursor-pointer"
-                    onClick={() => handleSelectProtocol(protocol)}
-                  >
-                    {protocol}
-                  </li>
-                ))}
-              </ul>
-            )}
-          </div>
+          <SearchBar protocols={protocols} onSelectProtocol={handleSelectProtocol} />
           <button className="p-4 rounded-md">Filter</button>
         </div>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
