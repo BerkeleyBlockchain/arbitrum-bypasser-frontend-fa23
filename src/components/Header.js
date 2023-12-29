@@ -3,6 +3,7 @@ import { FaDiscord, FaTwitter } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
 import { ConnectButton } from "@rainbow-me/rainbowkit";
 import arbLogo from "../assets/arblogo.svg";
+import MetaMaskSignMessageComponent from "../containers/EthSign";
 
 export default function Header() {
   const navigate = useNavigate();
@@ -35,6 +36,8 @@ export default function Header() {
           <span className="h-3 w-3 border-2 border-white rounded-full mr-2"></span>
           Transactions
         </button>
+        {/* Add your MetaMaskSignMessageComponent next to Transactions button */}
+        <MetaMaskSignMessageComponent message="Your default message or pass a message prop" />
       </div>
       <div className="flex items-center">
         <FaTwitter

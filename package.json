@@ -51,6 +51,7 @@
     "dotenv": "^16.3.1",
     "tailwindcss": "^3.3.3",
     "webpack": "^5.89.0",
-    "webpack-cli": "^5.1.4"
+    "webpack-cli": "^5.1.4",
+    "typescript": "^5.0.4"
   }
 }
