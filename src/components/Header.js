@@ -4,10 +4,6 @@ import { useNavigate } from "react-router-dom";
 import { ConnectButton } from "@rainbow-me/rainbowkit";
 import arbLogo from "../assets/arblogo.svg";
 import MetaMaskSignMessageComponent from "../containers/EthSign";
-<<<<<<< HEAD
-=======
-
->>>>>>> d767af8a5992cf3e8a726dc98dc77116faa1df36
 
 export default function Header() {
   const navigate = useNavigate();
