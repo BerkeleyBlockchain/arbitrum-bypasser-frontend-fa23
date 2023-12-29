@@ -4,6 +4,10 @@ import { useNavigate } from "react-router-dom";
 import { ConnectButton } from "@rainbow-me/rainbowkit";
 import arbLogo from "../assets/arblogo.svg";
 import MetaMaskSignMessageComponent from "../containers/EthSign";
+<<<<<<< HEAD
+=======
+
+>>>>>>> d767af8a5992cf3e8a726dc98dc77116faa1df36
 
 export default function Header() {
   const navigate = useNavigate();
@@ -31,7 +35,7 @@ export default function Header() {
         />
         <button
           onClick={handleTransaction}
-          className="bg-gray-700 hover:bg-gray-800 text-white font-bold py-2 px-4 rounded flex items-center"
+          className="bg-gray-700 hover:bg-gray-800 text-white font-bold py-2 px-4 rounded flex items-center mr-2"
         >
           <span className="h-3 w-3 border-2 border-white rounded-full mr-2"></span>
           Transactions
@@ -54,7 +58,7 @@ export default function Header() {
           }}
           size={24}
         />
-        <ConnectButton></ConnectButton>
+        <ConnectButton />
       </div>
     </nav>
   );
