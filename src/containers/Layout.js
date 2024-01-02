@@ -4,9 +4,9 @@ import Header from "../components/Header";
 
 export default function Layout() {
   return (
-    <div className="bg-1e-black">
+    <div className="bg-1e-black m-0 p-0">
       <Header />
-      <Outlet />
+      <Outlet className="m-0 p-0" />
     </div>
   );
 }

@@ -1,7 +1,7 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
 
-function Square({ addy, name, abi, type, image }) {
+function ProtocolCard({ addy, name, abi, type, image }) {
   const navigate = useNavigate();
 
   const handleClick = () => {
@@ -95,4 +95,4 @@ function Square({ addy, name, abi, type, image }) {
   );
 }
 
-export default Square;
+export default ProtocolCard;

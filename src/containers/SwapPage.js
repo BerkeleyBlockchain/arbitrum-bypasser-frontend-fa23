@@ -5,6 +5,8 @@ import { useNavigate, useLocation } from "react-router-dom";
 import { ethers } from "ethers";
 
 import "./SwapPage.css";
+import SearchBar from "./SearchBar";
+
 import { sendL1toL2 } from "../utils/sendL1toL2";
 import { useConnectModal } from "@rainbow-me/rainbowkit";
 
@@ -74,27 +76,12 @@ export default function SwapPage() {
   });
 
   return (
-    <div className="swap-bg bg-cover bg-no-repeat text-white min-h-screen pt-24t">
-      {/* Search Bar Section */}
-      <div className="text-white text-center mt-32 mb-8">
-        <h2 className="text-4xl font-bold mb-8">
-          Execute Transactions from your ETH account
-        </h2>
-        <div
-          className="inline-flex justify-center items-center w-full px-4 py-3 rounded-lg bg-gray-800"
-          style={{ maxWidth: "800px", backgroundColor: "rgba(17, 19, 24, 1)" }}
-        >
-          <FaSearch className="text-gray-300 mr-3" size={20} />
-          <input
-            type="text"
-            placeholder="Search..."
-            className="flex-grow text-white focus:outline-none"
-            style={{ backgroundColor: "rgba(17, 19, 24, 1)" }}
-          />
-          <button className="ml-3 p-2 rounded-lg bg-gray-700 hover:bg-gray-600 transition duration-150 ease-in-out">
-            <FaFilter className="text-white" size={20} />
-          </button>
-        </div>
+    <div className="landing-bg bg-cover bg-no-repeat text-white min-h-screen pt-24">
+      <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+        <h1 className="text-5xl font-bold mb-2">Protocol: {name} </h1>
+        <p className="mb-8">
+          Execute transactions to {name} on Arbitrum from your ETH account
+        </p>
       </div>
 
       {!isSwapped ? (
