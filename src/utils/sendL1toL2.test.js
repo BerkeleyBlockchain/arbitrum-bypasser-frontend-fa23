@@ -70,11 +70,14 @@ const main = async (address, abi_function, parameters) => {
    */
   console.log(l1Wallet, l2Wallet);
   console.log(inboxSdk);
-  return;
 
   const l2SignedTx = await inboxSdk.signL2Tx(transactionl2Request, l2Wallet);
 
   const l2Txhash = ethers.utils.parseTransaction(l2SignedTx).hash;
+  console.log(
+    `Signed this L2 tx hash but not broadcasted: https://sepolia.arbiscan.io/tx/${l2Txhash}`
+  );
+  return;
 
   const l1Tx = await inboxSdk.sendL2SignedTx(l2SignedTx);
 

@@ -83,17 +83,18 @@ export const sendL1toL2 = async (
   //   return { l1Tx: null, l2Tx: null, l2Status: 0 };
   // }
 
-  const signedtxt = await signEth(transactionl2Request, l2Signer); /// this client is l2 signer
-  console.log("Signed L2 tx: ", signedtxt);
-  return;
-  const l2SignedTx = await inboxSdk.signL2Tx(transactionl2Request, l2Signer); /// this client is l2 signer
+  const l2SignedTx = await signEth(transactionl2Request, l2Signer); /// this client is l2 signer
   console.log("Signed L2 tx: ", l2SignedTx);
 
-  const l2Txhash = ethers.utils.parseTransaction(l2SignedTx).hash; // extract hash to check if tx executed on l2 later
-  console.log(`L2 tx hash: https://sepolia.arbiscan.io/tx/${l2Txhash}`);
-  return;
-  // will need to prompt switch here
+  // const l2SignedTx = await inboxSdk.signL2Tx(transactionl2Request, l2Signer); /// this client is l2 signer
+  // console.log("Signed L2 tx: ", l2SignedTx);
 
+  const l2Txhash = ethers.utils.parseTransaction(l2SignedTx).hash; // extract hash to check if tx executed on l2 later
+  console.log(
+    `Signed this L2 tx hash but not broadcasted: https://sepolia.arbiscan.io/tx/${l2Txhash}`
+  );
+
+  // ******************* Sending the L2 Signed message through L1 Now *******************
   const l1Tx = await inboxSdk.sendL2SignedTx(l2SignedTx);
   console.log(`L1 tx hash created: ${l1Tx.hash}`);
   console.log("Waiting for this transaciton to settle on L1...");
@@ -108,7 +109,7 @@ export const sendL1toL2 = async (
     `Now we need to wait for tx to be finalized on L2: ${l2Txhash} to be included on l2 (may take 15 minutes) ....... `
   );
   // Don't need to wait because this will move to frontend move this secitop
-  return { l1Tx: inboxRec.transactionHash, l2Tx: l2Txhash, l2Status: 1 };
+  return { l1TxHash: inboxRec.transactionHash, l2TxHash: l2Txhash, status: 1 };
 };
 
 // ******************* Checking Transaction Completion *******************

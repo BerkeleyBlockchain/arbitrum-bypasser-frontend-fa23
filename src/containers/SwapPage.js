@@ -45,7 +45,7 @@ export default function SwapPage() {
   // ******************* Ethers, MetaMask Signer *******************
   const [signer, setSigner] = useState(null);
 
-  useEffect(() => { 
+  useEffect(() => {
     async function connectToMetaMask() {
       if (window.ethereum) {
         try {
@@ -294,7 +294,10 @@ export default function SwapPage() {
               Receipt
             </div>
             <div className="text-white text-sm mb-3">
-              Status: <span className="text-[rgba(0,212,136,1)]">Pending</span>
+              Status:{" "}
+              <span className="text-[rgba(0,212,136,1)]">{l2Status}</span>
+              L1TxHash: <span>https://sepolia.etherscan.io/tx/${l1Tx}</span>
+              L2TxHash: <span>https://sepolia.arbiscan.io/tx/${l2Tx}</span>
             </div>
 
             <hr className="border-gray-700 my-4" />
@@ -411,7 +414,7 @@ export const ExecuteButton = ({
     // ******************* Convert WalletClient to Signer Object *******************
     // const l2Signer = useEthersSigner();
     try {
-      const { l1Tx, l2Tx, l2Status } = await sendL1toL2(
+      const { l1TxHash, l2TxHash, status } = await sendL1toL2(
         l1Signer,
         l2Signer,
         walletClient,
@@ -422,9 +425,9 @@ export const ExecuteButton = ({
 
       // Update the state after the transaction
       setIsSwapped(true);
-      setL1Tx(l1Tx);
-      setL2Tx(l2Tx);
-      setL2Status(l2Status);
+      setL1Tx(l1TxHash);
+      setL2Tx(l2TxHash);
+      setL2Status(status);
     } catch (error) {
       console.error("Transaction execution error:", error);
     }
