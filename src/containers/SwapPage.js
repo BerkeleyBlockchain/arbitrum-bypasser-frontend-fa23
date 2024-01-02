@@ -395,6 +395,7 @@ export const ExecuteButton = ({
   console.log(l2Signer);
 
   async function handleExecuteClick() {
+    // REPLACE: add a loading buffer or move to next screen
     // ******************* Check if Wallet is Connected *******************
     if (isDisconnected || !isSuccess || isError || isLoading) {
       openConnectModal(); // Short Circuit
@@ -413,14 +414,33 @@ export const ExecuteButton = ({
 
     // ******************* Convert WalletClient to Signer Object *******************
     // const l2Signer = useEthersSigner();
+
+    const contractABI = [
+      {
+        inputs: [
+          { internalType: "address", name: "destination", type: "address" },
+        ],
+        name: "withdrawEth",
+        outputs: [{ internalType: "uint256", name: "", type: "uint256" }],
+        stateMutability: "payable",
+        type: "function",
+      },
+    ]; // REPLACE with `abi`
+    const contractAddress = "0x0000000000000000000000000000000000000064"; // REPLACE with `addy`
+
+    const userInputs = {
+      functionName: "withdrawEth",
+      functionABI: "", // REPLACE
+      value: "0.000000000000000001",
+      idata: ["0x3D0AD1BC6023e75B17b36F04CFc0022687E69084"], // needs to be in order
+    }; // REPLACE ENITRELY
+
     try {
       const { l1TxHash, l2TxHash, status } = await sendL1toL2(
-        l1Signer,
-        l2Signer,
-        walletClient,
-        "0x0000000000000000000000000000000000000064",
-        "withdrawEth",
-        ["0x3D0AD1BC6023e75B17b36F04CFc0022687E69084"]
+        contractAddress,
+        "contractName",
+        contractABI,
+        userInputs
       );
 
       // Update the state after the transaction

@@ -77,8 +77,8 @@ const main = async (address, abi_function, parameters) => {
   console.log(
     `Signed this L2 tx hash but not broadcasted: https://sepolia.arbiscan.io/tx/${l2Txhash}`
   );
-  return;
 
+  console.log(l2SignedTx);
   const l1Tx = await inboxSdk.sendL2SignedTx(l2SignedTx);
 
   const inboxRec = await l1Tx.wait();
@@ -95,6 +95,7 @@ const main = async (address, abi_function, parameters) => {
   console.log(
     `Now we need to wait for tx to be finalized on L2: ${l2Txhash} to be included on l2 (may take 15 minutes) ....... `
   );
+  return;
 
   const l2TxReceipt = await l2Provider.waitForTransaction(l2Txhash);
   console.log(l2TxReceipt);
