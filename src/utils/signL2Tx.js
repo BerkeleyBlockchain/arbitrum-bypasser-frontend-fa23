@@ -1,17 +1,14 @@
 import { React } from "react";
 import { ethers } from "ethers";
+import { readABI } from "./readFile";
 
 export const signL2Tx = async (contractAddress, contractABI, userInputs) => {
   // ******************* Grab Program Params *******************
   console.log(`========= signL2Tx =========`);
   console.log(contractAddress, contractABI, userInputs);
+  const abi = await readABI(contractABI);
 
-  const {
-    functionName,
-    functionABI,
-    value: userValue,
-    idata: userParams,
-  } = userInputs;
+  const { functionName, value: userValue, idata: userParams } = userInputs;
 
   if (!window.ethereum) {
     alert("MetaMask is not installed!");
@@ -33,19 +30,8 @@ export const signL2Tx = async (contractAddress, contractABI, userInputs) => {
     const provider = new ethers.providers.Web3Provider(window.ethereum);
     const signer = provider.getSigner();
 
-    // ******************* Create Transaction Object *******************
-    // const contract = new ethers.Contract(contractAddress, contractABI, signer);
-    // console.log(contract);
-    // const transactionRequest = await contract.populateTransaction.withdrawEth(
-    //   "0x3D0AD1BC6023e75B17b36F04CFc0022687E69084",
-    //   {
-    //     value: ethers.utils.parseEther("1"), // Convert the ETH amount to Wei
-    //   }
-    // );
-    // console.log(transactionRequest);
-
     // ******************* Connect to Contract *******************
-    const icontract = new ethers.utils.Interface(contractABI);
+    const icontract = new ethers.utils.Interface(abi);
     console.log(icontract);
 
     const idata = icontract.encodeFunctionData(functionName, userParams);

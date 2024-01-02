@@ -4,7 +4,7 @@ import "./Landing.css";
 import ProtocolCard from "../components/ProtocolCard";
 import testnetMap from "../constants/testnet_map.json";
 
-import SearchBar from "./SearchBar";
+import SearchBar from "../components/SearchBar";
 
 const protocols = Object.values(testnetMap).map((value) => value.name);
 

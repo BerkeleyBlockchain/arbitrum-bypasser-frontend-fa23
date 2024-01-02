@@ -2,10 +2,12 @@ import React, { useEffect, useState } from "react";
 import { FaCheckCircle, FaFilter, FaSearch } from "react-icons/fa";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate, useLocation } from "react-router-dom";
+import { ClipLoader } from "react-spinners";
 import { ethers } from "ethers";
 
 import "./SwapPage.css";
-import SearchBar from "./SearchBar";
+import SearchBar from "../components/SearchBar";
+import { readABIFunctions } from "../utils/readFile";
 
 import { sendL1toL2 } from "../utils/sendL1toL2";
 import { useConnectModal } from "@rainbow-me/rainbowkit";
@@ -20,23 +22,44 @@ export default function SwapPage() {
   const navigate = useNavigate();
   const location = useLocation();
   const { addy, name, abi } = location.state || {};
+  const [functionList, setFunctionList] = useState({});
+  const [selectedFunction, setSelectedFunction] = useState("");
 
   useEffect(() => {
+    async function getABIFunctions() {
+      const funcs = await readABIFunctions(abi);
+      setFunctionList(funcs);
+      setSelectedFunction(Object.keys(funcs)[0]);
+    }
     // Check if addy, name, or abi is null or undefined
     if (!addy || !name || !abi) {
       navigate("/"); // Redirect to the home page
+    } else {
+      getABIFunctions();
     }
   }, [addy, name, abi, navigate]);
 
-  console.log("The Protocol for this page is: ", addy, name, abi);
-
   // ******************* State Set up *******************
-
   // const dispatch = useDispatch();
-  const [functionMethod, setfunctionMethod] = useState("Ethereum Mainnet");
-  const [ethAmount, setEthAmount] = useState("1.5");
-  const [formInputOne, setFormInputOne] = useState("");
-  const [formInputTwo, setFormInputTwo] = useState("");
+  const [payableValue, setPayableValue] = useState(""); //0.000000000000000001 in wei
+  const [formInputs, setFormInputs] = useState([]);
+
+  const handleFormInput = (index, evalue) => {
+    let updatedFormInputs = [...formInputs];
+    updatedFormInputs[index] = evalue;
+    setFormInputs(updatedFormInputs);
+  };
+
+  useEffect(() => {
+    if (Object.keys(functionList).length === 0) {
+      return;
+    }
+
+    const length = Object.keys(functionList[selectedFunction]?.inputs).length;
+    const arrayOfEmptyStrings = new Array(length).fill("");
+    setFormInputs(arrayOfEmptyStrings);
+  }, [functionList, selectedFunction]);
+
   const [isSwapped, setIsSwapped] = useState(false);
 
   // const [executeStatus, setExecuteStatus] = useState(false);
@@ -75,12 +98,92 @@ export default function SwapPage() {
     address: address || null,
   });
 
+  // ******************* Execute Button Function *******************
+  const ExecuteButton = ({
+    isDisconnected,
+    setIsSwapped,
+    setL1Tx,
+    setL2Status,
+    setL2Tx,
+  }) => {
+    const { openConnectModal } = useConnectModal();
+
+    const walletClient = useWalletClient();
+    const { data: clientData, isSuccess, isLoading, isError } = walletClient;
+    console.log(walletClient);
+
+    const l1Signer = useEthersSigner({ chainId: sepolia.id });
+    const l2Signer = useEthersSigner({ chainId: arbitrumSepolia.id });
+    console.log(l1Signer);
+    console.log(l2Signer);
+
+    async function handleExecuteClick() {
+      // REPLACE: add a loading buffer or move to next screen
+      // ******************* Check if Wallet is Connected *******************
+      if (isDisconnected || !isSuccess || isError || isLoading) {
+        openConnectModal(); // Short Circuit
+        return;
+      }
+
+      // ******************* Swap to Arb Sepolia *******************
+      // try {
+      //   await walletClient.data.switchChain({
+      //     id: arbitrumSepolia.id,
+      //   });
+      // } catch (error) {
+      //   console.log(error);
+      //   return; // Short Circuit
+      // }
+
+      // ******************* Convert WalletClient to Signer Object *******************
+      // const l2Signer = useEthersSigner();
+
+      const contractAddress = addy;
+
+      const userInputs = {
+        functionName: selectedFunction,
+        value: payableValue,
+        idata: formInputs, // needs to be in order
+      }; // REPLACE ENITRELY
+
+      try {
+        const { l1TxHash, l2TxHash, status } = await sendL1toL2(
+          contractAddress,
+          name,
+          abi,
+          userInputs
+        );
+
+        // Update the state after the transaction
+        setIsSwapped(true);
+        setL1Tx(l1TxHash);
+        setL2Tx(l2TxHash);
+        setL2Status(status);
+      } catch (error) {
+        console.error("Transaction execution error:", error);
+      }
+    }
+
+    return (
+      <button
+        onClick={handleExecuteClick}
+        className="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-6 rounded-full mx-2"
+      >
+        Execute
+      </button>
+    );
+  };
+
   return (
     <div className="landing-bg bg-cover bg-no-repeat text-white min-h-screen pt-24">
       <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-        <h1 className="text-5xl font-bold mb-2">Protocol: {name} </h1>
+        <h1 className="text-5xl font-bold mb-2">
+          Protocol: <span className="text-[rgba(0,212,136,1)]">{name}</span>
+        </h1>
         <p className="mb-8">
-          Execute transactions to {name} on Arbitrum from your ETH account
+          Execute transactions to{" "}
+          <span className="text-[rgba(0,212,136,1)]">{name}</span> on Arbitrum
+          from your ETH account
         </p>
       </div>
 
@@ -101,17 +204,16 @@ export default function SwapPage() {
                     className="text-white"
                     style={{ color: "rgba(99, 117, 146, 1)" }}
                   >
-                    From:
+                    Method:
                   </span>
                   <select
-                    value={functionMethod}
-                    onChange={(e) => setfunctionMethod(e.target.value)}
+                    value={selectedFunction}
+                    onChange={(e) => setSelectedFunction(e.target.value)}
                     className="ml-2 bg-gray-700 text-white rounded p-1"
                   >
-                    <option value="Ethereum Mainnet">Ethereum Mainnet</option>
-                    <option value="Binance">Binance</option>
-                    <option value="Polygon">Polygon</option>
-                    <option value="Solana">Solana</option>
+                    {Object.entries(functionList).map(([key, value]) => (
+                      <option value={key}>{key}</option>
+                    ))}
                   </select>
                 </div>
 
@@ -123,12 +225,19 @@ export default function SwapPage() {
                     marginRight: "20px",
                   }}
                 >
-                  <input
-                    type="text"
-                    value={ethAmount}
-                    onChange={(e) => setEthAmount(e.target.value)}
-                    className="text-white bg-transparent focus:outline-none"
-                  />
+                  {Object.keys(functionList).length === 0 ? (
+                    <ClipLoader size={25} color={"#ffffff"} />
+                  ) : (
+                    <input
+                      type="text"
+                      value={payableValue}
+                      placeholder={
+                        functionList[selectedFunction].stateMutability
+                      }
+                      onChange={(e) => setPayableValue(e.target.value)}
+                      className="text-white bg-transparent focus:outline-none"
+                    />
+                  )}
                 </div>
                 <div
                   className="text-left text-white text-xs"
@@ -160,32 +269,28 @@ export default function SwapPage() {
               </div>
 
               <div className="w-1/2 text-left">
-                <div className="mb-3">
-                  <input
-                    type="text"
-                    value={formInputOne}
-                    onChange={(e) => setFormInputOne(e.target.value)}
-                    className="w-full p-2 text-white bg-gray-700 rounded focus:outline-none"
-                    placeholder="Form Input One"
-                    style={{
-                      backgroundColor: "rgba(25, 29, 36, 1)",
-                      borderRadius: "8px",
-                    }}
-                  />
-                </div>
-                <div className="mb-3">
-                  <textarea
-                    value={formInputTwo}
-                    onChange={(e) => setFormInputTwo(e.target.value)}
-                    className="w-full p-2 text-white bg-gray-700 focus:outline-none"
-                    placeholder="Form Input Two"
-                    style={{
-                      backgroundColor: "rgba(25, 29, 36, 1)",
-                      borderRadius: "8px",
-                      height: "200px",
-                    }}
-                  />
-                </div>
+                {Object.keys(functionList).length === 0 ||
+                functionList[selectedFunction]?.inputs.length === 0 ? (
+                  <div className="mb-3"> No Inputs Needed!</div>
+                ) : (
+                  Object.entries(
+                    functionList[selectedFunction]?.inputs || {}
+                  ).map(([key, value]) => (
+                    <div className="mb-3" key={key}>
+                      <input
+                        type="text"
+                        value={formInputs[key] || ""}
+                        onChange={(e) => handleFormInput(key, e.target.value)}
+                        className="w-full p-2 text-white bg-gray-700 rounded focus:outline-none"
+                        placeholder={`${value.name} ${value.type}`}
+                        style={{
+                          backgroundColor: "rgba(25, 29, 36, 1)",
+                          borderRadius: "8px",
+                        }}
+                      />
+                    </div>
+                  ))
+                )}
               </div>
             </div>
 
@@ -361,91 +466,3 @@ export default function SwapPage() {
     </div>
   );
 }
-
-// ******************* Execute Button Function *******************
-export const ExecuteButton = ({
-  isDisconnected,
-  setIsSwapped,
-  setL1Tx,
-  setL2Status,
-  setL2Tx,
-}) => {
-  const { openConnectModal } = useConnectModal();
-
-  const walletClient = useWalletClient();
-  const { data: clientData, isSuccess, isLoading, isError } = walletClient;
-  console.log(walletClient);
-
-  const l1Signer = useEthersSigner({ chainId: sepolia.id });
-  const l2Signer = useEthersSigner({ chainId: arbitrumSepolia.id });
-  console.log(l1Signer);
-  console.log(l2Signer);
-
-  async function handleExecuteClick() {
-    // REPLACE: add a loading buffer or move to next screen
-    // ******************* Check if Wallet is Connected *******************
-    if (isDisconnected || !isSuccess || isError || isLoading) {
-      openConnectModal(); // Short Circuit
-      return;
-    }
-
-    // ******************* Swap to Arb Sepolia *******************
-    // try {
-    //   await walletClient.data.switchChain({
-    //     id: arbitrumSepolia.id,
-    //   });
-    // } catch (error) {
-    //   console.log(error);
-    //   return; // Short Circuit
-    // }
-
-    // ******************* Convert WalletClient to Signer Object *******************
-    // const l2Signer = useEthersSigner();
-
-    const contractABI = [
-      {
-        inputs: [
-          { internalType: "address", name: "destination", type: "address" },
-        ],
-        name: "withdrawEth",
-        outputs: [{ internalType: "uint256", name: "", type: "uint256" }],
-        stateMutability: "payable",
-        type: "function",
-      },
-    ]; // REPLACE with `abi`
-    const contractAddress = "0x0000000000000000000000000000000000000064"; // REPLACE with `addy`
-
-    const userInputs = {
-      functionName: "withdrawEth",
-      functionABI: "", // REPLACE
-      value: "0.000000000000000001",
-      idata: ["0x3D0AD1BC6023e75B17b36F04CFc0022687E69084"], // needs to be in order
-    }; // REPLACE ENITRELY
-
-    try {
-      const { l1TxHash, l2TxHash, status } = await sendL1toL2(
-        contractAddress,
-        "contractName",
-        contractABI,
-        userInputs
-      );
-
-      // Update the state after the transaction
-      setIsSwapped(true);
-      setL1Tx(l1TxHash);
-      setL2Tx(l2TxHash);
-      setL2Status(status);
-    } catch (error) {
-      console.error("Transaction execution error:", error);
-    }
-  }
-
-  return (
-    <button
-      onClick={handleExecuteClick}
-      className="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-6 rounded-full mx-2"
-    >
-      Execute
-    </button>
-  );
-};
