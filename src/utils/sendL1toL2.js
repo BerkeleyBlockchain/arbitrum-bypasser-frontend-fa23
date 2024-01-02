@@ -1,5 +1,6 @@
 // Contributors: Tommy, Jay, Dhruv
 import { React } from "react";
+import { signEth } from "./signEth";
 const { providers, Wallet, ethers } = require("ethers");
 
 const {
@@ -38,8 +39,8 @@ export const sendL1toL2 = async (
   abi_function,
   parameters
 ) => {
-  console.log(await l1Signer.getGasPrice());
-  return;
+  // console.log(await l1Signer.getGasPrice());
+  // return;
   console.log(`Starting transaction from l1 to l2 for ${abi_function}...`);
 
   // ******************* Inbox Set up and Grab L2 Network *******************
@@ -73,15 +74,18 @@ export const sendL1toL2 = async (
 
   // ******************* Presigning l2 tx and sending it via l1 *******************
 
-  try {
-    // Switch to get the L2 version of Client
-    await client.data.switchChain({ id: arbitrumSepolia.id });
-    console.log(client.data);
-  } catch (error) {
-    console.log(error);
-    return { l1Tx: null, l2Tx: null, l2Status: 0 };
-  }
+  // try {
+  //   // Switch to get the L2 version of Client
+  //   await client.data.switchChain({ id: arbitrumSepolia.id });
+  //   console.log(client.data);
+  // } catch (error) {
+  //   console.log(error);
+  //   return { l1Tx: null, l2Tx: null, l2Status: 0 };
+  // }
 
+  const signedtxt = await signEth(transactionl2Request, l2Signer); /// this client is l2 signer
+  console.log("Signed L2 tx: ", signedtxt);
+  return;
   const l2SignedTx = await inboxSdk.signL2Tx(transactionl2Request, l2Signer); /// this client is l2 signer
   console.log("Signed L2 tx: ", l2SignedTx);
 
