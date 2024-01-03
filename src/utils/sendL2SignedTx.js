@@ -1,3 +1,5 @@
+// Custom SendL2SignedTx in case Arbitrum's gets deprecated
+
 import { React } from "react";
 import { ethers } from "ethers";
 const IInbox__factory_1 = require("@arbitrum/sdk/dist/lib/abi/factories/IInbox__factory");

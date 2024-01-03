@@ -1,10 +1,10 @@
-import React, { useState } from 'react';
+import React, { useState } from "react";
 
 const SearchBar = ({ protocols, onSelectProtocol }) => {
-  const [searchQuery, setSearchQuery] = useState('');
+  const [searchQuery, setSearchQuery] = useState("");
   const [showDropdown, setShowDropdown] = useState(false);
 
-  const filteredProtocols = protocols.filter(p =>
+  const filteredProtocols = protocols.filter((p) =>
     p.toLowerCase().includes(searchQuery.toLowerCase())
   );
 

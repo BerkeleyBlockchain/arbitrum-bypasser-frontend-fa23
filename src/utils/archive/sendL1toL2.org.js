@@ -1,6 +1,6 @@
 // Contributors: Tommy, Jay, Dhruv
 import { React } from "react";
-import { signL2Tx } from "./signL2Tx";
+import { signL2Tx } from "../signL2Tx";
 const { providers, Wallet, ethers } = require("ethers");
 
 const {

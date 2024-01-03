@@ -1,7 +1,5 @@
 // import from constants
 
-import { forEachChild } from "typescript";
-
 /**
  * @param {string} file_name - name of file
  * @returns {object} abi of that file

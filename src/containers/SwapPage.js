@@ -15,7 +15,7 @@ import { useConnectModal } from "@rainbow-me/rainbowkit";
 import { useWalletClient, useBalance, useAccount } from "wagmi";
 import { sepolia, arbitrumSepolia } from "wagmi/chains";
 
-import { useEthersSigner } from "../utils/convertViem";
+// import { useEthersSigner } from "../utils/convertViem";
 
 export default function SwapPage() {
   // ******************* Preprocessing to Gate Page If forced entry *******************
@@ -42,7 +42,7 @@ export default function SwapPage() {
   // ******************* State Set up *******************
   // const dispatch = useDispatch();
   const [payableValue, setPayableValue] = useState(""); //0.000000000000000001 in wei
-  const [formInputs, setFormInputs] = useState([]);
+  const [formInputs, setFormInputs] = useState([]); // ["0x3D0AD1BC6023e75B17b36F04CFc0022687E69084"]
 
   const handleFormInput = (index, evalue) => {
     let updatedFormInputs = [...formInputs];
@@ -112,10 +112,10 @@ export default function SwapPage() {
     const { data: clientData, isSuccess, isLoading, isError } = walletClient;
     console.log(walletClient);
 
-    const l1Signer = useEthersSigner({ chainId: sepolia.id });
-    const l2Signer = useEthersSigner({ chainId: arbitrumSepolia.id });
-    console.log(l1Signer);
-    console.log(l2Signer);
+    // const l1Signer = useEthersSigner({ chainId: sepolia.id });
+    // const l2Signer = useEthersSigner({ chainId: arbitrumSepolia.id });
+    // console.log(l1Signer);
+    // console.log(l2Signer);
 
     async function handleExecuteClick() {
       // REPLACE: add a loading buffer or move to next screen
@@ -388,8 +388,11 @@ export default function SwapPage() {
             <div className="text-white text-sm mb-3">
               Status:{" "}
               <span className="text-[rgba(0,212,136,1)]">{l2Status}</span>
-              L1TxHash: <span>https://sepolia.etherscan.io/tx/${l1Tx}</span>
-              L2TxHash: <span>https://sepolia.arbiscan.io/tx/${l2Tx}</span>
+              <br />
+              L1TxHash: <span>https://sepolia.etherscan.io/tx/{l1Tx}</span>
+              <br />
+              L2TxHash: <span>https://sepolia.arbiscan.io/tx/{l2Tx}</span>
+              <br />
             </div>
 
             <hr className="border-gray-700 my-4" />

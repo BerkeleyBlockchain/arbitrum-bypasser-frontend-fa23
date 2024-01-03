@@ -1,3 +1,4 @@
+import { React } from "react";
 const { providers, Wallet, ethers } = require("ethers");
 const {
   getL2Network,
@@ -7,7 +8,6 @@ const {
   ArbSys__factory,
 } = require("@arbitrum/sdk/dist/lib/abi/factories/ArbSys__factory");
 const { InboxTools } = require("@arbitrum/sdk");
-
 
 // ******************* Grab Custom Node RPCS for Eth and Goerli *******************
 const l1Provider = new providers.JsonRpcProvider(process.env.REACT_APP_L1RPC);
@@ -28,32 +28,32 @@ const DELAY_PERIOD = 24 * 60 * 60; // 24 hours in seconds
  * @param {number} blockNumber - The block number to check.
  * @returns {boolean} True if the block is eligible for force inclusion, false otherwise.
  */
-async function isBlockEligibleForForceInclusion(blockNumber) {
+export async function isBlockEligibleForForceInclusion(blockNumber) {
   const block = await l1Provider.getBlock(blockNumber);
-  const currentTime = Math.floor(Date.now() / 1000); 
+  const currentTime = Math.floor(Date.now() / 1000);
   const timeElapsed = currentTime - block.timestamp;
   return timeElapsed > DELAY_PERIOD;
 }
-async function main() {
-  // The third element in process.argv is your first command-line argument
-  const blockHash = process.argv[2];
+// async function main() {
+//   // The third element in process.argv is your first command-line argument
+//   const blockHash = process.argv[2];
 
-  if (!blockHash) {
-      console.error("Please provide a block hash.");
-      process.exit(1);
-  }
+//   if (!blockHash) {
+//     console.error("Please provide a block hash.");
+//     process.exit(1);
+//   }
 
-  // Call your forceInclude function here with the blockHash
-  try {
-      await forceInclude(blockHash);
-      console.log("Force include executed successfully.");
-  } catch (error) {
-      console.error("Error during force include:", error.message);
-  }
-}
+//   // Call your forceInclude function here with the blockHash
+//   try {
+//     await forceInclude(blockHash);
+//     console.log("Force include executed successfully.");
+//   } catch (error) {
+//     console.error("Error during force include:", error.message);
+//   }
+// }
 
-// Execute the main function
-main();
+// // Execute the main function
+// main();
 
 /**
  * Primary function to send a transaction to the delayed inbox in L2 via L1
@@ -61,7 +61,7 @@ main();
  * @param {string} abi_function ~ function name from abi dictionary
  * @param {array} parameters ~ [value, value, value, ...]
  */
-const forceInclude = async (block) => {
+export const forceInclude = async (blockNumber) => {
   console.log(`Checking force inclusion for block ${blockNumber}`);
 
   // Check if the block is eligible for force inclusion
@@ -77,7 +77,7 @@ const forceInclude = async (block) => {
 
   // Execute force include
   const forceInclusionTx = await inboxSdk.forceInclude({
-    blockNumber: BigNumber.from(blockNumber)
+    blockNumber: BigNumber.from(blockNumber),
   });
 
   if (!forceInclusionTx) {
@@ -99,9 +99,9 @@ const forceInclude = async (block) => {
   //expect(forceInclusionTx, 'Null force inclusion').to.not.be.null
   //await forceInclusionTx!.wait()
 
-  const messagesReadAfter = await sequencerInbox.totalDelayedMessagesRead()
+  // UNCOMMENT LATER
+  // const messagesReadAfter = await sequencerInbox.totalDelayedMessagesRead();
 
   //expect(messagesReadAfter.toNumber(), 'Message not read').to.eq(
-    //startInboxLength.add(1).toNumber()
+  //startInboxLength.add(1).toNumber()
 };
-module.exports = { forceInclude };
