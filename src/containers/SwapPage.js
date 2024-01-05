@@ -27,16 +27,25 @@ export default function SwapPage() {
 
   useEffect(() => {
     async function getABIFunctions() {
+      if (!abi) {
+        console.error('ABI is not defined');
+        return;
+      }
       const funcs = await readABIFunctions(abi);
-      setFunctionList(funcs);
-      setSelectedFunction(Object.keys(funcs)[0]);
+      if (funcs && typeof funcs === 'object' && Object.keys(funcs).length > 0) {
+        setFunctionList(funcs);
+        setSelectedFunction(Object.keys(funcs)[0]);
+      } else {
+        console.error('Function list is empty or not an object:', funcs);
+      }
     }
     // Check if addy, name, or abi is null or undefined
     if (!addy || !name || !abi) {
-      navigate("/"); // Redirect to the home page
+      navigate("/"); 
     } else {
       getABIFunctions();
     }
+
   }, [addy, name, abi, navigate]);
 
   // ******************* State Set up *******************
