@@ -102,7 +102,7 @@ const TransactionBox = ({
             {to}
           </a>
           <br />
-          Gas Price: {gasPrice} Gwei
+          Gas Price: {gasPrice} Gwein
           <br />
           TxReceiptStatus:{" "}
           {txreceipt_status === "1" ? (
