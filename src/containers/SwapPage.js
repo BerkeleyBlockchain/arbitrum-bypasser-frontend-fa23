@@ -25,6 +25,16 @@ export default function SwapPage() {
   const [functionList, setFunctionList] = useState({});
   const [selectedFunction, setSelectedFunction] = useState("");
 
+  const [tokenIn, setTokenIn] = useState("");
+  const [tokenOut, setTokenOut] = useState("");
+  const [amountIn, setAmountIn] = useState("");
+  const [amountOut, setAmountOut] = useState("");
+
+  const tokens = [
+    { address: 0xaf88d065e77c8cC2239327C5EDb3A432268e5831, symbol: "USDC"},
+    { address: 0x912CE59144191C1204E64559FE8253a0e49E6548, symbol: "ARB"},
+  ]
+
   useEffect(() => {
     async function getABIFunctions() {
       if (!abi) {
@@ -207,6 +217,55 @@ export default function SwapPage() {
           >
             {/* Network Selection and Asset Input */}
             <div className="flex items-start text-sm font-medium">
+            {selectedFunction === 'exactInput' && (
+              <div className="w-1/2 text-left">
+                {/* Token In Selection */}
+                <div className="mb-3">
+                  <label htmlFor="tokenIn">From Token:</label>
+                  <select
+                    id="tokenIn"
+                    value={tokenIn}
+                    onChange={(e) => setTokenIn(e.target.value)}
+                    style={{backgroundColor: 'rgba(25, 29, 36, 1)'}}
+                  >
+                    {tokens.map((token) => (
+                      <option key={token.address} value={token.address}>
+                        {token.symbol}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+                {/* Amount In Input */}
+                <div className="mb-3">
+                  <label htmlFor="amountIn">Amount In:</label>
+                  <input
+                    id="amountIn"
+                    type="text"
+                    value={amountIn}
+                    onChange={(e) => setAmountIn(e.target.value)}
+                    placeholder="Enter amount"
+                    style={{backgroundColor: 'rgba(25, 29, 36, 1)'}}
+                  />
+                </div>
+
+                {/* Token Out Selection */}
+                <div className="mb-3">
+                  <label htmlFor="tokenOut">To Token:</label>
+                  <select
+                    id="tokenOut"
+                    value={tokenOut}
+                    onChange={(e) => setTokenOut(e.target.value)}
+                    style={{backgroundColor: 'rgba(25, 29, 36, 1)'}}
+                  >
+                    {tokens.map((token) => (
+                      <option key={token.address} value={token.address}>
+                        {token.symbol}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+              </div>
+            )}
               <div className="w-1/2 text-left">
                 <div className="mb-3">
                   <span
