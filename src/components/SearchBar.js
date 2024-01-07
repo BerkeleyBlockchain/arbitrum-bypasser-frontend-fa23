@@ -1,12 +1,24 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
+import { ProtocolsContext } from "../containers/ProtocolsContext";
 
-const SearchBar = ({ protocols, onSelectProtocol }) => {
+const SearchBar = () => {
   const [searchQuery, setSearchQuery] = useState("");
+  const [newProtocol, setNewProtocol] = useState("");
   const [showDropdown, setShowDropdown] = useState(false);
+
+  // Use useContext to access the protocols and functions from the context
+  const { protocols, addProtocol, selectProtocol } = useContext(ProtocolsContext);
 
   const filteredProtocols = protocols.filter((p) =>
     p.toLowerCase().includes(searchQuery.toLowerCase())
   );
+
+  const handleAddNewProtocol = () => {
+    if (newProtocol && !protocols.includes(newProtocol)) {
+      addProtocol(newProtocol); // Add protocol using the function from context
+      setNewProtocol("");
+    }
+  };
 
   return (
     <div className="relative flex-1">
@@ -38,7 +50,7 @@ const SearchBar = ({ protocols, onSelectProtocol }) => {
               onClick={() => {
                 setSearchQuery(protocol);
                 setShowDropdown(false);
-                onSelectProtocol(protocol);
+                selectProtocol(protocol); // Select protocol using the function from context
               }}
             >
               {protocol}

@@ -1,5 +1,6 @@
 import React from "react";
 import { RouterProvider } from "react-router-dom";
+import { ProtocolsProvider } from "./containers/ProtocolsContext";
 import "./App.css";
 
 import router from "./router";
@@ -54,7 +55,9 @@ export default function App() {
   return (
     <WagmiConfig config={wagmiConfig}>
       <RainbowKitProvider chains={chains}>
-        <RouterProvider router={router} />
+        <ProtocolsProvider> {/* Wrap the router with ProtocolsProvider */}
+          <RouterProvider router={router} />
+        </ProtocolsProvider>
       </RainbowKitProvider>
     </WagmiConfig>
   );
