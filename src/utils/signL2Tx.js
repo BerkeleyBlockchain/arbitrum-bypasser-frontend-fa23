@@ -8,7 +8,12 @@ export const signL2Tx = async (contractAddress, contractABI, userInputs) => {
   console.log(contractAddress, contractABI, userInputs);
   const abi = await readABI(contractABI);
 
-  const { functionName, value: userValue, idata: userParams } = userInputs;
+  const {
+    functionName,
+    gasBuffer,
+    value: userValue,
+    idata: userParams,
+  } = userInputs;
 
   if (!window.ethereum) {
     alert("MetaMask is not installed!");
@@ -45,14 +50,18 @@ export const signL2Tx = async (contractAddress, contractABI, userInputs) => {
       data: idata,
       value: ethers.utils.parseEther(userValue),
     });
-    console.log(estGas);
+    const multiplier = ethers.utils.parseUnits((1 + gasBuffer).toString(), 18);
+    const adjustedGas = estGas
+      .mul(multiplier)
+      .div(ethers.utils.parseUnits("1", 18));
+    console.log(adjustedGas.toString());
 
     // ******************* Create TX Object *******************
     let transaction = {
       to: contractAddress,
       value: ethers.utils.parseEther(userValue),
       data: idata,
-      gasLimit: estGas,
+      gasLimit: adjustedGas,
       maxPriorityFeePerGas: (await provider.getFeeData()).maxPriorityFeePerGas,
       maxFeePerGas: (await provider.getFeeData()).maxFeePerGas,
       nonce: nonceNumber,
