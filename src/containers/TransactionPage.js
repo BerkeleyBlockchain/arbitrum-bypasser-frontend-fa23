@@ -22,20 +22,26 @@ export default function TransactionPage() {
 
   useEffect(() => {
     async function getTxFromScanner(account) {
-      const txs = await getLastTransactions(account, 5);
-      setTransactions(txs);
-      console.log(txs);
-      return txs;
+      try {
+        const txs = await getLastTransactions(account, 5);
+        setTransactions(txs);
+        return txs;
+      } catch (err) {
+        console.log(err);
+        setTransactions([]);
+      }
     }
     async function getTxFromLocal() {
       const localTransaction = localStorage.getItem("currentTransaction");
       if (localTransaction) {
         console.log(JSON.parse(localTransaction));
         setCurrentTransaction(JSON.parse(localTransaction));
-        console.log(currentTransaction);
       }
     }
-    getTxFromScanner(address);
+
+    if (address != null) {
+      getTxFromScanner(address);
+    }
     getTxFromLocal();
   }, [address]);
 
@@ -68,7 +74,8 @@ export default function TransactionPage() {
             timeStamp={currentTransaction.timeStamp}
           />
         )}
-        {!transactions ? (
+
+        {transactions.length === 0 ? (
           <ClipLoader size={25} color={"#ffffff"} />
         ) : (
           transactions.map((txObj) => (
