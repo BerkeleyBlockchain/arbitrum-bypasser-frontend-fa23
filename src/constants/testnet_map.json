@@ -13,7 +13,7 @@
   },
   "0xE592427A0AEce92De3Edee1F18E0157C05861564": {
     "name": "UniswapV3 Swap Router",
-    "abi": "UniswapRouterABI.json",
+    "abi": "UniswapV3RouterABI.json",
     "type": "DEX",
     "image": "https://upload.wikimedia.org/wikipedia/commons/thumb/e/e7/Uniswap_Logo.svg/1026px-Uniswap_Logo.svg.png"
   },
