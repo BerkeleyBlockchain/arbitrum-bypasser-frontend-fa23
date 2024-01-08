@@ -6,7 +6,7 @@ import { ClipLoader } from "react-spinners";
 import { ethers } from "ethers";
 
 import "./SwapPage.css";
-import SearchBar from "../components/SearchBar";
+import GasSlider from "../components/GasSlider";
 import { readABIFunctions } from "../utils/readFile";
 
 import { sendL1toL2 } from "../utils/sendL1toL2";
@@ -51,6 +51,7 @@ export default function SwapPage() {
   // const dispatch = useDispatch();
   const [payableValue, setPayableValue] = useState(""); //0.000000000000000001 in wei
   const [formInputs, setFormInputs] = useState([]); // ["0x3D0AD1BC6023e75B17b36F04CFc0022687E69084"]
+  const [gasBuffer, setGasBuffer] = useState(20);
 
   const handleFormInput = (index, evalue) => {
     let updatedFormInputs = [...formInputs];
@@ -66,11 +67,12 @@ export default function SwapPage() {
     const length = Object.keys(functionList[selectedFunction]?.inputs).length;
     const arrayOfEmptyStrings = new Array(length).fill("");
     setFormInputs(arrayOfEmptyStrings);
+    setPayableValue("");
+    setGasBuffer(20);
   }, [functionList, selectedFunction]);
 
   const [isSwapped, setIsSwapped] = useState(false);
 
-  // const [executeStatus, setExecuteStatus] = useState(false);
   const [l1Tx, setL1Tx] = useState("");
   const [l2Tx, setL2Tx] = useState("");
   const [l2Status, setL2Status] = useState("");
@@ -106,7 +108,17 @@ export default function SwapPage() {
     address: address || null,
   });
 
-  // ******************* Execute Button Function *******************
+  // ******************* Handle Click Function *******************
+  const handleMaxClick = () => {
+    setPayableValue(balance?.formatted);
+  };
+  const handleHalfClick = () => {
+    setPayableValue(balance?.formatted / 2);
+  };
+  const handleNoneClick = () => {
+    setPayableValue("");
+  };
+
   const ExecuteButton = ({
     isDisconnected,
     setIsSwapped,
@@ -120,11 +132,6 @@ export default function SwapPage() {
     const { data: clientData, isSuccess, isLoading, isError } = walletClient;
     console.log(walletClient);
 
-    // const l1Signer = useEthersSigner({ chainId: sepolia.id });
-    // const l2Signer = useEthersSigner({ chainId: arbitrumSepolia.id });
-    // console.log(l1Signer);
-    // console.log(l2Signer);
-
     async function handleExecuteClick() {
       // REPLACE: add a loading buffer or move to next screen
       // ******************* Check if Wallet is Connected *******************
@@ -133,27 +140,14 @@ export default function SwapPage() {
         return;
       }
 
-      // ******************* Swap to Arb Sepolia *******************
-      // try {
-      //   await walletClient.data.switchChain({
-      //     id: arbitrumSepolia.id,
-      //   });
-      // } catch (error) {
-      //   console.log(error);
-      //   return; // Short Circuit
-      // }
-
-      // ******************* Convert WalletClient to Signer Object *******************
-      // const l2Signer = useEthersSigner();
-
       const contractAddress = addy;
 
       const userInputs = {
         functionName: selectedFunction,
-        gasBuffer: 0.2,
-        value: payableValue,
+        gasBuffer: gasBuffer * 0.01,
+        value: payableValue, // this is a string
         idata: formInputs, // needs to be in order
-      }; // REPLACE ENITRELY
+      };
 
       try {
         const { l1TxHash, l2TxHash, status } = await sendL1toL2(
@@ -205,20 +199,18 @@ export default function SwapPage() {
               backgroundColor: "rgba(17, 19, 24, 1)",
             }}
           >
-            {/* Network Selection and Asset Input */}
             <div className="flex items-start text-sm font-medium">
+              {/* Left Column */}
               <div className="w-1/2 text-left">
-                <div className="mb-3">
-                  <span
-                    className="text-white"
-                    style={{ color: "rgba(99, 117, 146, 1)" }}
-                  >
-                    Method:
-                  </span>
+                {/* Method Selection */}
+                <div className="mb-4">
+                  <span className="text-white">Method:</span>
                   <select
                     value={selectedFunction}
-                    onChange={(e) => setSelectedFunction(e.target.value)}
-                    className="ml-2 bg-gray-700 text-white rounded p-1"
+                    onChange={(e) => {
+                      setSelectedFunction(e.target.value);
+                    }}
+                    className="ml-2 bg-blue-600 text-white text-center rounded p-1"
                   >
                     {Object.entries(functionList).map(([key, value]) => (
                       <option value={key}>{key}</option>
@@ -226,9 +218,12 @@ export default function SwapPage() {
                   </select>
                 </div>
 
-                {/* Amount input and Token Symbols */}
+                {/* Payable Value Input */}
+                <div>
+                  <span className="white">Payable Value:</span>
+                </div>
                 <div
-                  className="mt-3 px-4 py-2 rounded shadow flex items-center justify-center"
+                  className="mt-3 px-4 py-2 rounded shadow flex items-start justify-start"
                   style={{
                     backgroundColor: "rgba(25, 29, 36, 1)",
                     marginRight: "20px",
@@ -241,21 +236,47 @@ export default function SwapPage() {
                       type="text"
                       value={payableValue}
                       placeholder={
-                        functionList[selectedFunction].stateMutability
+                        functionList[selectedFunction].stateMutability ===
+                        "payable"
+                          ? "e.g. 0.005 in ETH (payable)"
+                          : "e.g. 0.005 in ETH (not payable)"
                       }
                       onChange={(e) => setPayableValue(e.target.value)}
-                      className="text-white bg-transparent focus:outline-none"
+                      className="text-white w-full bg-transparent focus:outline-none"
                     />
                   )}
                 </div>
+
                 <div
                   className="text-left text-white text-xs"
-                  style={{ color: "rgba(99, 117, 146, 1)", marginTop: "20px" }}
+                  style={{ color: "rgba(99, 117, 146, 1)", marginTop: "10px" }}
                 >
                   {!isDisconnected && (
-                    <span>
-                      Balance: {balance?.formatted} {balance?.symbol}{" "}
-                      <span style={{ color: "#3182ce" }}>MAX</span>
+                    <span className="flex justify-between items-center w-full">
+                      <span>
+                        Balance: {balance?.formatted.slice(0, 5)}{" "}
+                        {balance?.symbol}{" "}
+                      </span>
+                      <span>
+                        <button
+                          onClick={handleNoneClick}
+                          className="text-blue-500 hover:text-blue-700 font-bold p-1 rounded-full mx-1"
+                        >
+                          NONE
+                        </button>
+                        <button
+                          onClick={handleHalfClick}
+                          className="text-blue-500 hover:text-blue-700 font-bold p-1 rounded-full mx-1"
+                        >
+                          HALF
+                        </button>
+                        <button
+                          onClick={handleMaxClick}
+                          className="pr-6 text-blue-500 hover:text-blue-700 font-bold p-1 rounded-full mx-1"
+                        >
+                          MAX
+                        </button>
+                      </span>
                     </span>
                   )}
                   {isDisconnected && <span>Connect wallet to see balance</span>}
@@ -265,18 +286,11 @@ export default function SwapPage() {
                   style={{ width: "calc(100% - 20px)" }}
                 />
 
-                <div className="text-left text-white text-xs">
-                  {/* need to obtain from coingecko api */}
-                  <p>
-                    Rate: 1 ETH = 1915.48 ARB{" "}
-                    <span style={{ color: "rgba(99, 117, 146, 1)" }}>
-                      ($1586.04){" "}
-                    </span>{" "}
-                    SWAP FEE: $10 USD
-                  </p>
-                </div>
+                {/* Gas Slider Input */}
+                <GasSlider gasState={gasBuffer} setGasState={setGasBuffer} />
               </div>
 
+              {/* Method Inputs*/}
               <div className="w-1/2 text-left">
                 {Object.keys(functionList).length === 0 ||
                 functionList[selectedFunction]?.inputs.length === 0 ? (
@@ -290,7 +304,7 @@ export default function SwapPage() {
                         type="text"
                         value={formInputs[key] || ""}
                         onChange={(e) => handleFormInput(key, e.target.value)}
-                        className="w-full p-2 text-white bg-gray-700 rounded focus:outline-none"
+                        className="w-full p-2 bg-gray-700 rounded focus:outline-none"
                         placeholder={`${value.name} ${value.type}`}
                         style={{
                           backgroundColor: "rgba(25, 29, 36, 1)",
@@ -315,7 +329,7 @@ export default function SwapPage() {
                 onClick={handleSwapClick}
                 className="bg-gray-600 hover:bg-gray-700 text-white font-bold py-2 px-6 rounded-full mx-2"
               >
-                Back to Protocol
+                Back to Protocols
               </button>
             </div>
           </div>
@@ -347,7 +361,7 @@ export default function SwapPage() {
               </div>
 
               <div
-                className="w-1 bg-gray-600"
+                className="w-1 bg-gray-700"
                 style={{ height: "64px", width: "2px", marginLeft: "15px" }}
               ></div>
               <div className="flex items-center">
@@ -365,7 +379,7 @@ export default function SwapPage() {
               </div>
 
               <div
-                className="w-1 bg-gray-600"
+                className="w-1 bg-gray-700"
                 style={{ height: "64px", width: "2px", marginLeft: "15px" }}
               ></div>
               <div className="flex items-center">
@@ -385,7 +399,7 @@ export default function SwapPage() {
       ) : (
         <div className="flex justify-center items-start mt-8 mb-8">
           <div
-            className="relative inline-block w-full px-6 py-6 rounded-lg bg-gray-800 shadow-lg"
+            className="relative inline-block w-full px-6 py-6 rounded-lg bg-gray-700 shadow-lg"
             style={{
               maxWidth: "800px",
               backgroundColor: "rgba(17, 19, 24, 1)",

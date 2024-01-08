@@ -54,7 +54,7 @@ export const signL2Tx = async (contractAddress, contractABI, userInputs) => {
     const adjustedGas = estGas
       .mul(multiplier)
       .div(ethers.utils.parseUnits("1", 18));
-    console.log(adjustedGas.toString());
+    console.log(estGas.toString(), adjustedGas.toString());
 
     // ******************* Create TX Object *******************
     let transaction = {
