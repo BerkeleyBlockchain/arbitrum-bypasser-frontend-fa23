@@ -40,5 +40,17 @@
     "abi": "SushiswapRouter3.json",
     "type": "dApp",
     "image": "https://s3-alpha.figma.com/hub/file/2214755056/cf1785d6-2459-4861-b2b4-d3b2b8fb8088-cover.png"
+  },
+  "0x7e7a0e201fd38d3adaa9523da6c109a07118c96a": {
+    "name": "Synapse Router",
+    "abi": "SynapseRouter.json",
+    "type": "Bridge",
+    "image": "https://307049640-files.gitbook.io/~/files/v0/b/gitbook-x-prod.appspot.com/o/spaces%2F-MhQGEw0SsziyZOw9Bjh%2Fuploads%2F7ENKOSWtpdP0Hi1mwuGv%2Fsynape_synapse_social_icon.png?alt=media&token=3f30591b-6d4d-4240-9d82-89a6a5065ad4"
+  },
+  "0x7f90122BF0700F9E7e1F688fe926940E8839F353": {
+    "name": "Curve 2Pool (StableSwap)",
+    "abi": "Curve2Pool.json",
+    "type": "LP",
+    "image": "https://cryptologos.cc/logos/curve-dao-token-crv-logo.png"
   }
 }
