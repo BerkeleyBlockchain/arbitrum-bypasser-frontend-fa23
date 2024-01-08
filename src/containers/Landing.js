@@ -19,7 +19,7 @@ export default function Landing() {
     : Object.entries(squaresData);
 
   return (
-    <div className="landing-bg bg-cover bg-no-repeat text-white  pt-24">
+    <div className="flex-grow landing-bg bg-cover bg-no-repeat h-full text-white py-24">
       <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
         <h1 className="text-5xl font-bold mb-2">
           Execute Transactions from your ETH account

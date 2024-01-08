@@ -57,13 +57,13 @@ export default function TransactionPage() {
   }, [currentTransaction, transactions]);
 
   return (
-    <div className="swap-bg bg-cover bg-fixed bg-no-repeat text-white min-h-screen pt-24 pb-24">
+    <div className="swap-bg bg-cover bg-fixed bg-no-repeat text-white flex-grow py-24">
       <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
         <h1 className="text-5xl font-bold mb-2">Your Latest Transactions:</h1>
         <p className="mb-8">
           Here are the latest transactions for the acccount {address}:
         </p>
-        {!currentTransaction ? (
+        {address == null || !currentTransaction ? (
           <></>
         ) : (
           <CurrentTransactionBox

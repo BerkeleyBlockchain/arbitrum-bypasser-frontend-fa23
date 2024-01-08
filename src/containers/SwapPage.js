@@ -235,7 +235,7 @@ export default function SwapPage() {
 
   // ******************* SWAP PAGE CONTENTS *******************
   return (
-    <div className="landing-bg bg-cover bg-no-repeat text-white min-h-screen pt-24">
+    <div className="landing-bg bg-cover bg-no-repeat text-white flex-grow pt-24">
       <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
         <h1 className="text-5xl font-bold mb-2">
           Protocol: <span className="text-[rgba(0,212,136,1)]">{name}</span>
