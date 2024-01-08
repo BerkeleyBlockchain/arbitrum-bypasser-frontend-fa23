@@ -338,45 +338,58 @@ export default function SwapPage() {
 
               {/* Method Inputs*/}
               <div className="w-1/2 text-left">
-                {Object.keys(functionList).length === 0 ? (
-                <div className="mb-3">No Inputs Needed!</div>
-              ) : (
-                functionList[selectedFunction]?.inputs.map((input, index) => (
-                  input.components ? (
-                    // If input has components, we render inputs for each component
-                    input.components.map((component, componentIndex) => (
-                      <div className="mb-3" key={`${index}-${componentIndex}`}>
+                {Object.keys(functionList).length === 0 ||
+                functionList[selectedFunction]?.inputs.length === 0 ? (
+                  <div className="mb-3">No Inputs Needed!</div>
+                ) : (
+                  functionList[selectedFunction]?.inputs.map((input, index) =>
+                    input.components ? (
+                      // If input has components, we render inputs for each component
+                      input.components.map((component, componentIndex) => (
+                        <div
+                          className="mb-3"
+                          key={`${index}-${componentIndex}`}
+                        >
+                          <input
+                            type="text"
+                            value={
+                              formInputs[`${index}-${componentIndex}`] || ""
+                            }
+                            onChange={(e) =>
+                              handleFormInput(
+                                `${index}-${componentIndex}`,
+                                e.target.value
+                              )
+                            }
+                            className="w-full p-2 bg-gray-700 rounded focus:outline-none"
+                            placeholder={`${component.name} (${component.type})`}
+                            style={{
+                              backgroundColor: "rgba(25, 29, 36, 1)",
+                              borderRadius: "8px",
+                            }}
+                          />
+                        </div>
+                      ))
+                    ) : (
+                      // Otherwise, render a single input for the non-component input
+                      <div className="mb-3" key={index}>
                         <input
                           type="text"
-                          value={formInputs[`${index}-${componentIndex}`] || ""}
-                          onChange={(e) => handleFormInput(`${index}-${componentIndex}`, e.target.value)}
+                          value={formInputs[index] || ""}
+                          onChange={(e) =>
+                            handleFormInput(index, e.target.value)
+                          }
                           className="w-full p-2 bg-gray-700 rounded focus:outline-none"
-                          placeholder={`${component.name} (${component.type})`}
+                          placeholder={`${input.name} (${input.type})`}
                           style={{
                             backgroundColor: "rgba(25, 29, 36, 1)",
                             borderRadius: "8px",
                           }}
                         />
                       </div>
-                    ))
-                  ) : (
-                    // Otherwise, render a single input for the non-component input
-                    <div className="mb-3" key={index}>
-                      <input
-                        type="text"
-                        value={formInputs[index] || ""}
-                        onChange={(e) => handleFormInput(index, e.target.value)}
-                        className="w-full p-2 bg-gray-700 rounded focus:outline-none"
-                        placeholder={`${input.name} (${input.type})`}
-                        style={{
-                          backgroundColor: "rgba(25, 29, 36, 1)",
-                          borderRadius: "8px",
-                        }}
-                      />
-                    </div>
+                    )
                   )
-                ))
-              )}
+                )}
               </div>
             </div>
 

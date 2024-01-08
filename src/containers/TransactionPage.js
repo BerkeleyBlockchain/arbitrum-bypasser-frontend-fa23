@@ -7,6 +7,7 @@ import {
   forceInclude,
   isBlockEligibleForForceInclusion,
 } from "../utils/forceInclude";
+import { transpileModule } from "typescript";
 
 export default function TransactionPage() {
   // ******************* Get and Create Wallet *******************
@@ -86,29 +87,29 @@ const TransactionBox = ({
         </div>
 
         <div className="text-white text-sm mb-3">
-          Etherscan Link:{" "}
+          Scanner Link:{" "}
           <a
-            class="text-blue-500 underline"
-            href={`https://sepolia.etherscan.io/tx/${hash}`}
+            className="text-blue-500 underline"
+            href={`https://sepolia.arbiscan.io/tx/${hash}`}
           >
             {hash}
           </a>
           <br />
           To Contract:{" "}
           <a
-            class="text-blue-500 underline"
-            href={`https://sepolia.etherscan.io/${to}`}
+            className="text-blue-500 underline"
+            href={`https://sepolia.arbiscan.io/address/${to}`}
           >
             {to}
           </a>
           <br />
-          Gas Price: {gasPrice} Gwein
+          Gas Price: {gasPrice} Gwei
           <br />
           TxReceiptStatus:{" "}
           {txreceipt_status === "1" ? (
             <span className="text-[rgba(0,212,136,1)]">Success</span>
           ) : (
-            <span className="text-[rgba(255, 255, 0, 1)]">Success</span>
+            <span className="text-red-400">Pending / Fail</span>
           )}
         </div>
 
@@ -124,7 +125,7 @@ const TransactionBox = ({
             </button>
           ) : (
             <button
-              className="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-6 rounded-full"
+              className="bg-red-600 hover:bg-red-700 text-white font-bold py-2 px-6 rounded-full"
               onClick={() => forceInclude(hash)}
             >
               Force Include
