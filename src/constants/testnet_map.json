@@ -28,5 +28,17 @@
     "abi": "TestStorms_ABI.json",
     "type": "dApp",
     "image": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTCauUZiXzWGXoeJSlTQjmevgRl2RIsvvXFDA&usqp=CAU"
+  },
+  "0xaBBc5F99639c9B6bCb58544ddf04EFA6802F4064": {
+    "name": "GMX Router",
+    "abi": "GMXRouter.json",
+    "type": "dApp",
+    "image": "https://altcoinsbox.com/wp-content/uploads/2023/03/gmx-logo.png"
+  },
+  "0xfc506AaA1340b4dedFfd88bE278bEe058952D674": {
+    "name": "Sushi Swap Router",
+    "abi": "SushiswapRouter3.json",
+    "type": "dApp",
+    "image": "https://s3-alpha.figma.com/hub/file/2214755056/cf1785d6-2459-4861-b2b4-d3b2b8fb8088-cover.png"
   }
 }
