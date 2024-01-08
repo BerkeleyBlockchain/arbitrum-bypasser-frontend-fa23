@@ -208,6 +208,16 @@ export default function SwapPage() {
         setL1Tx(l1TxHash);
         setL2Tx(l2TxHash);
         setL2Status(status);
+        localStorage.setItem(
+          "currentTransaction",
+          JSON.stringify({
+            l2TxHash: l2TxHash,
+            l1TxHash: l1TxHash,
+            timeStamp: Date.now().toUTCString(),
+            contractAddress,
+            name,
+          })
+        );
       } catch (error) {
         console.error("Transaction execution error:", error);
       }
@@ -223,6 +233,7 @@ export default function SwapPage() {
     );
   };
 
+  // ******************* SWAP PAGE CONTENTS *******************
   return (
     <div className="landing-bg bg-cover bg-no-repeat text-white min-h-screen pt-24">
       <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">

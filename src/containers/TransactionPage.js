@@ -18,24 +18,56 @@ export default function TransactionPage() {
 
   // ******************* Grab Transactions *******************
   const [transactions, setTransactions] = useState([]);
+  const [currentTransaction, setCurrentTransaction] = useState({});
 
   useEffect(() => {
-    async function grabTransactions(account) {
+    async function getTxFromScanner(account) {
       const txs = await getLastTransactions(account, 5);
       setTransactions(txs);
       console.log(txs);
       return txs;
     }
-    grabTransactions(address);
+    async function getTxFromLocal() {
+      const localTransaction = localStorage.getItem("currentTransaction");
+      if (localTransaction) {
+        console.log(JSON.parse(localTransaction));
+        setCurrentTransaction(JSON.parse(localTransaction));
+        console.log(currentTransaction);
+      }
+    }
+    getTxFromScanner(address);
+    getTxFromLocal();
   }, [address]);
 
+  useEffect(() => {
+    if (
+      transactions.length > 0 &&
+      currentTransaction &&
+      currentTransaction === transactions[0].hash
+    ) {
+      setCurrentTransaction({});
+      localStorage.removeItem("currentTransaction");
+    }
+  }, [currentTransaction, transactions]);
+
   return (
-    <div className="swap-bg bg-cover bg-no-repeat text-white min-h-screen pt-24">
+    <div className="swap-bg bg-cover bg-fixed bg-no-repeat text-white min-h-screen pt-24 pb-24">
       <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
         <h1 className="text-5xl font-bold mb-2">Your Latest Transactions:</h1>
         <p className="mb-8">
           Here are the latest transactions for the acccount {address}:
         </p>
+        {!currentTransaction ? (
+          <></>
+        ) : (
+          <CurrentTransactionBox
+            hash={currentTransaction.l2TxHash}
+            functionName={currentTransaction.name}
+            to={currentTransaction.contractAddress}
+            userInputs={currentTransaction.userInputs}
+            timeStamp={currentTransaction.timeStamp}
+          />
+        )}
         {!transactions ? (
           <ClipLoader size={25} color={"#ffffff"} />
         ) : (
@@ -137,6 +169,78 @@ const TransactionBox = ({
           >
             Check 24 Hour Status
           </button>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+const CurrentTransactionBox = ({
+  hash,
+  functionName,
+  to,
+  userInputs,
+  timeStamp,
+}) => {
+  return (
+    <div className="flex justify-center items-start mt-8 mb-8">
+      <div
+        className="relative inline-block w-full px-6 py-6 rounded-lg bg-gray-800 shadow-lg"
+        style={{
+          maxWidth: "800px",
+          backgroundColor: "rgba(17, 19, 24, 1)",
+        }}
+      >
+        <div className="text-white text-center text-xl text-shadow text-gray-400 font-bold mb-6">
+          MOST RECENT TRANSACTION
+          <br />
+          <span className="text-yellow-500">Time Elapsed: 00:00:00</span>
+        </div>
+        <div className="text-white text-left text-lg font-bold mb-1">
+          {functionName}
+        </div>
+
+        <div className="text-white text-sm mb-3">
+          Expected Scanner Link:{" "}
+          <a
+            className="text-blue-500 underline"
+            href={`https://sepolia.arbiscan.io/tx/${hash}`}
+          >
+            {hash}
+          </a>
+          <br />
+          To Contract:{" "}
+          <a
+            className="text-blue-500 underline"
+            href={`https://sepolia.arbiscan.io/address/${to}`}
+          >
+            {to}
+          </a>
+          <br />
+          Timestamp: <span>{timeStamp}</span>
+          <br />
+          Status: <span className="text-yellow-400">Pending</span>
+        </div>
+
+        <hr className="border-gray-700 my-4" />
+
+        <div className="flex justify-center">
+          {/* TODO change to check date now */}
+          {hash === "1" ? (
+            <button
+              className="bg-gray-400 text-white font-bold py-2 px-6 rounded-full cursor-not-allowed opacity-50"
+              disabled
+            >
+              Force Include
+            </button>
+          ) : (
+            <button
+              className="bg-red-600 hover:bg-red-700 text-white font-bold py-2 px-6 rounded-full"
+              onClick={() => forceInclude(hash)}
+            >
+              Force Include
+            </button>
+          )}
         </div>
       </div>
     </div>
