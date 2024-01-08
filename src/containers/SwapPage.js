@@ -62,10 +62,46 @@ export default function SwapPage() {
   const [payableValue, setPayableValue] = useState(""); //0.000000000000000001 in wei
   const [formInputs, setFormInputs] = useState([]); // ["0x3D0AD1BC6023e75B17b36F04CFc0022687E69084"]
 
-  const handleFormInput = (index, evalue) => {
-    let updatedFormInputs = [...formInputs];
-    updatedFormInputs[index] = evalue;
-    setFormInputs(updatedFormInputs);
+  const handleFormInput = (functionName, paramName, value) => {
+    setFormInputs((currentInputs) => ({
+      ...currentInputs,
+      [functionName]: {
+        ...(currentInputs[functionName] || {}),
+        [paramName]: value,
+      },
+    }));
+  };
+  
+
+  const renderComponentInputs = (functionName, components) => {
+    return components.map((component, index) => (
+      <div className="mb-3" key={`${functionName}-${component.name}`}>
+        <label htmlFor={`${functionName}-${component.name}`} className="block text-sm font-medium text-gray-300">
+          {component.name} ({component.type}):
+        </label>
+        <input
+          id={`${functionName}-${component.name}`}
+          type="text"
+          value={formInputs[functionName]?.[component.name] || ''}
+          onChange={(e) => handleFormInput(functionName, component.name, e.target.value)}
+          className="mt-1 block w-full rounded-md bg-gray-700 border-transparent focus:border-gray-500 focus:ring-0 text-white"
+        />
+      </div>
+    ));
+  };
+
+  const renderInputsOrComponents = (functionName, inputs) => {
+    return inputs.map((input) => {
+      if (input.type === 'tuple' && input.components) {
+        return renderComponentInputs(functionName, input.components);
+      } else {
+        return (
+          <input
+            key ={`${functionName}-${input.name}`}
+          />
+        );
+      }
+    });
   };
 
   useEffect(() => {
@@ -267,6 +303,7 @@ export default function SwapPage() {
               </div>
             )}
               <div className="w-1/2 text-left">
+                {functionList[selectedFunction] && renderInputsOrComponents(selectedFunction, functionList[selectedFunction].inputs)}
                 <div className="mb-3">
                   <span
                     className="text-white"
