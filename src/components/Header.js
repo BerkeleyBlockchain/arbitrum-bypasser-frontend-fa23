@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from 'react';
 import { FaDiscord, FaTwitter } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
 import { ConnectButton } from "@rainbow-me/rainbowkit";
@@ -7,6 +7,7 @@ import MetaMaskSignMessageComponent from "./EthSign";
 
 export default function Header() {
   const navigate = useNavigate();
+  const [network, setNetwork] = useState("Mainnet");
 
   const handleHome = () => {
     navigate("/");
@@ -18,6 +19,10 @@ export default function Header() {
 
   const handleLink = (url) => {
     window.open(url, "_blank", "noopener,noreferrer");
+  };
+
+  const toggleNetwork = () => {
+    setNetwork(network === "Mainnet" ? "Testnet" : "Mainnet");
   };
 
   return (
@@ -40,6 +45,12 @@ export default function Header() {
         {/* <MetaMaskSignMessageComponent message="Your default message or pass a message prop" /> */}
       </div>
       <div className="flex items-center">
+        <button
+          onClick={toggleNetwork}
+          className="bg-gray-700 hover:bg-gray-800 text-white font-bold py-2 px-4 rounded flex items-center mr-2"
+        >
+          {network}
+        </button>
         <FaTwitter
           className="text-white ml-4 mr-2 hover:cursor-pointer hover:scale-110"
           onClick={() => {

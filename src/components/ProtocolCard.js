@@ -50,12 +50,11 @@ function ProtocolCard({ addy, name, abi, type, image }) {
             padding: "5px 10px",
             lineHeight: "12.25px",
             letterSpacing: "39%",
-            fontFamily: "Helvetica",
+            fontFamily: "Roboto",
             fontSize: "10px",
             color: "white",
-            maxWidth: "35%",
             alignSelf: "center",
-            display: "flex",
+            display: "inline-flex",
             justifyContent: "center",
             alignItems: "center",
           }}
@@ -66,8 +65,8 @@ function ProtocolCard({ addy, name, abi, type, image }) {
           style={{
             color: "white",
             padding: "5px 0",
-            fontFamily: "Helvetica",
-            fontSize: "14px",
+            fontFamily: "Roboto",
+            fontSize: "16px",
             textAlign: "Left",
           }}
         >
