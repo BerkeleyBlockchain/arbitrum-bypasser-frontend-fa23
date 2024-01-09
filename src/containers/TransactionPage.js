@@ -70,7 +70,6 @@ export default function TransactionPage() {
             hash={currentTransaction.l2TxHash}
             functionName={currentTransaction.name}
             to={currentTransaction.contractAddress}
-            userInputs={currentTransaction.userInputs}
             timeStamp={currentTransaction.timeStamp}
           />
         )}
@@ -182,13 +181,7 @@ const TransactionBox = ({
   );
 };
 
-const CurrentTransactionBox = ({
-  hash,
-  functionName,
-  to,
-  userInputs,
-  timeStamp,
-}) => {
+const CurrentTransactionBox = ({ hash, functionName, to, timeStamp }) => {
   return (
     <div className="flex justify-center items-start mt-8 mb-8">
       <div
@@ -249,6 +242,84 @@ const CurrentTransactionBox = ({
             </button>
           )}
         </div>
+      </div>
+    </div>
+  );
+};
+
+export const ReceiptTransactionBox = ({
+  l1TxHash,
+  l2TxHash,
+  functionName,
+  to,
+  timeStamp,
+}) => {
+  return (
+    <div
+      className="relative inline-block w-full px-6 py-6 rounded-lg bg-gray-800 shadow-lg"
+      style={{
+        maxWidth: "800px",
+        backgroundColor: "rgba(17, 19, 24, 1)",
+      }}
+    >
+      <div className="text-white text-center text-xl text-shadow text-gray-400 font-bold mb-10">
+        Waiting for L2 Transaction Confirmation...
+        <br />
+        <span className="text-yellow-500">Time Elapsed: 00:00:00</span>
+      </div>
+      <div className="text-white text-left text-lg font-bold mb-1">
+        Function: {functionName}
+      </div>
+
+      <div className="text-white text-sm mb-3">
+        L1 Transaction Approved:{" "}
+        <a
+          className="text-blue-500 underline"
+          href={`https://sepolia.arbiscan.io/tx/${l1TxHash}`}
+        >
+          {l1TxHash}
+        </a>
+        <br />
+        L2 Transaction Awaiting:{" "}
+        <a
+          className="text-blue-500 underline"
+          href={`https://sepolia.arbiscan.io/tx/${l2TxHash}`}
+        >
+          {l2TxHash}
+        </a>
+        <br />
+        To Contract:{" "}
+        <a
+          className="text-blue-500 underline"
+          href={`https://sepolia.arbiscan.io/address/${to}`}
+        >
+          {to}
+        </a>
+        <br />
+        Timestamp: <span>{timeStamp}</span>
+        <br />
+        Status: <span className="text-yellow-400">Pending</span>
+      </div>
+
+      <hr className="border-gray-700 my-4" />
+
+      <div className="flex justify-center">
+        {/* TODO change to check date now */}
+        {l1TxHash === "1" ? (
+          <button
+            className="bg-gray-400 text-white font-bold py-2 px-6 rounded-full cursor-not-allowed opacity-50"
+            disabled
+          >
+            Force Include
+          </button>
+        ) : (
+          <button
+            className="bg-red-600 hover:bg-red-700 text-white font-bold py-2 px-6 rounded-full"
+            onClick={() => forceInclude(l2TxHash)}
+          >
+            Force Include
+          </button>
+        )}
       </div>
     </div>
   );

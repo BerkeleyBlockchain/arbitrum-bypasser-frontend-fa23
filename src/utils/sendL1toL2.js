@@ -30,7 +30,11 @@ export const sendL1toL2 = async (
 
   // ******************* Presigning a transaction to the address *******************
   const l2SignedTx = await signL2Tx(contractAddress, contractABI, userInputs);
+  // console.log("Contract Address: ", contractAddress);
+  // console.log("Contract ABI: ", contractABI);
+  // console.log("User Inputs: ", userInputs);
   console.log("Signed L2 tx: ", l2SignedTx);
+  // for debugging
 
   const l2Txhash = ethers.utils.parseTransaction(l2SignedTx).hash; // extract hash to check if tx executed on l2 later
   console.log(
