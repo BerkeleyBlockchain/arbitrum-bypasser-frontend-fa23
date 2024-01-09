@@ -5,18 +5,22 @@ import testnetMap from "../constants/testnet_map.json";
 import SearchBar from "../components/SearchBar";
 
 export default function Landing() {
-  const [selectedProtocol, setSelectedProtocol] = useState("");
-  const squaresData = testnetMap;
+  const [searchQuery, setSearchQuery] = useState("");
+  const [filterType, setFilterType] = useState("");
 
-  const handleSelectProtocol = (protocol) => {
-    setSelectedProtocol(protocol);
+  const handleSearchChange = (query) => {
+    setSearchQuery(query.toLowerCase());
   };
 
-  const filteredSquaresData = selectedProtocol
-    ? Object.entries(squaresData).filter(
-        ([key, value]) => value.name === selectedProtocol
-      )
-    : Object.entries(squaresData);
+  const handleFilterChange = (type) => {
+    setFilterType(type);
+  };
+
+  const filteredSquaresData = Object.entries(testnetMap)
+    .filter(([key, value]) => 
+      (!filterType || value.type === filterType) &&
+      (!searchQuery || value.name.toLowerCase().includes(searchQuery))
+    );
 
   return (
     <div className="flex-grow landing-bg bg-cover bg-no-repeat h-full text-white py-24">
@@ -29,8 +33,8 @@ export default function Landing() {
           ipsum.
         </p>
         <div className="flex gap-4 mb-10">
-          <SearchBar onSelectProtocol={handleSelectProtocol} />
-          <button className="p-4 rounded-md">Filter</button>
+          <SearchBar onSearch={handleSearchChange} onFilter={handleFilterChange} />
+          {/* Removed the standalone Filter button as the functionality is integrated into SearchBar */}
         </div>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
           {filteredSquaresData.map(([key, value]) => (
