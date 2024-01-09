@@ -1,5 +1,6 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
+import ArrowSVGIcon from "./ArrowIcon";
 
 function ProtocolCard({ addy, name, abi, type, image }) {
   const navigate = useNavigate();
@@ -79,7 +80,7 @@ function ProtocolCard({ addy, name, abi, type, image }) {
           position: "absolute",
           bottom: "10px",
           right: "10px",
-          backgroundColor: "white",
+          backgroundColor: "rgba(25, 22, 28, 1)",
           borderRadius: "50%",
           width: "30px",
           height: "30px",
@@ -89,7 +90,7 @@ function ProtocolCard({ addy, name, abi, type, image }) {
           cursor: "pointer",
         }}
       >
-        <div style={{ transform: "rotate(-45deg)" }}>→</div>
+        <ArrowSVGIcon width="20" height="20" fill="white" />
       </div>
     </div>
   );
