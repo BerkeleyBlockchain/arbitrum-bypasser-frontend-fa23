@@ -76,7 +76,7 @@ export default function SwapPage() {
   };
 
   const handleInputChange = (functionName, inputName, value) => {
-    setFunctionInputs(prevInputs => {
+    setFunctionInputs((prevInputs) => {
       const newInputs = _.cloneDeep(prevInputs);
       _.set(newInputs, [functionName, inputName], value);
       return newInputs;
@@ -89,13 +89,18 @@ export default function SwapPage() {
         // Render inputs for each tuple component
         return input.components.map((component) => (
           <div key={`${functionName}-${component.name}`} className="mb-3">
-            <label htmlFor={`${functionName}-${component.name}`} className="block text-sm font-medium text-gray-300">
+            <label
+              htmlFor={`${functionName}-${component.name}`}
+              className="block text-sm font-medium text-gray-300"
+            >
               {component.name} ({component.type}):
             </label>
             <input
               type="text"
-              value={_.get(functionInputs, [functionName, component.name], '')}
-              onChange={(e) => handleInputChange(functionName, component.name, e.target.value)}
+              value={_.get(functionInputs, [functionName, component.name], "")}
+              onChange={(e) =>
+                handleInputChange(functionName, component.name, e.target.value)
+              }
               className="mt-1 block w-full rounded-md bg-gray-700 border-transparent focus:border-gray-500 focus:ring-0 text-white"
             />
           </div>
@@ -104,13 +109,18 @@ export default function SwapPage() {
         // Render a single input for non-tuple types
         return (
           <div key={`${functionName}-${input.name}`} className="mb-3">
-            <label htmlFor={`${functionName}-${input.name}`} className="block text-sm font-medium text-gray-300">
+            <label
+              htmlFor={`${functionName}-${input.name}`}
+              className="block text-sm font-medium text-gray-300"
+            >
               {input.name} ({input.type}):
             </label>
             <input
               type="text"
-              value={_.get(functionInputs, [functionName, input.name], '')}
-              onChange={(e) => handleInputChange(functionName, input.name, e.target.value)}
+              value={_.get(functionInputs, [functionName, input.name], "")}
+              onChange={(e) =>
+                handleInputChange(functionName, input.name, e.target.value)
+              }
               className="mt-1 block w-full rounded-md bg-gray-700 border-transparent focus:border-gray-500 focus:ring-0 text-white"
             />
           </div>
@@ -170,24 +180,24 @@ export default function SwapPage() {
   const [l2Status, setL2Status] = useState("");
 
   // ******************* Ethers, MetaMask Signer *******************
-  const [signer, setSigner] = useState(null);
+  // const [signer, setSigner] = useState(null);
 
-  useEffect(() => {
-    async function connectToMetaMask() {
-      if (window.ethereum) {
-        try {
-          await window.ethereum.request({ method: "eth_requestAccounts" });
-          const provider = new ethers.providers.Web3Provider(window.ethereum);
-          setSigner(provider.getSigner());
-        } catch (error) {
-          console.error("Cannot connect to MetaMask", error);
-        }
-      } else {
-        console.error("MetaMask not found");
-      }
-    }
-    connectToMetaMask();
-  }, []);
+  // useEffect(() => {
+  //   async function connectToMetaMask() {
+  //     if (window.ethereum) {
+  //       try {
+  //         await window.ethereum.request({ method: "eth_requestAccounts" });
+  //         const provider = new ethers.providers.Web3Provider(window.ethereum);
+  //         setSigner(provider.getSigner());
+  //       } catch (error) {
+  //         console.error("Cannot connect to MetaMask", error);
+  //       }
+  //     } else {
+  //       console.error("MetaMask not found");
+  //     }
+  //   }
+  //   connectToMetaMask();
+  // }, []);
 
   // ******************* Go Back Function *******************
   function handleSwapClick() {
@@ -399,7 +409,10 @@ export default function SwapPage() {
                 functionList[selectedFunction]?.inputs.length === 0 ? (
                   <div className="mb-3">No Inputs Needed!</div>
                 ) : (
-                  renderFunctionInputs(selectedFunction, functionList[selectedFunction]?.inputs)
+                  renderFunctionInputs(
+                    selectedFunction,
+                    functionList[selectedFunction]?.inputs
+                  )
                 )}
               </div>
             </div>
@@ -499,10 +512,21 @@ export default function SwapPage() {
               Status:{" "}
               <span className="text-[rgba(0,212,136,1)]">{l2Status}</span>
               <br />
-              L1TxHash: <span>https://sepolia.etherscan.io/tx/{l1Tx}</span>
+              L1 Transacion Confirmation:{" "}
+              <a
+                className="text-blue-500 underline"
+                href={`https://sepolia.arbiscan.io/address/${l1Tx}`}
+              >
+                {l1Tx}
+              </a>
               <br />
-              L2TxHash: <span>https://sepolia.arbiscan.io/tx/{l2Tx}</span>
-              <br />
+              Awaiting L2 Transacion Confirmation:{" "}
+              <a
+                className="text-blue-500 underline"
+                href={`https://sepolia.arbiscan.io/address/${l2Tx}`}
+              >
+                {l2Tx}
+              </a>
             </div>
 
             <hr className="border-gray-700 my-4" />
