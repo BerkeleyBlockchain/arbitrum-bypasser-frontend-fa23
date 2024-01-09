@@ -7,6 +7,8 @@ const SearchBar = ({ onSearch, onFilter }) => {
   const [isFocused, setIsFocused] = useState(false); // State to track focus
   const { addProtocol, selectProtocol } = useContext(ProtocolsContext);
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+  const [selectedFilters, setSelectedFilters] = useState([]);
+
 
   const handleSearchChange = (e) => {
     const query = e.target.value.toLowerCase();
@@ -14,41 +16,59 @@ const SearchBar = ({ onSearch, onFilter }) => {
     onSearch(query); // Notify Landing component of the search query change
   };
 
-  const handleFilterSelect = (type) => {
-    setIsDropdownOpen(false);
-    onFilter(type); // Notify Landing component of the filter type change
+  const toggleFilter = (type) => {
+    const newFilters = selectedFilters.includes(type)
+      ? selectedFilters.filter(t => t !== type)
+      : [...selectedFilters, type];
+    setSelectedFilters(newFilters);
+    onFilter(newFilters);
   };
   
   // get all unique types
   const protocolTypes = Array.from(new Set(Object.values(testnetMap).map(entry => entry.type)));
 
   return (
-    <div className="relative flex-1">
-      <div className="flex gap-2">
-        <input
-          className="w-full p-4 rounded-md"
-          type="search"
-          value={searchQuery}
-          onChange={handleSearchChange}
-          onFocus={() => setIsFocused(true)}
-          onBlur={() => setTimeout(() => setIsFocused(false), 100)}
-          style={{
-            backgroundColor: "transparent",
-            border: "1px solid #4B5563",
-            borderRadius: "18px",
-            padding: "10px 20px",
-          }}
-          placeholder="Search Protocols"
-        />
-        <button onClick={() => setIsDropdownOpen(!isDropdownOpen)}>Filter</button>
+    <div className="relative flex flex-1 gap-2">
+      <input
+        className="flex-1 px-4 py-2 rounded-md bg-transparent border border-gray-600" // Adjusted the width class
+        type="search"
+        value={searchQuery}
+        onChange={handleSearchChange}
+        placeholder="Search Protocols"
+      />
+
+      <div className="relative">
+        <button 
+          className="px-4 py-2 rounded-md bg-blue-600 text-white"
+          onClick={() => setIsDropdownOpen(!isDropdownOpen)}
+        >
+          Filter
+        </button>
+
         {isDropdownOpen && (
-          <ul className="absolute z-10 bg-white border border-gray-700 rounded-md mt-1">
+          <div className="absolute right-0 z-10 w-48 mt-1 bg-gray-800 border border-gray-700 rounded-md">
             {protocolTypes.map((type, index) => (
-              <li key={index} className="p-2 hover:bg-gray-700 cursor-pointer" onClick={() => handleFilterSelect(type)}>
-                {type}
-              </li>
+              <div key={index} className="px-2 py-1">
+                <label className="flex items-center cursor-pointer text-white">
+                  <input
+                    type="checkbox"
+                    className="mr-2"
+                    checked={selectedFilters.includes(type)}
+                    onChange={() => toggleFilter(type)}
+                  />
+                  {type}
+                </label>
+              </div>
             ))}
-          </ul>
+            <div className="text-center">
+              <button 
+                className="w-full px-4 py-2 text-sm text-white bg-blue-600 hover:bg-blue-700"
+                onClick={() => setIsDropdownOpen(false)}
+              >
+                Close
+              </button>
+            </div>
+          </div>
         )}
       </div>
     </div>
