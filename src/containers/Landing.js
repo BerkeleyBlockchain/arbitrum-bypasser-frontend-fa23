@@ -25,7 +25,7 @@ export default function Landing() {
   return (
     <div className="flex-grow landing-bg bg-cover bg-no-repeat h-full text-white py-24">
       <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-        <h1 className="text-6xl font-thin">Execute Transactions from your ETH account</h1>
+        <h1 className="text-6xl font-thin mb-3">Execute Transactions from Arbitrum L2 using your ETH account</h1>
         <p className="text-gray-400 text-lg mb-6">
           Lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum.
         </p>
