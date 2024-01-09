@@ -1,23 +1,28 @@
-import React, { useState, useContext } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import { ProtocolsContext } from "../containers/ProtocolsContext";
+import testnetMap from "../constants/testnet_map.json"; // Import the JSON file
 
 const SearchBar = () => {
   const [searchQuery, setSearchQuery] = useState("");
-  const [newProtocol, setNewProtocol] = useState("");
-  const [showDropdown, setShowDropdown] = useState(false);
+  const [filteredProtocols, setFilteredProtocols] = useState([]);
+  const { addProtocol, selectProtocol } = useContext(ProtocolsContext);
 
-  // Use useContext to access the protocols and functions from the context
-  const { protocols, addProtocol, selectProtocol } = useContext(ProtocolsContext);
+  useEffect(() => {
+    // Extract protocol names from testnet_map and initialize filteredProtocols
+    const protocolNames = Object.values(testnetMap).map((entry) => entry.name);
+    setFilteredProtocols(protocolNames);
+  }, []);
 
-  const filteredProtocols = protocols.filter((p) =>
-    p.toLowerCase().includes(searchQuery.toLowerCase())
-  );
+  const handleSearchChange = (e) => {
+    const query = e.target.value.toLowerCase();
+    setSearchQuery(query);
 
-  const handleAddNewProtocol = () => {
-    if (newProtocol && !protocols.includes(newProtocol)) {
-      addProtocol(newProtocol); // Add protocol using the function from context
-      setNewProtocol("");
-    }
+    // Filter protocol names based on search query
+    const filtered = Object.values(testnetMap)
+      .map((entry) => entry.name)
+      .filter((name) => name.toLowerCase().includes(query));
+
+    setFilteredProtocols(filtered);
   };
 
   return (
@@ -26,13 +31,9 @@ const SearchBar = () => {
         className="w-full p-4 rounded-md"
         type="search"
         value={searchQuery}
-        onChange={(e) => setSearchQuery(e.target.value)}
-        onFocus={() => setShowDropdown(true)}
-        onBlur={() => {
-          setTimeout(() => {
-            setShowDropdown(false);
-          }, 100);
-        }}
+        onChange={handleSearchChange}
+        onFocus={() => setFilteredProtocols(Object.values(testnetMap).map(entry => entry.name))}
+        onBlur={() => setTimeout(() => setFilteredProtocols([]), 100)}
         style={{
           backgroundColor: "transparent",
           border: "1px solid #4B5563",
@@ -41,16 +42,15 @@ const SearchBar = () => {
         }}
         placeholder="Search Protocols"
       />
-      {showDropdown && (
+      {filteredProtocols.length > 0 && (
         <ul className="absolute z-10 w-full bg-black border border-gray-700 rounded-md mt-1">
-          {filteredProtocols.map((protocol) => (
+          {filteredProtocols.map((protocol, index) => (
             <li
-              key={protocol}
+              key={index}
               className="p-2 hover:bg-gray-700 cursor-pointer"
               onClick={() => {
                 setSearchQuery(protocol);
-                setShowDropdown(false);
-                selectProtocol(protocol); // Select protocol using the function from context
+                selectProtocol(protocol); // Handle protocol selection logic
               }}
             >
               {protocol}
