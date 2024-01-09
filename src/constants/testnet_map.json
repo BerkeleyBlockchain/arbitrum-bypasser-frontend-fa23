@@ -29,7 +29,7 @@
     "type": "dApp",
     "image": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTCauUZiXzWGXoeJSlTQjmevgRl2RIsvvXFDA&usqp=CAU"
   },
-  "0xaBBc5F99639c9B6bCb58544ddf04EFA6802F4064": {
+  "0x526f42ea12e167e36e3de747187f53b6989d121a": {
     "name": "GMX Router",
     "abi": "GMXRouter.json",
     "type": "dApp",
@@ -41,7 +41,7 @@
     "type": "dApp",
     "image": "https://s3-alpha.figma.com/hub/file/2214755056/cf1785d6-2459-4861-b2b4-d3b2b8fb8088-cover.png"
   },
-  "0x7e7a0e201fd38d3adaa9523da6c109a07118c96a": {
+  "0x537ab51470984D6D9aDF8953C0D2ed8eDA4050ED": {
     "name": "Synapse Router",
     "abi": "SynapseRouter.json",
     "type": "Bridge",
