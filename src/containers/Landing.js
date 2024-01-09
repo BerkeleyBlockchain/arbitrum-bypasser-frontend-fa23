@@ -25,6 +25,10 @@ export default function Landing() {
   return (
     <div className="flex-grow landing-bg bg-cover bg-no-repeat h-full text-white py-24">
       <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+        <h1 className="text-6xl font-thin">Execute Transactions from your ETH account</h1>
+        <p className="text-gray-400 text-lg mb-6">
+          Lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum.
+        </p>
         {/* ...other content */}
         <div className="flex gap-4 mb-10">
           <SearchBar onSearch={handleSearchChange} onFilter={handleFilterChange} />

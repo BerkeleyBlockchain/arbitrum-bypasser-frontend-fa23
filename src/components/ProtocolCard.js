@@ -64,9 +64,9 @@ function ProtocolCard({ addy, name, abi, type, image }) {
         <h3
           style={{
             color: "white",
-            padding: "5px 0",
+            padding: "1px 0",
             fontFamily: "Roboto",
-            fontSize: "16px",
+            fontSize: "15px",
             textAlign: "Left",
           }}
         >
