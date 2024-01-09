@@ -11,6 +11,7 @@ function ProtocolCard({ addy, name, abi, type, image }) {
 
   return (
     <div
+      onClick={handleClick}
       style={{
         width: "200px",
         height: "200px",
@@ -22,8 +23,12 @@ function ProtocolCard({ addy, name, abi, type, image }) {
         display: "flex",
         flexDirection: "column",
         justifyContent: "space-between",
-        alignItems: "center", // Center children horizontally
+        alignItems: "center",
+        cursor: "pointer",
+        transition: "background-color 0.3s ease", // Add transition for background color
       }}
+      onMouseEnter={(e) => (e.currentTarget.style.backgroundColor = "rgba(45, 42, 48, 1)")} // Darken on hover
+      onMouseLeave={(e) => (e.currentTarget.style.backgroundColor = "rgba(25, 22, 28, 1)")} // Revert on mouse leave
     >
       <img
         src={image}
@@ -74,7 +79,6 @@ function ProtocolCard({ addy, name, abi, type, image }) {
         </h3>
       </div>
       <div
-        onClick={handleClick}
         style={{
           position: "absolute",
           bottom: "10px",
@@ -86,7 +90,6 @@ function ProtocolCard({ addy, name, abi, type, image }) {
           display: "flex",
           alignItems: "center",
           justifyContent: "center",
-          cursor: "pointer",
         }}
       >
         <ArrowSVGIcon width="20" height="20" fill="white" />

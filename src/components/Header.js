@@ -46,7 +46,7 @@ export default function Header() {
       </div>
       <div className="flex items-center">
       <button
-          onClick={toggleNetwork}
+          onClick={toggleNetwork} //MAINNET TESTNET BUTTON
           className={`${
             network === "Mainnet" ? "bg-green-500 hover:bg-green-600" : "bg-gray-500 hover:bg-gray-600"
           } text-white font-thin py-2 px-4 rounded flex items-center mr-2 transition-colors duration-300`}
