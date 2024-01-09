@@ -4,6 +4,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { useNavigate, useLocation } from "react-router-dom";
 import { ClipLoader } from "react-spinners";
 import { ethers } from "ethers";
+import _ from "lodash";
 
 import "./SwapPage.css";
 import GasSlider from "../components/GasSlider";
@@ -24,6 +25,7 @@ export default function SwapPage() {
   const { addy, name, abi } = location.state || {};
   const [functionList, setFunctionList] = useState({});
   const [selectedFunction, setSelectedFunction] = useState("");
+  const [functionInputs, setFunctionInputs] = useState({});
 
   const [tokenIn, setTokenIn] = useState("");
   const [tokenOut, setTokenOut] = useState("");
@@ -71,6 +73,50 @@ export default function SwapPage() {
         [paramName]: value,
       },
     }));
+  };
+
+  const handleInputChange = (functionName, inputName, value) => {
+    setFunctionInputs(prevInputs => {
+      const newInputs = _.cloneDeep(prevInputs);
+      _.set(newInputs, [functionName, inputName], value);
+      return newInputs;
+    });
+  };
+
+  const renderFunctionInputs = (functionName, inputs) => {
+    return inputs.map((input, index) => {
+      if (input.type === "tuple" && input.components) {
+        // Render inputs for each tuple component
+        return input.components.map((component) => (
+          <div key={`${functionName}-${component.name}`} className="mb-3">
+            <label htmlFor={`${functionName}-${component.name}`} className="block text-sm font-medium text-gray-300">
+              {component.name} ({component.type}):
+            </label>
+            <input
+              type="text"
+              value={_.get(functionInputs, [functionName, component.name], '')}
+              onChange={(e) => handleInputChange(functionName, component.name, e.target.value)}
+              className="mt-1 block w-full rounded-md bg-gray-700 border-transparent focus:border-gray-500 focus:ring-0 text-white"
+            />
+          </div>
+        ));
+      } else {
+        // Render a single input for non-tuple types
+        return (
+          <div key={`${functionName}-${input.name}`} className="mb-3">
+            <label htmlFor={`${functionName}-${input.name}`} className="block text-sm font-medium text-gray-300">
+              {input.name} ({input.type}):
+            </label>
+            <input
+              type="text"
+              value={_.get(functionInputs, [functionName, input.name], '')}
+              onChange={(e) => handleInputChange(functionName, input.name, e.target.value)}
+              className="mt-1 block w-full rounded-md bg-gray-700 border-transparent focus:border-gray-500 focus:ring-0 text-white"
+            />
+          </div>
+        );
+      }
+    });
   };
 
   const renderComponentInputs = (functionName, components) => {
@@ -353,53 +399,7 @@ export default function SwapPage() {
                 functionList[selectedFunction]?.inputs.length === 0 ? (
                   <div className="mb-3">No Inputs Needed!</div>
                 ) : (
-                  functionList[selectedFunction]?.inputs.map((input, index) =>
-                    input.components ? (
-                      // If input has components, we render inputs for each component
-                      input.components.map((component, componentIndex) => (
-                        <div
-                          className="mb-3"
-                          key={`${index}-${componentIndex}`}
-                        >
-                          <input
-                            type="text"
-                            value={
-                              formInputs[`${index}-${componentIndex}`] || ""
-                            }
-                            onChange={(e) =>
-                              handleFormInput(
-                                `${index}-${componentIndex}`,
-                                e.target.value
-                              )
-                            }
-                            className="w-full p-2 bg-gray-700 rounded focus:outline-none"
-                            placeholder={`${component.name} (${component.type})`}
-                            style={{
-                              backgroundColor: "rgba(25, 29, 36, 1)",
-                              borderRadius: "8px",
-                            }}
-                          />
-                        </div>
-                      ))
-                    ) : (
-                      // Otherwise, render a single input for the non-component input
-                      <div className="mb-3" key={index}>
-                        <input
-                          type="text"
-                          value={formInputs[index] || ""}
-                          onChange={(e) =>
-                            handleFormInput(index, e.target.value)
-                          }
-                          className="w-full p-2 bg-gray-700 rounded focus:outline-none"
-                          placeholder={`${input.name} (${input.type})`}
-                          style={{
-                            backgroundColor: "rgba(25, 29, 36, 1)",
-                            borderRadius: "8px",
-                          }}
-                        />
-                      </div>
-                    )
-                  )
+                  renderFunctionInputs(selectedFunction, functionList[selectedFunction]?.inputs)
                 )}
               </div>
             </div>
