@@ -29,7 +29,7 @@ export default function Landing() {
         <div className="flex gap-4 mb-10">
           <SearchBar onSearch={handleSearchChange} onFilter={handleFilterChange} />
         </div>
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-x-1 gap-4">
           {filteredSquaresData.map(([key, value]) => (
             <ProtocolCard
               key={key}
