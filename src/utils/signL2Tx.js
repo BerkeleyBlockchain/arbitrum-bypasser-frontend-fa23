@@ -39,7 +39,8 @@ export const signL2Tx = async (contractAddress, contractABI, userInputs) => {
     const icontract = new ethers.utils.Interface(abi);
     console.log(icontract);
 
-    const idata = icontract.encodeFunctionData(functionName, userParams);
+    const paramsArray = Object.keys(userParams).map(key => userParams[key]);
+    const idata = icontract.encodeFunctionData(functionName, paramsArray); //this line may be bugging
     console.log(idata);
     console.log(userValue);
 

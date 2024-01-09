@@ -75,14 +75,18 @@ export default function SwapPage() {
     }));
   };
 
-  const handleInputChange = (functionName, inputName, value) => {
+  const handleInputChange = (functionName, inputName, value, isNested = false, parentName = '') => {
     setFunctionInputs(prevInputs => {
       const newInputs = _.cloneDeep(prevInputs);
-      _.set(newInputs, [functionName, inputName], value);
+  
+      // Determine the path to set the value in the state
+      const path = isNested ? [functionName, parentName, inputName] : [functionName, inputName];
+      _.set(newInputs, path, value);
+  
       return newInputs;
     });
   };
-
+  
   const renderFunctionInputs = (functionName, inputs) => {
     return inputs.map((input, index) => {
       if (input.type === "tuple" && input.components) {
@@ -94,8 +98,8 @@ export default function SwapPage() {
             </label>
             <input
               type="text"
-              value={_.get(functionInputs, [functionName, component.name], '')}
-              onChange={(e) => handleInputChange(functionName, component.name, e.target.value)}
+              value={_.get(functionInputs, [functionName, input.name, component.name], '')}
+              onChange={(e) => handleInputChange(functionName, component.name, e.target.value, true, input.name)}
               className="mt-1 block w-full rounded-md bg-gray-700 border-transparent focus:border-gray-500 focus:ring-0 text-white"
             />
           </div>
@@ -118,6 +122,7 @@ export default function SwapPage() {
       }
     });
   };
+  
 
   const renderComponentInputs = (functionName, components) => {
     return components.map((component, index) => (
@@ -225,22 +230,19 @@ export default function SwapPage() {
     console.log(walletClient);
 
     async function handleExecuteClick() {
-      // REPLACE: add a loading buffer or move to next screen
-      // ******************* Check if Wallet is Connected *******************
       if (isDisconnected || !isSuccess || isError || isLoading) {
-        openConnectModal(); // Short Circuit
+        openConnectModal();
         return;
       }
-
+    
       const contractAddress = addy;
-
       const userInputs = {
         functionName: selectedFunction,
         gasBuffer: gasBuffer * 0.01,
-        value: payableValue, // this is a string
-        idata: formInputs, // needs to be in order
+        value: payableValue,
+        idata: functionInputs[selectedFunction] || {}, // Ensure this is not undefined and is correctly formatted
       };
-
+    
       try {
         const { l1TxHash, l2TxHash, status } = await sendL1toL2(
           contractAddress,
@@ -248,26 +250,26 @@ export default function SwapPage() {
           abi,
           userInputs
         );
-
-        // Update the state after the transaction
+    
         setIsSwapped(true);
         setL1Tx(l1TxHash);
         setL2Tx(l2TxHash);
         setL2Status(status);
-        localStorage.setItem(
-          "currentTransaction",
-          JSON.stringify({
-            l2TxHash: l2TxHash,
-            l1TxHash: l1TxHash,
-            timeStamp: Date.now().toUTCString(),
-            contractAddress,
-            name,
-          })
-        );
+    
+        // Store the transaction data
+        localStorage.setItem("currentTransaction", JSON.stringify({
+          l2TxHash: l2TxHash,
+          l1TxHash: l1TxHash,
+          timeStamp: new Date().toISOString(),
+          contractAddress,
+          name,
+        }));
       } catch (error) {
         console.error("Transaction execution error:", error);
+        // Here you would handle the error, potentially updating the UI to inform the user
       }
     }
+    
 
     return (
       <button
