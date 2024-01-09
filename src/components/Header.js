@@ -36,7 +36,7 @@ export default function Header() {
         />
         <button
           onClick={handleTransaction}
-          className="bg-gray-700 hover:bg-gray-800 text-white font-bold py-2 px-4 rounded flex items-center mr-2"
+          className="bg-gray-700 hover:bg-gray-800 text-white font-thin py-2 px-4 rounded flex items-center mr-2"
         >
           <span className="h-3 w-3 border-2 border-white rounded-full mr-2"></span>
           Transactions
@@ -45,9 +45,11 @@ export default function Header() {
         {/* <MetaMaskSignMessageComponent message="Your default message or pass a message prop" /> */}
       </div>
       <div className="flex items-center">
-        <button
+      <button
           onClick={toggleNetwork}
-          className="bg-gray-700 hover:bg-gray-800 text-white font-bold py-2 px-4 rounded flex items-center mr-2"
+          className={`${
+            network === "Mainnet" ? "bg-green-500 hover:bg-green-600" : "bg-gray-500 hover:bg-gray-600"
+          } text-white font-thin py-2 px-4 rounded flex items-center mr-2 transition-colors duration-300`}
         >
           {network}
         </button>
