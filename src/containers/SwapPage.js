@@ -229,10 +229,20 @@ export default function SwapPage() {
             l2TxHash: l2TxHash,
             l1TxHash: l1TxHash,
             timeStamp: new Date().toISOString(),
-            contractAddress,
-            name,
+            contractAddress: contractAddress,
+            name: name,
           })
         );
+        // localStorage.setItem(
+        //   "currentTransaction",
+        //   JSON.stringify({
+        //     l2TxHash: "sadgadsg",
+        //     l1TxHash: "sadgadsg",
+        //     timestamp: "2024-01-07T22:18:01",
+        //     contractAddress: "sadgadsg",
+        //     name: "Testing Function",
+        //   })
+        // );
       } catch (error) {
         console.error("Transaction execution error:", error);
         // Here you would handle the error, potentially updating the UI to inform the user
@@ -405,7 +415,7 @@ export default function SwapPage() {
             l2TxHash={l2Tx}
             functionName={selectedFunction}
             to={addy}
-            timeStamp={new Date().toUTCString()}
+            timeStamp={new Date()}
           />
           <SwapStatusBar isSwapped={isSwapped} />
         </div>
