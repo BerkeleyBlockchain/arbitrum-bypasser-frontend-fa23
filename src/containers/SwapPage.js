@@ -1,9 +1,7 @@
 import React, { useEffect, useState, useContext } from "react";
-import { FaCheckCircle, FaFilter, FaSearch } from "react-icons/fa";
-import { useDispatch, useSelector } from "react-redux";
+import { FaCheckCircle } from "react-icons/fa";
 import { useNavigate, useLocation } from "react-router-dom";
 import { ClipLoader } from "react-spinners";
-import { ethers } from "ethers";
 import _ from "lodash";
 
 import "./SwapPage.css";
@@ -14,8 +12,7 @@ import { sendL1toL2 } from "../utils/sendL1toL2";
 import { useConnectModal } from "@rainbow-me/rainbowkit";
 
 import { useWalletClient, useBalance, useAccount } from "wagmi";
-import { sepolia, arbitrumSepolia } from "wagmi/chains";
-import { ReceiptTransactionBox } from "./TransactionPage";
+import { L1TransactionBox, ReceiptTransactionBox } from "./TransactionPage";
 
 import { GlobalContext } from "../ContextProvider";
 
@@ -157,7 +154,7 @@ export default function SwapPage() {
     setGasBuffer(20);
   }, [functionList, selectedFunction]);
 
-  const [isSwapped, setIsSwapped] = useState(false);
+  const [isSwapped, setIsSwapped] = useState(1);
 
   const [l1Tx, setL1Tx] = useState("");
   const [l2Tx, setL2Tx] = useState("");
@@ -213,6 +210,7 @@ export default function SwapPage() {
       };
 
       try {
+        setIsSwapped(2);
         const { l1TxHash, l2TxHash, status } = await sendL1toL2(
           contractAddress,
           name,
@@ -221,7 +219,7 @@ export default function SwapPage() {
           livenet
         );
 
-        setIsSwapped(true);
+        setIsSwapped(3);
         setL1Tx(l1TxHash);
         setL2Tx(l2TxHash);
         setL2Status(status);
@@ -248,6 +246,7 @@ export default function SwapPage() {
         //   })
         // );
       } catch (error) {
+        setIsSwapped(1);
         console.error("Transaction execution error:", error);
         // Here you would handle the error, potentially updating the UI to inform the user
       }
@@ -263,23 +262,12 @@ export default function SwapPage() {
     );
   };
 
-  // ******************* SWAP PAGE CONTENTS *******************
-  return (
-    <div className="landing-bg bg-cover bg-no-repeat text-white flex-grow pt-24">
-      {/* Header */}
-      <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-        <h1 className="text-5xl font-bold mb-2">
-          Protocol: <span className="text-[rgba(0,212,136,1)]">{name}</span>
-        </h1>
-        <p className="mb-8">
-          Execute transactions to{" "}
-          <span className="text-[rgba(0,212,136,1)]">{name}</span> on Arbitrum
-          from your ETH account
-        </p>
-      </div>
+  // ******************* Content Component *******************
+  let content;
 
-      {/* The Content */}
-      {!isSwapped ? (
+  switch (isSwapped) {
+    case 1:
+      content = (
         <div className="flex justify-center items-start mt-8 mb-8">
           {/* Swap Box Content */}
           <div
@@ -412,7 +400,19 @@ export default function SwapPage() {
           </div>
           <SwapStatusBar isSwapped={isSwapped} />
         </div>
-      ) : (
+      );
+      break;
+    case 2:
+      content = (
+        <div className="flex justify-center items-start mt-8 mb-8">
+          <L1TransactionBox selectedFunction={selectedFunction} />
+
+          <SwapStatusBar isSwapped={isSwapped} />
+        </div>
+      );
+      break;
+    case 3:
+      content = (
         <div className="flex justify-center items-start mt-8 mb-8">
           <ReceiptTransactionBox
             l1TxHash={l1Tx}
@@ -424,12 +424,56 @@ export default function SwapPage() {
           />
           <SwapStatusBar isSwapped={isSwapped} />
         </div>
-      )}
+      );
+      break;
+    case 4:
+      content = (
+        <div className="flex justify-center items-start mt-8 mb-8">
+          <ReceiptTransactionBox
+            l1TxHash={l1Tx}
+            l2TxHash={l2Tx}
+            functionName={selectedFunction}
+            to={addy}
+            timeStamp={new Date()}
+            livenet={livenet}
+          />
+          <SwapStatusBar isSwapped={isSwapped} />
+        </div>
+      );
+      break;
+    default:
+      content = <ClipLoader size={25} color={"#ffffff"} />;
+  }
+
+  // ******************* SWAP PAGE CONTENTS *******************
+  return (
+    <div className="landing-bg bg-cover bg-no-repeat text-white flex-grow pt-24">
+      {/* Header */}
+      <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+        <h1 className="text-5xl font-bold mb-2">
+          Protocol: <span className="text-[rgba(0,212,136,1)]">{name}</span>
+        </h1>
+        <p className="mb-8">
+          Execute transactions to{" "}
+          <span className="text-[rgba(0,212,136,1)]">{name}</span> on Arbitrum
+          from your ETH account
+        </p>
+      </div>
+
+      {/* The Content */}
+      {content}
     </div>
   );
 }
 
 const SwapStatusBar = ({ isSwapped }) => {
+  // Define a function to determine the style based on the current step
+  const getStyle = (currentStep) => {
+    return isSwapped >= currentStep
+      ? "text-[rgba(0,212,136,1)] border-[rgba(0,212,136,1)]"
+      : "text-gray-500 border-gray-500";
+  };
+
   return (
     <div className="flex flex-col items-center ml-8">
       <div className="flex flex-col justify-between items-start h-full">
@@ -440,15 +484,19 @@ const SwapStatusBar = ({ isSwapped }) => {
           <span className="text-xs text-white ml-2">Starting Swap</span>
         </div>
         <div
-          className="w-1 bg-[rgba(0,212,136,1)]"
+          className={`w-1 ${
+            isSwapped > 1 ? "bg-[rgba(0,212,136,1)]" : "bg-gray-600"
+          }`}
           style={{ height: "64px", width: "2px", marginLeft: "15px" }}
         ></div>
         <div className="flex items-center">
           <div
-            className="h-8 w-8 border-2 border-[rgba(0,212,136,1)] rounded-full flex items-center justify-center"
+            className={`h-8 w-8 border-2 rounded-full flex items-center justify-center ${getStyle(
+              2
+            )}`}
             style={{ backgroundColor: "transparent" }}
           >
-            <span className="text-xs text-white font-bold text-[rgba(0,212,136,1)]">
+            <span className={`text-xs text-white font-bold ${getStyle(2)}`}>
               2
             </span>
           </div>
@@ -456,15 +504,19 @@ const SwapStatusBar = ({ isSwapped }) => {
         </div>
 
         <div
-          className="w-1 bg-[rgba(0,212,136,1)]"
+          className={`w-1 ${
+            isSwapped > 2 ? "bg-[rgba(0,212,136,1)]" : "bg-gray-600"
+          }`}
           style={{ height: "64px", width: "2px", marginLeft: "15px" }}
         ></div>
         <div className="flex items-center">
           <div
-            className="h-8 w-8 border-2 border-[rgba(0,212,136,1)] rounded-full flex items-center justify-center"
+            className={`h-8 w-8 border-2 rounded-full flex items-center justify-center ${getStyle(
+              3
+            )}`}
             style={{ backgroundColor: "transparent" }}
           >
-            <span className="text-xs text-white font-bold text-[rgba(0,212,136,1)]">
+            <span className={`text-xs text-white font-bold ${getStyle(3)}`}>
               3
             </span>
           </div>
@@ -472,15 +524,19 @@ const SwapStatusBar = ({ isSwapped }) => {
         </div>
 
         <div
-          className="w-1 bg-gray-600"
+          className={`w-1 ${
+            isSwapped > 3 ? "bg-[rgba(0,212,136,1)]" : "bg-gray-600"
+          }`}
           style={{ height: "64px", width: "2px", marginLeft: "15px" }}
         ></div>
         <div className="flex items-center">
           <div
-            className="h-8 w-8 border-2 border-gray-500 rounded-full flex items-center justify-center"
+            className={`h-8 w-8 border-2 rounded-full flex items-center justify-center ${getStyle(
+              4
+            )}`}
             style={{ backgroundColor: "transparent" }}
           >
-            <span className="text-xs text-white font-bold text-gray-500">
+            <span className={`text-xs text-white font-bold ${getStyle(4)}`}>
               4
             </span>
           </div>
