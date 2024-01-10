@@ -1,4 +1,5 @@
-import { useEffect, useState, useContext, Fragment } from "react";
+import { useEffect, useState, useContext } from "react";
+import { useNavigate } from "react-router-dom";
 import { getLastTransactions } from "../utils/getTransactions";
 import { useStopwatch } from "react-timer-hook";
 import Button from "@mui/material/Button";
@@ -72,7 +73,8 @@ export default function TransactionPage() {
       <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
         <h1 className="text-5xl font-bold mb-2">Your Latest Transactions:</h1>
         <p className="mb-8">
-          Here are the latest transactions for the acccount {address}:
+          If 24 hours have passed and your transaction has not been included
+          yet, the option to force include will open up.
         </p>
         {address == null || !currentTransaction ? (
           <></>
@@ -117,15 +119,24 @@ const TransactionBox = ({
   txreceipt_status,
   livenet,
 }) => {
+  const previousDate = new Date(timeStamp * 1000);
+  const currentDate = new Date();
+  const difference = currentDate - previousDate;
+  const isMoreThan24Hours = difference > 24 * 60 * 60 * 1000;
+  const disabled =
+    txreceipt_status === "1" || !isMoreThan24Hours ? true : false;
+
   function convertTimestampToUTC(unixTimestamp) {
     const date = new Date(unixTimestamp * 1000); // Convert to milliseconds
     return date.toUTCString();
   }
 
   const [open, setOpen] = useState(false);
+  const [forceincludeContent, setForceIncludeContent] = useState("");
 
   const toggleModal = () => {
-    console.log(timeStamp);
+    // console.log(timeStamp);
+    setForceIncludeContent("");
     setOpen(true);
   };
 
@@ -134,6 +145,18 @@ const TransactionBox = ({
       return;
     }
     setOpen(false);
+  };
+
+  const handleForceInclude = async (hash) => {
+    const forceInclusionTx = await forceInclude(hash, livenet);
+    if (!forceInclusionTx) {
+      console.log("Force Inclusion Failed");
+      setForceIncludeContent("Force Inclusion Failed!");
+      setOpen(true);
+    } else {
+      setForceIncludeContent("Refresh and wait for force inclusion!");
+      setOpen(true);
+    }
   };
 
   return (
@@ -185,21 +208,17 @@ const TransactionBox = ({
         <hr className="border-gray-700 my-4" />
 
         <div className="flex justify-center">
-          {txreceipt_status === "1" ? (
-            <button
-              className="bg-gray-400 text-white font-bold py-2 px-6 rounded-full cursor-not-allowed opacity-50"
+          <button
+            onClick={() => handleForceInclude(hash)}
+            disabled={disabled}
+            className={`${disabled ? "cursor-not-allowed opacity-50" : ""} ${
               disabled
-            >
-              Force Include
-            </button>
-          ) : (
-            <button
-              className="bg-red-600 hover:bg-red-700 text-white font-bold py-2 px-6 rounded-full"
-              onClick={() => forceInclude(hash)}
-            >
-              Force Include
-            </button>
-          )}
+                ? "bg-gray-400 cursor-not-allowed opacity-50"
+                : "bg-red-600 hover:bg-red-700"
+            } text-white font-bold py-2 px-6 rounded-full`}
+          >
+            Force Include
+          </button>
           <button
             className="ml-5 bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-6 rounded-full"
             onClick={() => toggleModal()}
@@ -214,7 +233,11 @@ const TransactionBox = ({
         anchorOrigin={{ vertical: "top", horizontal: "right" }}
       >
         <Alert onClose={handleClose} severity="info" sx={{ width: "100%" }}>
-          <RawStopwatch offset={timeStamp} />
+          {forceincludeContent !== "" ? (
+            <>{forceincludeContent}</>
+          ) : (
+            <RawStopwatch offset={timeStamp} />
+          )}
         </Alert>
       </Snackbar>
     </div>
@@ -229,19 +252,46 @@ const MostRecentTransactionBox = ({
   timestamp,
   livenet,
 }) => {
+  const previousDate = new Date(timestamp);
+  const currentDate = new Date();
+  const difference = currentDate - previousDate;
+  const isMoreThan24Hours = difference > 24 * 60 * 60 * 1000;
+  const disabled = !isMoreThan24Hours ? true : false;
+
   const [stopwatchSecondOffset, setStopwatchSecondOffset] = useState(0);
   const [timestampDate, setTimestampDate] = useState(new Date());
 
   useEffect(() => {
     const pastDate = new Date(timestamp);
-    console.log(timestamp);
+    // console.log(timestamp);
     setTimestampDate(timestampDate);
     const currentDate = new Date();
     const differenceInMilliseconds = currentDate - pastDate;
     const totalSeconds = Math.floor(differenceInMilliseconds / 1000);
     setStopwatchSecondOffset(totalSeconds);
-    console.log("offset", totalSeconds);
+    // console.log("offset", totalSeconds);
   }, [timestamp]);
+
+  const [open, setOpen] = useState(false);
+  const [forceincludeContent, setForceIncludeContent] = useState("");
+
+  const handleClose = (event, reason) => {
+    if (reason === "clickaway") {
+      return;
+    }
+    setOpen(false);
+  };
+  const handleForceInclude = async (hash) => {
+    const forceInclusionTx = await forceInclude(hash, livenet);
+    if (!forceInclusionTx) {
+      console.log("Force Inclusion Failed");
+      setForceIncludeContent("Force Inclusion Failed!");
+      setOpen(true);
+    } else {
+      setForceIncludeContent("Refresh and wait for force inclusion!");
+      setOpen(true);
+    }
+  };
 
   return (
     <div className="flex justify-center items-start mt-8 mb-8">
@@ -306,24 +356,28 @@ const MostRecentTransactionBox = ({
         <hr className="border-gray-700 my-4" />
 
         <div className="flex justify-center">
-          {/* TODO change to check date now */}
-          {l1TxHash === "1" ? (
-            <button
-              className="bg-gray-400 text-white font-bold py-2 px-6 rounded-full cursor-not-allowed opacity-50"
+          <button
+            onClick={() => handleForceInclude(l2TxHash)}
+            disabled={disabled}
+            className={`${disabled ? "cursor-not-allowed opacity-50" : ""} ${
               disabled
-            >
-              Force Include
-            </button>
-          ) : (
-            <button
-              className="bg-red-600 hover:bg-red-700 text-white font-bold py-2 px-6 rounded-full"
-              onClick={() => forceInclude(l1TxHash)}
-            >
-              Force Include
-            </button>
-          )}
+                ? "bg-gray-400 cursor-not-allowed opacity-50"
+                : "bg-red-600 hover:bg-red-700"
+            } text-white font-bold py-2 px-6 rounded-full`}
+          >
+            Force Include
+          </button>
         </div>
       </div>
+      <Snackbar
+        open={open}
+        autoHideDuration={2}
+        anchorOrigin={{ vertical: "top", horizontal: "right" }}
+      >
+        <Alert onClose={handleClose} severity="info" sx={{ width: "100%" }}>
+          <>{forceincludeContent}</>
+        </Alert>
+      </Snackbar>
     </div>
   );
 };
@@ -336,6 +390,7 @@ export const ReceiptTransactionBox = ({
   timeStamp,
   livenet,
 }) => {
+  const navigate = useNavigate();
   const { seconds, minutes, hours } = useStopwatch({
     autoStart: true,
     offsetTimestamp: timeStamp,
@@ -401,22 +456,12 @@ export const ReceiptTransactionBox = ({
       <hr className="border-gray-700 my-4" />
 
       <div className="flex justify-center">
-        {/* TODO change to check date now */}
-        {l1TxHash === "1" ? (
-          <button
-            className="bg-gray-400 text-white font-bold py-2 px-6 rounded-full cursor-not-allowed opacity-50"
-            disabled
-          >
-            Force Include
-          </button>
-        ) : (
-          <button
-            className="bg-red-600 hover:bg-red-700 text-white font-bold py-2 px-6 rounded-full"
-            onClick={() => forceInclude(l2TxHash)}
-          >
-            Force Include
-          </button>
-        )}
+        <button
+          className="bg-red-600 hover:bg-red-700 text-white font-bold py-2 px-6 rounded-full"
+          onClick={() => navigate("/transactions")}
+        >
+          Check Force Include Eligibility
+        </button>
       </div>
     </div>
   );

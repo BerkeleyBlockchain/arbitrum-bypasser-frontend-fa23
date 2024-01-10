@@ -35,11 +35,11 @@ export const forceInclude = async (blockNumber, livenet) => {
   console.log(`Checking force inclusion for block ${blockNumber}`);
 
   // ******************* Check Eligibility of Block  *******************
-  const isEligible = await isBlockEligibleForForceInclusion(blockNumber);
-  if (!isEligible) {
-    console.log("Block is not eligible for force inclusion.");
-    return;
-  }
+  // const isEligible = await isBlockEligibleForForceInclusion(blockNumber);
+  // if (!isEligible) {
+  //   console.log("Block is not eligible for force inclusion.");
+  //   return;
+  // }
 
   // ******************* Grabbing Signer on Sepolia  *******************
   let inboxSdk;
@@ -59,11 +59,20 @@ export const forceInclude = async (blockNumber, livenet) => {
     console.log("Error Creating InboxTools with Ethers Signer: ", err);
     return;
   }
+  console.log(inboxSdk);
 
-  // ******************* Calling Force Include  *******************
-  const forceInclusionTx = await inboxSdk.forceInclude({
-    blockNumber: BigNumber.from(blockNumber),
-  });
+  // // ******************* Calling Force Include  *******************
+  // const forceInclusionTx = await inboxSdk.forceInclude({
+  //   blockNumber: BigNumber.from(blockNumber),
+  // });
+  let forceInclusionTx;
+  try {
+    forceInclusionTx = await inboxSdk.forceInclude();
+    console.log(forceInclusionTx);
+  } catch (err) {
+    console.log(err);
+    return;
+  }
 
   if (!forceInclusionTx) {
     console.log("No eligible messages for force inclusion.");
