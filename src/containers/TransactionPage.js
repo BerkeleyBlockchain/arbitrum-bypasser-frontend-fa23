@@ -466,3 +466,39 @@ export const ReceiptTransactionBox = ({
     </div>
   );
 };
+
+export const L1TransactionBox = ({ selectedFunction }) => {
+  const { seconds, minutes, hours } = useStopwatch({
+    autoStart: true,
+  });
+  const formatTime = (timeValue) => {
+    return String(timeValue).padStart(2, "0");
+  };
+
+  return (
+    <div
+      className="relative inline-block w-full px-6 py-6 rounded-lg bg-gray-800 shadow-lg"
+      style={{
+        maxWidth: "800px",
+        backgroundColor: "rgba(17, 19, 24, 1)",
+      }}
+    >
+      <div className="text-white text-center text-xl text-shadow text-gray-400 font-bold mb-10">
+        Waiting for User Signatures and L1 Transaction...
+        <br />
+        <span className="text-yellow-500">
+          Time Elapsed: {formatTime(hours)}:{formatTime(minutes)}:
+          {formatTime(seconds)}
+        </span>
+      </div>
+      <div className="text-white text-left text-lg font-bold mb-1">
+        {selectedFunction}
+      </div>
+
+      <div className="text-white text-sm mb-3">
+        L1 Transaction Approved:{" "}
+        <ClipLoader className="ml-2" size={12} color={"#ffffff"} />
+      </div>
+    </div>
+  );
+};

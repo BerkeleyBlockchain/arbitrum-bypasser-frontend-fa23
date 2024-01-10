@@ -37,7 +37,8 @@ export default function Landing() {
         <p className="text-gray-400 text-lg mb-6">
           Execute transactions on Arbitrum L2 using your ETH account and reduce
           censorship risks by circumventing both transaction submission and
-          transaction inclusion.
+          transaction inclusion. (This is a community prototype so use at your
+          own risk*!)
         </p>
         {/* ...other content */}
         <div className="flex gap-4 mb-10">
