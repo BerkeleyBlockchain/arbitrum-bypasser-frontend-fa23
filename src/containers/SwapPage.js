@@ -154,7 +154,7 @@ export default function SwapPage() {
     setGasBuffer(20);
   }, [functionList, selectedFunction]);
 
-  const [isSwapped, setIsSwapped] = useState(true);
+  const [isSwapped, setIsSwapped] = useState(false);
 
   const [l1Tx, setL1Tx] = useState("");
   const [l2Tx, setL2Tx] = useState("");
