@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import { FaDiscord, FaTwitter } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
 import { ConnectButton } from "@rainbow-me/rainbowkit";
 import arbLogo from "../assets/arblogo.svg";
@@ -17,8 +16,9 @@ export default function Header() {
     navigate("/transactions");
   };
 
-  const handleLink = (url) => {
-    window.open(url, "_blank", "noopener,noreferrer");
+  const handleAddABI = () => {
+    // Define the navigation action
+    navigate("/add-abi"); // Update this with the correct route
   };
 
   const toggleNetwork = () => {
@@ -41,11 +41,18 @@ export default function Header() {
           <span className="h-3 w-3 border-2 border-white rounded-full mr-2"></span>
           Transactions
         </button>
-        {/* Add your MetaMaskSignMessageComponent next to Transactions button */}
+        {/* Add ABI Button */}
+        <button
+          onClick={handleAddABI}
+          className="bg-gray-700 hover:bg-gray-800 text-white font-thin py-2 px-4 rounded flex items-center mr-2"
+        >
+          Add ABI
+        </button>
+        {/* MetaMaskSignMessageComponent */}
         {/* <MetaMaskSignMessageComponent message="Your default message or pass a message prop" /> */}
       </div>
       <div className="flex items-center">
-      <button
+        <button
           onClick={toggleNetwork} //MAINNET TESTNET BUTTON
           className={`${
             network === "Mainnet" ? "bg-green-500 hover:bg-green-600" : "bg-gray-500 hover:bg-gray-600"
@@ -53,20 +60,6 @@ export default function Header() {
         >
           {network}
         </button>
-        <FaTwitter
-          className="text-white ml-4 mr-2 hover:cursor-pointer hover:scale-110"
-          onClick={() => {
-            handleLink("https://twitter.com/arbitrum");
-          }}
-          size={24}
-        />
-        <FaDiscord
-          className="text-white mx-2 mr-4 hover:cursor-pointer hover:scale-110"
-          onClick={() => {
-            handleLink("https://discord.com/invite/arbitrum");
-          }}
-          size={24}
-        />
         <ConnectButton />
       </div>
     </nav>
