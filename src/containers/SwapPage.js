@@ -234,7 +234,7 @@ export default function SwapPage() {
             l1TxHash: l1TxHash,
             timeStamp: new Date().toISOString(),
             contractAddress: contractAddress,
-            name: name,
+            name: selectedFunction,
           })
         );
         // localStorage.setItem(
