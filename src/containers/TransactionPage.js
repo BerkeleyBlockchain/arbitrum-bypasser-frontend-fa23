@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useContext } from "react";
 import { getLastTransactions } from "../utils/getTransactions";
 import { useStopwatch } from "react-timer-hook";
 
@@ -9,13 +9,17 @@ import {
   isBlockEligibleForForceInclusion,
 } from "../utils/forceInclude";
 import Stopwatch from "../components/Stopwatch";
+import { GlobalContext } from "../ContextProvider";
 
 export default function TransactionPage() {
+  // ******************* Mainnet or Testnet *******************
+  const { livenet } = useContext(GlobalContext);
+
   // ******************* Get and Create Wallet *******************
-  const { address, isConnecting, isDisconnected } = useAccount();
-  const { data: balance } = useBalance({
-    address: address || null,
-  });
+  const { address } = useAccount();
+  // const { data: balance } = useBalance({
+  //   address: address || null,
+  // });
 
   // ******************* Grab Transactions *******************
   const [transactions, setTransactions] = useState([]);
@@ -24,7 +28,7 @@ export default function TransactionPage() {
   useEffect(() => {
     async function getTxFromScanner(account) {
       try {
-        const txs = await getLastTransactions(account, 5);
+        const txs = await getLastTransactions(account, 5, livenet);
         setTransactions(txs);
         return txs;
       } catch (err) {
@@ -44,7 +48,7 @@ export default function TransactionPage() {
       getTxFromScanner(address);
     }
     getTxFromLocal();
-  }, [address]);
+  }, [address, livenet]);
 
   useEffect(() => {
     if (
@@ -56,14 +60,6 @@ export default function TransactionPage() {
       localStorage.removeItem("currentTransaction");
     }
   }, [currentTransaction, transactions]);
-
-  // ******************* Timestamp Moving  *******************
-  // const timestampDate = new Date(timestamp);
-  // const currentDate = new Date();
-  // const differenceInMilliseconds = currentDate - timestampDate;
-  // const differenceInSeconds = Math.floor(differenceInMilliseconds / 1000);
-  // const offset = 152702;
-  // console.log(differenceInSeconds, offset);
 
   return (
     <div className="swap-bg bg-cover bg-fixed bg-no-repeat text-white flex-grow py-24">
@@ -80,6 +76,7 @@ export default function TransactionPage() {
             functionName={currentTransaction.name}
             to={currentTransaction.contractAddress}
             timestamp={currentTransaction.timestamp}
+            livenet={livenet}
           />
         )}
 
@@ -95,6 +92,7 @@ export default function TransactionPage() {
               gasPrice={txObj.gasPrice}
               timeStamp={txObj.timeStamp}
               txreceipt_status={txObj.txreceipt_status}
+              livenet={livenet}
             />
           ))
         )}
@@ -110,6 +108,7 @@ const TransactionBox = ({
   gasPrice,
   timeStamp,
   txreceipt_status,
+  livenet,
 }) => {
   function convertTimestampToUTC(unixTimestamp) {
     const date = new Date(unixTimestamp * 1000); // Convert to milliseconds
@@ -137,7 +136,7 @@ const TransactionBox = ({
           Scanner Link:{" "}
           <a
             className="text-blue-500 underline"
-            href={`https://sepolia.arbiscan.io/tx/${hash}`}
+            href={`https://${livenet ? "" : "sepolia."}arbiscan.io/tx/${hash}`}
           >
             {hash}
           </a>
@@ -145,7 +144,9 @@ const TransactionBox = ({
           To Contract:{" "}
           <a
             className="text-blue-500 underline"
-            href={`https://sepolia.arbiscan.io/address/${to}`}
+            href={`https://${
+              livenet ? "" : "sepolia."
+            }arbiscan.io/address/${to}`}
           >
             {to}
           </a>
@@ -190,7 +191,13 @@ const TransactionBox = ({
   );
 };
 
-const MostRecentTransactionBox = ({ hash, functionName, to, timestamp }) => {
+const MostRecentTransactionBox = ({
+  hash,
+  functionName,
+  to,
+  timestamp,
+  livenet,
+}) => {
   const [stopwatchSecondOffset, setStopwatchSecondOffset] = useState(0);
   const [timestampDate, setTimestampDate] = useState(new Date());
 
@@ -234,7 +241,7 @@ const MostRecentTransactionBox = ({ hash, functionName, to, timestamp }) => {
           Expected Scanner Link:{" "}
           <a
             className="text-blue-500 underline"
-            href={`https://sepolia.arbiscan.io/tx/${hash}`}
+            href={`https://${livenet ? "" : "sepolia."}arbiscan.io/tx/${hash}`}
           >
             {hash}
           </a>
@@ -242,7 +249,9 @@ const MostRecentTransactionBox = ({ hash, functionName, to, timestamp }) => {
           To Contract:{" "}
           <a
             className="text-blue-500 underline"
-            href={`https://sepolia.arbiscan.io/address/${to}`}
+            href={`https://${
+              livenet ? "" : "sepolia."
+            }arbiscan.io/address/${to}`}
           >
             {to}
           </a>
@@ -281,6 +290,7 @@ export const ReceiptTransactionBox = ({
   functionName,
   to,
   timeStamp,
+  livenet,
 }) => {
   const { seconds, minutes, hours } = useStopwatch({
     autoStart: true,
@@ -314,7 +324,9 @@ export const ReceiptTransactionBox = ({
         L1 Transaction Approved:{" "}
         <a
           className="text-blue-500 underline"
-          href={`https://sepolia.arbiscan.io/tx/${l1TxHash}`}
+          href={`https://${
+            livenet ? "" : "sepolia."
+          }arbiscan.io/tx/${l1TxHash}`}
         >
           {l1TxHash}
         </a>
@@ -322,7 +334,9 @@ export const ReceiptTransactionBox = ({
         L2 Transaction Awaiting:{" "}
         <a
           className="text-blue-500 underline"
-          href={`https://sepolia.arbiscan.io/tx/${l2TxHash}`}
+          href={`https://${
+            livenet ? "" : "sepolia."
+          }arbiscan.io/tx/${l2TxHash}`}
         >
           {l2TxHash}
         </a>
@@ -330,7 +344,7 @@ export const ReceiptTransactionBox = ({
         To Contract:{" "}
         <a
           className="text-blue-500 underline"
-          href={`https://sepolia.arbiscan.io/address/${to}`}
+          href={`https://${livenet ? "" : "sepolia."}arbiscan.io/address/${to}`}
         >
           {to}
         </a>

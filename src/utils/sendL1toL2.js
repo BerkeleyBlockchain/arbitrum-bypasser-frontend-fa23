@@ -1,4 +1,4 @@
-// Contributors: Tommy, Jay, Dhruv
+// Contributors: Tommy, Jay
 import { React } from "react";
 import { signL2Tx } from "./signL2Tx";
 const { providers, ethers } = require("ethers");
@@ -7,7 +7,7 @@ const {
   getL2Network,
 } = require("@arbitrum/sdk/dist/lib/dataEntities/networks");
 const { InboxTools } = require("@arbitrum/sdk");
-const { sepolia, arbitrumSepolia } = require("wagmi/chains");
+const { arbitrum, arbitrumSepolia } = require("wagmi/chains");
 
 // ******************* Grab Custom Node RPCS for Eth and Goerli *******************
 const l2Provider = new providers.JsonRpcProvider(process.env.REACT_APP_L2RPC);
@@ -16,7 +16,8 @@ export const sendL1toL2 = async (
   contractAddress,
   contractName,
   contractABI,
-  userInputs
+  userInputs,
+  livenet
 ) => {
   // ******************* Preliminary Checks *******************
   console.log(`========= sendL1toL2 =========`);
@@ -29,7 +30,12 @@ export const sendL1toL2 = async (
   }
 
   // ******************* Presigning a transaction to the address *******************
-  const l2SignedTx = await signL2Tx(contractAddress, contractABI, userInputs);
+  const l2SignedTx = await signL2Tx(
+    contractAddress,
+    contractABI,
+    userInputs,
+    livenet
+  );
   // console.log("Contract Address: ", contractAddress);
   // console.log("Contract ABI: ", contractABI);
   // console.log("User Inputs: ", userInputs);
@@ -38,7 +44,9 @@ export const sendL1toL2 = async (
 
   const l2Txhash = ethers.utils.parseTransaction(l2SignedTx).hash; // extract hash to check if tx executed on l2 later
   console.log(
-    `Signed this L2 tx hash but not broadcasted: https://sepolia.arbiscan.io/tx/${l2Txhash}`
+    `Signed this L2 tx hash but not broadcasted: https://${
+      livenet ? "" : "sepolia."
+    }arbiscan.io/tx/${l2Txhash}`
   );
 
   // ******************* Grabbing Signer on Sepolia  *******************
@@ -46,11 +54,13 @@ export const sendL1toL2 = async (
   try {
     await window.ethereum.request({
       method: "wallet_switchEthereumChain",
-      params: [{ chainId: "0xaa36a7" }], // REPLACE with sepolia
+      params: [{ chainId: livenet ? "0x1" : "0xaa36a7" }], // REPLACE with sepolia
     });
     const provider = new ethers.providers.Web3Provider(window.ethereum);
     const l1Signer = provider.getSigner();
-    const l2Network = await getL2Network(arbitrumSepolia.id);
+    const l2Network = await getL2Network(
+      livenet ? arbitrum.id : arbitrumSepolia.id
+    );
 
     inboxSdk = new InboxTools(l1Signer, l2Network);
   } catch (err) {
@@ -66,7 +76,9 @@ export const sendL1toL2 = async (
 
   const l1SentTx = await l1Tx.wait();
   console.log(
-    `Settled on L1! Address here: 🙌  https://sepolia.etherscan.io/tx/${l1SentTx.transactionHash}`
+    `Settled on L1! Address here: 🙌  https://${
+      livenet ? "" : "sepolia."
+    }etherscan.io/tx/${l1SentTx.transactionHash}`
   );
 
   // Waiting for Settlement on L2

@@ -15,10 +15,12 @@ export const readABI = async (fileName) => {
   }
 };
 
-export const readABIFunctions = async (fileName) => {
+export const readABIFunctions = async (fileName, livenet) => {
   try {
     // Dynamically import the JSON file based on the file name
-    const rawData = await import(`../contractABIs/testnet/${fileName}`);
+    const rawData = await import(
+      `../contractABIs/${livenet ? "mainnet" : "testnet"}/${fileName}`
+    );
     const data = rawData.default;
     const reorg = {};
 

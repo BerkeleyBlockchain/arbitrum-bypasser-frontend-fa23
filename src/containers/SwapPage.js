@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useContext } from "react";
 import { FaCheckCircle, FaFilter, FaSearch } from "react-icons/fa";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate, useLocation } from "react-router-dom";
@@ -17,7 +17,7 @@ import { useWalletClient, useBalance, useAccount } from "wagmi";
 import { sepolia, arbitrumSepolia } from "wagmi/chains";
 import { ReceiptTransactionBox } from "./TransactionPage";
 
-// import { useEthersSigner } from "../utils/convertViem";
+import { GlobalContext } from "../ContextProvider";
 
 export default function SwapPage() {
   // ******************* Preprocessing to Gate Page If forced entry *******************
@@ -27,6 +27,9 @@ export default function SwapPage() {
   const [functionList, setFunctionList] = useState({});
   const [selectedFunction, setSelectedFunction] = useState("");
   const [functionInputs, setFunctionInputs] = useState({});
+
+  // ******************* Mainnet or Testnet *******************
+  const { livenet } = useContext(GlobalContext);
 
   const [tokenIn, setTokenIn] = useState("");
   const [tokenOut, setTokenOut] = useState("");
@@ -44,7 +47,7 @@ export default function SwapPage() {
         console.error("ABI is not defined");
         return;
       }
-      const funcs = await readABIFunctions(abi);
+      const funcs = await readABIFunctions(abi, livenet);
       if (funcs && typeof funcs === "object" && Object.keys(funcs).length > 0) {
         setFunctionList(funcs);
         setSelectedFunction(Object.keys(funcs)[0]);
@@ -58,7 +61,7 @@ export default function SwapPage() {
     } else {
       getABIFunctions();
     }
-  }, [addy, name, abi, navigate]);
+  }, [addy, name, abi, navigate, livenet]);
 
   // ******************* State Set up *******************
   // const dispatch = useDispatch();
@@ -214,7 +217,8 @@ export default function SwapPage() {
           contractAddress,
           name,
           abi,
-          userInputs
+          userInputs,
+          livenet
         );
 
         setIsSwapped(true);
@@ -416,6 +420,7 @@ export default function SwapPage() {
             functionName={selectedFunction}
             to={addy}
             timeStamp={new Date()}
+            livenet={livenet}
           />
           <SwapStatusBar isSwapped={isSwapped} />
         </div>

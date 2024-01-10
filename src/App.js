@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useContext, useEffect } from "react";
 import { RouterProvider } from "react-router-dom";
 import { ProtocolsProvider } from "./containers/ProtocolsContext";
 import "./App.css";
@@ -11,27 +11,46 @@ import {
 } from "@rainbow-me/rainbowkit";
 import { metaMaskWallet } from "@rainbow-me/rainbowkit/wallets";
 import { configureChains, createConfig, WagmiConfig } from "wagmi";
-import { sepolia, arbitrumSepolia } from "wagmi/chains";
-import { publicProvider } from "wagmi/providers/public";
+import { sepolia, arbitrumSepolia, arbitrum, mainnet } from "wagmi/chains";
 import { jsonRpcProvider } from "@wagmi/core/providers/jsonRpc";
+import { GlobalContext } from "./ContextProvider";
 
 export default function App() {
-  const { chains, publicClient } = configureChains(
-    [sepolia, arbitrumSepolia],
-    [
-      jsonRpcProvider({
-        rpc: (chain) => {
-          if (chain.id === sepolia.id) {
-            return { http: process.env.REACT_APP_L1RPC }; // Use L1 RPC for Sepolia
-          } else if (chain.id === arbitrumSepolia.id) {
-            return { http: process.env.REACT_APP_L2RPC }; // Use L2 RPC for Arbitrum Sepolia
-          }
-          // Fallback or default URL if needed
-          return { http: "https://default-rpc-url.com" };
-        },
-      }),
-    ]
-  );
+  const { livenet } = useContext(GlobalContext);
+
+  const { chains, publicClient } = !livenet
+    ? configureChains(
+        // Testnet configuration
+        [sepolia, arbitrumSepolia],
+        [
+          jsonRpcProvider({
+            rpc: (chain) => {
+              if (chain.id === sepolia.id) {
+                return { http: process.env.REACT_APP_TESTNET_L1RPC }; // L1 RPC for Sepolia
+              } else if (chain.id === arbitrumSepolia.id) {
+                return { http: process.env.REACT_APP_TESTNET_L2RPC }; // L2 RPC for Arbitrum Sepolia
+              }
+              return { http: "https://default-rpc-url.com" }; // Fallback URL
+            },
+          }),
+        ]
+      )
+    : configureChains(
+        // Mainnet configuration
+        [mainnet, arbitrum],
+        [
+          jsonRpcProvider({
+            rpc: (chain) => {
+              if (chain.id === mainnet.id) {
+                return { http: process.env.REACT_APP_MAINNET_L1RPC }; // L1 RPC for Mainnet
+              } else if (chain.id === arbitrum.id) {
+                return { http: process.env.REACT_APP_MAINNET_L2RPC }; // L2 RPC for Arbitrum
+              }
+              return { http: "https://default-rpc-url.com" }; // Fallback URL
+            },
+          }),
+        ]
+      );
 
   // When using livenet
   // const { chains, publicClient } = configureChains(
@@ -55,7 +74,7 @@ export default function App() {
   return (
     <WagmiConfig config={wagmiConfig}>
       <RainbowKitProvider chains={chains}>
-        <ProtocolsProvider> {/* Wrap the router with ProtocolsProvider */}
+        <ProtocolsProvider>
           <RouterProvider router={router} />
         </ProtocolsProvider>
       </RainbowKitProvider>

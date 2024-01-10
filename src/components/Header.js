@@ -1,13 +1,24 @@
-import React, { useState } from 'react';
+import React, { useState, useContext, useEffect } from "react";
 import { FaDiscord, FaTwitter } from "react-icons/fa";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import { ConnectButton } from "@rainbow-me/rainbowkit";
 import arbLogo from "../assets/arblogo.svg";
-import MetaMaskSignMessageComponent from "./EthSign";
+import { GlobalContext } from "../ContextProvider";
 
 export default function Header() {
+  const { livenet, setLivenet } = useContext(GlobalContext);
+  const [disabled, setDisabled] = useState(false);
+  const location = useLocation();
+
+  useEffect(() => {
+    if (location.pathname === "/swap") {
+      setDisabled(true);
+    } else {
+      setDisabled(false);
+    }
+  }, [location]);
+
   const navigate = useNavigate();
-  const [network, setNetwork] = useState("Mainnet");
 
   const handleHome = () => {
     navigate("/");
@@ -22,7 +33,8 @@ export default function Header() {
   };
 
   const toggleNetwork = () => {
-    setNetwork(network === "Mainnet" ? "Testnet" : "Mainnet");
+    setLivenet(!livenet);
+    console.log(livenet);
   };
 
   return (
@@ -45,13 +57,16 @@ export default function Header() {
         {/* <MetaMaskSignMessageComponent message="Your default message or pass a message prop" /> */}
       </div>
       <div className="flex items-center">
-      <button
+        <button
           onClick={toggleNetwork} //MAINNET TESTNET BUTTON
-          className={`${
-            network === "Mainnet" ? "bg-green-500 hover:bg-green-600" : "bg-gray-500 hover:bg-gray-600"
-          } text-white font-thin py-2 px-4 rounded flex items-center mr-2 transition-colors duration-300`}
+          disabled={disabled}
+          className={`${disabled ? "cursor-not-allowed opacity-50" : ""} ${
+            livenet
+              ? "bg-green-500 hover:bg-green-600"
+              : "bg-gray-500 hover:bg-gray-600"
+          } text-white font-thin py-2 px-4 rounded flex items-center transition-colors duration-300`}
         >
-          {network}
+          {livenet ? "Mainnet" : "Testnet"}
         </button>
         <FaTwitter
           className="text-white ml-4 mr-2 hover:cursor-pointer hover:scale-110"
@@ -67,7 +82,7 @@ export default function Header() {
           }}
           size={24}
         />
-        <ConnectButton />
+        <ConnectButton showBalance={false} chainStatus="icon" />
       </div>
     </nav>
   );

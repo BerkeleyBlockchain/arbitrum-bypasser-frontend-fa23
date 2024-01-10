@@ -1,10 +1,14 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import "./Landing.css";
 import ProtocolCard from "../components/ProtocolCard";
 import testnetMap from "../constants/testnet_map.json";
+import mainnetMap from "../constants/mainnet_map.json";
 import SearchBar from "../components/SearchBar";
+import { GlobalContext } from "../ContextProvider";
 
 export default function Landing() {
+  const { livenet } = useContext(GlobalContext);
+
   const [searchQuery, setSearchQuery] = useState("");
   const [filterTypes, setFilterTypes] = useState([]); // Now an array
 
@@ -16,7 +20,9 @@ export default function Landing() {
     setFilterTypes(types); // Expecting an array of types
   };
 
-  const filteredSquaresData = Object.entries(testnetMap).filter(
+  const filteredSquaresData = Object.entries(
+    livenet ? mainnetMap : testnetMap
+  ).filter(
     ([key, value]) =>
       (filterTypes.length === 0 || filterTypes.includes(value.type)) && // Adjusted for an array of types
       (!searchQuery || value.name.toLowerCase().includes(searchQuery))

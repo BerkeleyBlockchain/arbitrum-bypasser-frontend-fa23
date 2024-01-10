@@ -2,11 +2,16 @@ import { React } from "react";
 import { ethers } from "ethers";
 import { readABI } from "./readFile";
 
-export const signL2Tx = async (contractAddress, contractABI, userInputs) => {
+export const signL2Tx = async (
+  contractAddress,
+  contractABI,
+  userInputs,
+  livenet
+) => {
   // ******************* Grab Program Params *******************
   console.log(`========= signL2Tx =========`);
   console.log(contractAddress, contractABI, userInputs);
-  const abi = await readABI(contractABI);
+  const abi = await readABI(contractABI, livenet);
 
   const {
     functionName,
@@ -30,7 +35,7 @@ export const signL2Tx = async (contractAddress, contractABI, userInputs) => {
     // ******************* Switch to L2 Chain *******************
     await window.ethereum.request({
       method: "wallet_switchEthereumChain",
-      params: [{ chainId: "0x66eee" }], // Replace with Arbitrum Chain ID
+      params: [{ chainId: livenet ? "0xA4B1" : "0x66eee" }], // Replace with Arbitrum Chain ID
     });
     const provider = new ethers.providers.Web3Provider(window.ethereum);
     const signer = provider.getSigner();
@@ -39,7 +44,7 @@ export const signL2Tx = async (contractAddress, contractABI, userInputs) => {
     const icontract = new ethers.utils.Interface(abi);
     console.log(icontract);
 
-    const paramsArray = Object.keys(userParams).map(key => userParams[key]);
+    const paramsArray = Object.keys(userParams).map((key) => userParams[key]);
     const idata = icontract.encodeFunctionData(functionName, paramsArray); //this line may be bugging
     console.log(idata);
     console.log(userValue);
@@ -67,7 +72,7 @@ export const signL2Tx = async (contractAddress, contractABI, userInputs) => {
       maxFeePerGas: (await provider.getFeeData()).maxFeePerGas,
       nonce: nonceNumber,
       type: 2,
-      chainId: 421614, // TODO: this is arb sepolia curretnyl make it dynamic
+      chainId: livenet ? 42161 : 421614, // TODO: this is arb sepolia curretnyl make it dynamic
     };
     console.log(transaction);
 
