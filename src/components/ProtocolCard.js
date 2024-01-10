@@ -85,7 +85,7 @@ function ProtocolCard({ addy, name, abi, type, image }) {
             color: "white",
             padding: "1px 0",
             fontFamily: "Roboto",
-            fontSize: "15px",
+            fontSize: "14px",
             textAlign: "Left",
           }}
         >
