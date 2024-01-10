@@ -7,17 +7,11 @@ export default function AddABI() {
   const [abiType, setABIType] = useState('');
   const [email, setEmail] = useState('');
 
-  const handleSubmit = (event) => {
-    event.preventDefault();
-    // Handle the submission here
-    console.log({ protocolName, contractAddress, abi, abiType });
-  };
-
   return (
     <div className="p-4" style={{ color: 'white' }}>
       <h1 className="text-2xl font-bold mb-4">Add ABI</h1>
       <h2 className="text-lg font-bold mb-4">Add a new smart contract ABI from your favorite protocol. After submitting, we will review and let you know if it is approved.</h2>
-      <form onSubmit={handleSubmit}>
+      <form method="POST" action="https://script.google.com/macros/s/AKfycbxy78SBMMM2G-hyqj1aZxvOOAfwHgy05pGULhRvVPvIcUZEOnO8S6CUmDyoHFF_VCfs/exec">
         <div className="mb-3">
           <label
             htmlFor="protocolName"
@@ -27,6 +21,7 @@ export default function AddABI() {
             Protocol Name
           </label>
           <input
+            name="Prottocol Name"
             type="text"
             id="protocolName"
             value={protocolName}
@@ -46,6 +41,7 @@ export default function AddABI() {
             Contract (address)
           </label>
           <input
+            name="Contract (address)"
             type="text"
             id="contractAddress"
             value={contractAddress}
@@ -64,6 +60,7 @@ export default function AddABI() {
             Type
           </label>
           <input
+            name="Type"
             type="text"
             id="abiType"
             value={abiType}
@@ -84,6 +81,7 @@ export default function AddABI() {
             Email (Optional)
           </label>
           <input
+            name="Email (Optional)"
             type="email"
             id="email"
             value={email}
