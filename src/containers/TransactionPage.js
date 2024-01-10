@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { getLastTransactions } from "../utils/getTransactions";
+import { useStopwatch } from "react-timer-hook";
 
 import { useAccount, useBalance } from "wagmi";
 import { ClipLoader } from "react-spinners";
@@ -7,7 +8,7 @@ import {
   forceInclude,
   isBlockEligibleForForceInclusion,
 } from "../utils/forceInclude";
-import { transpileModule } from "typescript";
+import Stopwatch from "../components/Stopwatch";
 
 export default function TransactionPage() {
   // ******************* Get and Create Wallet *******************
@@ -56,6 +57,14 @@ export default function TransactionPage() {
     }
   }, [currentTransaction, transactions]);
 
+  // ******************* Timestamp Moving  *******************
+  // const timestampDate = new Date(timestamp);
+  // const currentDate = new Date();
+  // const differenceInMilliseconds = currentDate - timestampDate;
+  // const differenceInSeconds = Math.floor(differenceInMilliseconds / 1000);
+  // const offset = 152702;
+  // console.log(differenceInSeconds, offset);
+
   return (
     <div className="swap-bg bg-cover bg-fixed bg-no-repeat text-white flex-grow py-24">
       <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -66,11 +75,11 @@ export default function TransactionPage() {
         {address == null || !currentTransaction ? (
           <></>
         ) : (
-          <CurrentTransactionBox
+          <MostRecentTransactionBox
             hash={currentTransaction.l2TxHash}
             functionName={currentTransaction.name}
             to={currentTransaction.contractAddress}
-            timeStamp={currentTransaction.timeStamp}
+            timestamp={currentTransaction.timestamp}
           />
         )}
 
@@ -181,7 +190,20 @@ const TransactionBox = ({
   );
 };
 
-const CurrentTransactionBox = ({ hash, functionName, to, timeStamp }) => {
+const MostRecentTransactionBox = ({ hash, functionName, to, timestamp }) => {
+  const [stopwatchSecondOffset, setStopwatchSecondOffset] = useState(0);
+  const [timestampDate, setTimestampDate] = useState(new Date());
+
+  useEffect(() => {
+    const pastDate = new Date(timestamp);
+    setTimestampDate(timestampDate);
+    const currentDate = new Date();
+    const differenceInMilliseconds = currentDate - pastDate;
+    const totalSeconds = Math.floor(differenceInMilliseconds / 1000);
+    setStopwatchSecondOffset(totalSeconds);
+    console.log("offset", totalSeconds);
+  }, [timestamp]);
+
   return (
     <div className="flex justify-center items-start mt-8 mb-8">
       <div
@@ -194,10 +216,18 @@ const CurrentTransactionBox = ({ hash, functionName, to, timeStamp }) => {
         <div className="text-white text-center text-xl text-shadow text-gray-400 font-bold mb-6">
           MOST RECENT TRANSACTION
           <br />
-          <span className="text-yellow-500">Time Elapsed: 00:00:00</span>
+          <span className="text-yellow-500">
+            {stopwatchSecondOffset && (
+              <Stopwatch offset={stopwatchSecondOffset} />
+            )}
+          </span>
         </div>
-        <div className="text-white text-left text-lg font-bold mb-1">
-          {functionName}
+        <div className="text=white text-left text-lg font-bold mb-1">
+          <span className="text-[rgba(0,212,136,1)]">
+            {timestampDate.toUTCString()}
+          </span>
+          <br />
+          Function: {functionName}
         </div>
 
         <div className="text-white text-sm mb-3">
@@ -216,8 +246,6 @@ const CurrentTransactionBox = ({ hash, functionName, to, timeStamp }) => {
           >
             {to}
           </a>
-          <br />
-          Timestamp: <span>{timeStamp}</span>
           <br />
           Status: <span className="text-yellow-400">Pending</span>
         </div>
@@ -254,6 +282,14 @@ export const ReceiptTransactionBox = ({
   to,
   timeStamp,
 }) => {
+  const { seconds, minutes, hours } = useStopwatch({
+    autoStart: true,
+    offsetTimestamp: timeStamp,
+  });
+  const formatTime = (timeValue) => {
+    return String(timeValue).padStart(2, "0");
+  };
+
   return (
     <div
       className="relative inline-block w-full px-6 py-6 rounded-lg bg-gray-800 shadow-lg"
@@ -265,7 +301,10 @@ export const ReceiptTransactionBox = ({
       <div className="text-white text-center text-xl text-shadow text-gray-400 font-bold mb-10">
         Waiting for L2 Transaction Confirmation...
         <br />
-        <span className="text-yellow-500">Time Elapsed: 00:00:00</span>
+        <span className="text-yellow-500">
+          Time Elapsed: {formatTime(hours)}:{formatTime(minutes)}:
+          {formatTime(seconds)}
+        </span>
       </div>
       <div className="text-white text-left text-lg font-bold mb-1">
         Function: {functionName}
@@ -296,7 +335,7 @@ export const ReceiptTransactionBox = ({
           {to}
         </a>
         <br />
-        Timestamp: <span>{timeStamp}</span>
+        Timestamp: <span>{timeStamp.toISOString()}</span>
         <br />
         Status: <span className="text-yellow-400">Pending</span>
       </div>
