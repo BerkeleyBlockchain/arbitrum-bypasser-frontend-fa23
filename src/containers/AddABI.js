@@ -3,7 +3,6 @@ import React, { useState } from 'react';
 export default function AddABI() {
   const [protocolName, setProtocolName] = useState('');
   const [contractAddress, setContractAddress] = useState('');
-  const [abi, setABI] = useState('');
   const [abiType, setABIType] = useState('');
   const [email, setEmail] = useState('');
 
@@ -21,7 +20,7 @@ export default function AddABI() {
             Protocol Name
           </label>
           <input
-            name="Prottocol Name"
+            name="Protocol Name"
             type="text"
             id="protocolName"
             value={protocolName}
