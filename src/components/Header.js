@@ -1,5 +1,5 @@
 import React, { useState, useContext, useEffect } from "react";
-import { FaDiscord, FaTwitter } from "react-icons/fa";
+
 import { useNavigate, useLocation } from "react-router-dom";
 import { ConnectButton } from "@rainbow-me/rainbowkit";
 import arbLogo from "../assets/arblogo.svg";
@@ -28,8 +28,8 @@ export default function Header() {
     navigate("/transactions");
   };
 
-  const handleLink = (url) => {
-    window.open(url, "_blank", "noopener,noreferrer");
+  const handleAddABI = () => {
+    navigate("/add-abi"); // This will navigate to the Add ABI page
   };
 
   const toggleNetwork = () => {
@@ -53,7 +53,14 @@ export default function Header() {
           <span className="h-3 w-3 border-2 border-white rounded-full mr-2"></span>
           Transactions
         </button>
-        {/* Add your MetaMaskSignMessageComponent next to Transactions button */}
+        {/* Add the Add ABI button */}
+        <button
+          onClick={handleAddABI}
+          className="bg-gray-700 hover:bg-gray-800 text-white font-thin py-2 px-4 rounded flex items-center mr-2"
+        >
+          Add ABI
+        </button>
+        {/* Uncomment and use the MetaMaskSignMessageComponent if needed */}
         {/* <MetaMaskSignMessageComponent message="Your default message or pass a message prop" /> */}
       </div>
       <div className="flex items-center">
@@ -64,24 +71,10 @@ export default function Header() {
             livenet
               ? "bg-green-500 hover:bg-green-600"
               : "bg-gray-500 hover:bg-gray-600"
-          } text-white font-thin py-2 px-4 rounded flex items-center transition-colors duration-300`}
+          } text-white font-thin py-2 px-4 rounded flex items-center transition-colors mr-3 duration-300`}
         >
           {livenet ? "Mainnet" : "Testnet"}
         </button>
-        <FaTwitter
-          className="text-white ml-4 mr-2 hover:cursor-pointer hover:scale-110"
-          onClick={() => {
-            handleLink("https://twitter.com/arbitrum");
-          }}
-          size={24}
-        />
-        <FaDiscord
-          className="text-white mx-2 mr-4 hover:cursor-pointer hover:scale-110"
-          onClick={() => {
-            handleLink("https://discord.com/invite/arbitrum");
-          }}
-          size={24}
-        />
         <ConnectButton showBalance={false} chainStatus="icon" />
       </div>
     </nav>

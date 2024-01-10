@@ -38,7 +38,7 @@
   "0xfc506AaA1340b4dedFfd88bE278bEe058952D674": {
     "name": "Sushi Swap Router",
     "abi": "SushiswapRouter3.json",
-    "type": "dApp",
+    "type": "DEX",
     "image": "https://s3-alpha.figma.com/hub/file/2214755056/cf1785d6-2459-4861-b2b4-d3b2b8fb8088-cover.png"
   },
   "0x537ab51470984D6D9aDF8953C0D2ed8eDA4050ED": {
@@ -50,7 +50,7 @@
   "0x7f90122BF0700F9E7e1F688fe926940E8839F353": {
     "name": "Curve 2Pool (StableSwap)",
     "abi": "Curve2Pool.json",
-    "type": "LP",
+    "type": "dApp",
     "image": "https://cryptologos.cc/logos/curve-dao-token-crv-logo.png"
   }
 }
