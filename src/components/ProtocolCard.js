@@ -1,6 +1,10 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
 import ArrowSVGIcon from "./ArrowIcon";
+import protocolbg1 from "../assets/protocolbg1.png";
+import protocolbg2 from "../assets/protocolbg2.png";
+import protocolbg3 from "../assets/protocolbg3.png";
+import protocolbg4 from "../assets/protocolbg4.png";
 
 function ProtocolCard({ addy, name, abi, type, image }) {
   const navigate = useNavigate();
@@ -9,13 +13,15 @@ function ProtocolCard({ addy, name, abi, type, image }) {
     navigate("/swap", { state: { addy, name, abi } });
   };
 
+  const images = [protocolbg1, protocolbg2, protocolbg3, protocolbg4];
+  const randomImage = images[Math.floor(Math.random() * images.length)];
+
   return (
     <div
       onClick={handleClick}
       style={{
         width: "200px",
         height: "200px",
-        backgroundColor: "rgba(25, 22, 28, 1)",
         borderRadius: "15px",
         overflow: "hidden",
         position: "relative",
@@ -25,10 +31,18 @@ function ProtocolCard({ addy, name, abi, type, image }) {
         justifyContent: "space-between",
         alignItems: "center",
         cursor: "pointer",
+        backgroundImage: `url(${randomImage})`, // Path to your image
+        backgroundSize: "cover", // Cover the entire div
+        backgroundPosition: "center", // Center the image
+        backgroundColor: "transparent",
         transition: "background-color 0.3s ease", // Add transition for background color
       }}
-      onMouseEnter={(e) => (e.currentTarget.style.backgroundColor = "rgba(45, 42, 48, 1)")} // Darken on hover
-      onMouseLeave={(e) => (e.currentTarget.style.backgroundColor = "rgba(25, 22, 28, 1)")} // Revert on mouse leave
+      onMouseEnter={(e) =>
+        (e.currentTarget.style.backgroundColor = "rgba(45, 42, 48, 0.5)")
+      } // Darken on hover
+      onMouseLeave={(e) =>
+        (e.currentTarget.style.backgroundColor = "transparent")
+      } // Revert on mouse leave
     >
       <img
         src={image}

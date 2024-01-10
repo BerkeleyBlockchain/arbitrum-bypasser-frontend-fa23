@@ -36,9 +36,10 @@ export const sendL1toL2 = async (
     userInputs,
     livenet
   );
-  // console.log("Contract Address: ", contractAddress);
-  // console.log("Contract ABI: ", contractABI);
-  // console.log("User Inputs: ", userInputs);
+  console.log("Contract Address: ", contractAddress);
+  console.log("Contract ABI: ", contractABI);
+  console.log("User Inputs: ", userInputs);
+  console.log("Livenet: ", livenet);
   console.log("Signed L2 tx: ", l2SignedTx);
   // for debugging
 
