@@ -249,8 +249,8 @@ export default function SwapPage() {
             l2TxHash: l2TxHash,
             l1TxHash: l1TxHash,
             timeStamp: new Date().toISOString(),
-            contractAddress: addy,
-            name: name,
+            contractAddress: contractAddress,
+            name: selectedFunction,
           })
         );
       } catch (error) {
