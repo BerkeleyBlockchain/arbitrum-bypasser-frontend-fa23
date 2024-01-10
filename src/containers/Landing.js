@@ -29,7 +29,7 @@ export default function Landing() {
           Arbitrum One Sequencer Bypasser
         </h1>
         <p className="text-gray-400 text-lg mb-6">
-          Execute transactions on Arbitrum L2 using your ETH account and reduces
+          Execute transactions on Arbitrum L2 using your ETH account and reduce
           censorship risks by circumventing both transaction submission and
           transaction inclusion.
         </p>
