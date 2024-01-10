@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { useNavigate } from "react-router-dom";
 import { ConnectButton } from "@rainbow-me/rainbowkit";
 import arbLogo from "../assets/arblogo.svg";
-import MetaMaskSignMessageComponent from "./EthSign";
+// import MetaMaskSignMessageComponent from "./EthSign";
 
 export default function Header() {
   const navigate = useNavigate();
@@ -17,8 +17,7 @@ export default function Header() {
   };
 
   const handleAddABI = () => {
-    // Define the navigation action
-    navigate("/add-abi"); // Update this with the correct route
+    navigate("/add-abi"); // This will navigate to the Add ABI page
   };
 
   const toggleNetwork = () => {
@@ -41,19 +40,19 @@ export default function Header() {
           <span className="h-3 w-3 border-2 border-white rounded-full mr-2"></span>
           Transactions
         </button>
-        {/* Add ABI Button */}
+        {/* Add the Add ABI button */}
         <button
           onClick={handleAddABI}
           className="bg-gray-700 hover:bg-gray-800 text-white font-thin py-2 px-4 rounded flex items-center mr-2"
         >
           Add ABI
         </button>
-        {/* MetaMaskSignMessageComponent */}
+        {/* Uncomment and use the MetaMaskSignMessageComponent if needed */}
         {/* <MetaMaskSignMessageComponent message="Your default message or pass a message prop" /> */}
       </div>
       <div className="flex items-center">
         <button
-          onClick={toggleNetwork} //MAINNET TESTNET BUTTON
+          onClick={toggleNetwork}
           className={`${
             network === "Mainnet" ? "bg-green-500 hover:bg-green-600" : "bg-gray-500 hover:bg-gray-600"
           } text-white font-thin py-2 px-4 rounded flex items-center mr-2 transition-colors duration-300`}
