@@ -335,7 +335,7 @@ const MostRecentTransactionBox = ({
             className="text-blue-500 underline"
             href={`https://${
               livenet ? "" : "sepolia."
-            }arbiscan.io/tx/${l1TxHash}`}
+            }etherscan.io/tx/${l1TxHash}`}
           >
             {l1TxHash}
           </a>
@@ -425,7 +425,7 @@ export const ReceiptTransactionBox = ({
           className="text-blue-500 underline"
           href={`https://${
             livenet ? "" : "sepolia."
-          }arbiscan.io/tx/${l1TxHash}`}
+          }etherscan.io/tx/${l1TxHash}`}
         >
           {l1TxHash}
         </a>
