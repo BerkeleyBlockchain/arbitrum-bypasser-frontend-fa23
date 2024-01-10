@@ -16,7 +16,7 @@ export default function AddABI() {
   return (
     <div className="p-4" style={{ color: 'white' }}>
       <h1 className="text-2xl font-bold mb-4">Add ABI</h1>
-      <h2 className="text-lg font-bold mb-4">Add a new smart contract ABI from your favorite protocol.</h2>
+      <h2 className="text-lg font-bold mb-4">Add a new smart contract ABI from your favorite protocol. After submitting, we will review and let you know if it is approved.</h2>
       <form onSubmit={handleSubmit}>
         <div className="mb-3">
           <label
@@ -69,7 +69,7 @@ export default function AddABI() {
             value={abiType}
             onChange={(e) => setABIType(e.target.value)}
             className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg block w-full p-2.5"
-            placeholder="e.g., ERC20, ERC721"
+            placeholder="e.g., dApp, DEX, Bridge, etc."
             required
           />
         </div>

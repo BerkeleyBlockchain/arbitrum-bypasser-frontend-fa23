@@ -13,9 +13,10 @@ function Footer() {
         color: "white",
         textAlign: "center",
         padding: "10px 20px",
-        position: "relative",
+        position: "fixed",  // Fixed at the bottom of the viewport
         bottom: "0",
-        width: "100%",
+        left: "0",
+        right: "0",
         display: "flex",
         alignItems: "center",
         justifyContent: "space-between",
