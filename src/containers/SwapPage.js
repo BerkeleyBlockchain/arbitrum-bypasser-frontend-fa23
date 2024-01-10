@@ -203,53 +203,60 @@ export default function SwapPage() {
         openConnectModal();
         return;
       }
-
-      const contractAddress = addy;
+    
+      // Ensure the contract address is defined
+      if (!addy) {
+        console.error("Contract address is undefined");
+        // Handle this error appropriately, maybe set an error message state and display it on the UI
+        return;
+      }
+    
       const userInputs = {
         functionName: selectedFunction,
         gasBuffer: gasBuffer * 0.01,
         value: payableValue,
-        idata: functionInputs[selectedFunction] || {}, // Ensure this is not undefined and is correctly formatted
+        idata: functionInputs[selectedFunction] || {},
       };
-
+    
+      // Debugging: Log the user inputs before attempting the transaction
+      console.log("Attempting transaction with inputs:", userInputs);
+    
       try {
+        // Additional validation if needed
+        if (!userInputs.idata || Object.keys(userInputs.idata).length === 0) {
+          throw new Error("Input data is not properly formatted or is missing");
+        }
+    
+        // Call the sendL1toL2 function with the required inputs
         const { l1TxHash, l2TxHash, status } = await sendL1toL2(
-          contractAddress,
+          addy, // use the contract address from state
           name,
           abi,
           userInputs,
           livenet
         );
-
+    
+        // If the transaction is successful, update the state accordingly
         setIsSwapped(true);
         setL1Tx(l1TxHash);
         setL2Tx(l2TxHash);
         setL2Status(status);
-
-        // Store the transaction data
+    
+        // Store the transaction data in local storage
         localStorage.setItem(
           "currentTransaction",
           JSON.stringify({
             l2TxHash: l2TxHash,
             l1TxHash: l1TxHash,
             timeStamp: new Date().toISOString(),
-            contractAddress: contractAddress,
+            contractAddress: addy,
             name: name,
           })
         );
-        // localStorage.setItem(
-        //   "currentTransaction",
-        //   JSON.stringify({
-        //     l2TxHash: "sadgadsg",
-        //     l1TxHash: "sadgadsg",
-        //     timestamp: "2024-01-07T22:18:01",
-        //     contractAddress: "sadgadsg",
-        //     name: "Testing Function",
-        //   })
-        // );
       } catch (error) {
         console.error("Transaction execution error:", error);
         // Here you would handle the error, potentially updating the UI to inform the user
+        // For example, you could set an error message in the state and display it on the UI
       }
     }
 

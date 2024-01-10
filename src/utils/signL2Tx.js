@@ -38,15 +38,18 @@ export const signL2Tx = async (
       params: [{ chainId: livenet ? "0xA4B1" : "0x66eee" }], // Replace with Arbitrum Chain ID
     });
     const provider = new ethers.providers.Web3Provider(window.ethereum);
+    console.log("ETH Window:", window.ethereum);
+    console.log("Provider:", provider);
     const signer = provider.getSigner();
+    console.log("Signer:", signer)
 
     // ******************* Connect to Contract *******************
     const icontract = new ethers.utils.Interface(abi);
-    console.log(icontract);
+    console.log("icontract:", icontract);
 
     const paramsArray = Object.keys(userParams).map((key) => userParams[key]);
     const idata = icontract.encodeFunctionData(functionName, paramsArray); //this line may be bugging
-    console.log(idata);
+    console.log("idata:", idata);
     console.log(userValue);
 
     // ******************* Estimate Gas and Nonce *******************
