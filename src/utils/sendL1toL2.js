@@ -1,7 +1,9 @@
 // Contributors: Tommy, Jay
+"use client";
 import { React } from "react";
 import { signL2Tx } from "./signL2Tx";
-const { providers, ethers } = require("ethers");
+import { ethers } from "ethers";
+import { jsonRpcProvider } from "@wagmi/core/providers/jsonRpc";
 
 const {
   getL2Network,
@@ -10,7 +12,7 @@ const { InboxTools } = require("@arbitrum/sdk");
 const { arbitrum, arbitrumSepolia } = require("wagmi/chains");
 
 // ******************* Grab Custom Node RPCS for Eth and Goerli *******************
-const l2Provider = new providers.JsonRpcProvider(process.env.REACT_APP_L2RPC);
+const l2Provider = jsonRpcProvider({ rpc: process.env.REACT_APP_L2RPC });
 
 export const sendL1toL2 = async (
   contractAddress,

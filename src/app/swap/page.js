@@ -2,25 +2,27 @@
 import React, { useEffect, useState, useContext } from "react";
 import { FaCheckCircle } from "react-icons/fa";
 import { useRouter } from "next/navigation";
+import { useSearchParams } from "next/navigation";
 import { ClipLoader } from "react-spinners";
 
 import "./SwapPage.css";
-import GasSlider from "@/components/GasSlider";
-import { readABIFunctions } from "@/utils/readFile";
+import GasSlider from "../../components/GasSlider";
+import { readABIFunctions } from "../../utils/readFile";
 
-import { sendL1toL2 } from "@/utils/sendL1toL2";
+import { sendL1toL2 } from "../../utils/sendL1toL2";
 import { useConnectModal } from "@rainbow-me/rainbowkit";
 
 import { useWalletClient, useBalance, useAccount } from "wagmi";
 import { L1TransactionBox, ReceiptTransactionBox } from "../transactions/page";
 
-import { GlobalContext } from "@/components/ContextProvider";
+import { GlobalContext } from "../../components/ContextProvider";
 
 export default function SwapPage() {
   // ******************* Preprocessing to Gate Page If forced entry *******************
   const navigate = useRouter();
-
-  const stateData = JSON.parse(navigate.query.state || "{}");
+  const searchParams = useSearchParams();
+  console.log(searchParams.toString());
+  const stateData = JSON.parse(navigate.query || "{}");
   console.log(stateData);
   return <></>;
   const { addy, name, abi } = location.state || {};

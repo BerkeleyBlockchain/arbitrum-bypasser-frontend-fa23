@@ -6,7 +6,7 @@ function ProtocolCard({ addy, name, abi, type, image }) {
   const navigate = useRouter();
 
   const handleClick = () => {
-    navigate.push("/swap", { state: { addy, name, abi } });
+    navigate.push("/swap", { query: { addy: addy, name: name, abi: abi } });
   };
 
   const images = [
