@@ -15,6 +15,7 @@
     "@metamask/sdk": "^0.14.2",
     "@mui/material": "^5.15.4",
     "@rainbow-me/rainbowkit": "^1.3.3",
+    "axios": "^1.6.5",
     "ethers": "^6.10.0",
     "next": "14.0.4",
     "react": "^18",
