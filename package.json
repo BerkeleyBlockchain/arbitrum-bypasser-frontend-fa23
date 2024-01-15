@@ -1,0 +1,33 @@
+{
+  "name": "arbitrum-bypasser-app-fa23",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint"
+  },
+  "dependencies": {
+    "@arbitrum/sdk": "^3.1.13",
+    "@emotion/react": "^11.11.3",
+    "@emotion/styled": "^11.11.0",
+    "@metamask/sdk": "^0.14.2",
+    "@mui/material": "^5.15.4",
+    "@rainbow-me/rainbowkit": "^1.3.3",
+    "ethers": "^6.10.0",
+    "next": "14.0.4",
+    "react": "^18",
+    "react-dom": "^18",
+    "react-icons": "^5.0.1",
+    "react-spinners": "^0.13.8",
+    "react-timer-hook": "^3.0.7",
+    "viem": "^1.21.4",
+    "wagmi": "^1.4.13"
+  },
+  "devDependencies": {
+    "autoprefixer": "^10.0.1",
+    "postcss": "^8",
+    "tailwindcss": "^3.3.0"
+  }
+}
