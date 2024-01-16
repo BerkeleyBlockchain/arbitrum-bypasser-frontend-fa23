@@ -28,5 +28,35 @@
     "abi": "Curve2Pool.json",
     "type": "dApp",
     "image": "https://cryptologos.cc/logos/curve-dao-token-crv-logo.png"
+  },
+  "0x489ee077994b6658eafa855c308275ead8097c4a": {
+    "name": "GMX Vault",
+    "abi": "GMXVault.json",
+    "type": "dApp",
+    "image": "https://altcoinsbox.com/wp-content/uploads/2023/03/gmx-logo.png"
+  },
+  "0x09f77e8a13de9a35a7231028187e9fd5db8a2acb": {
+    "name": "GMX Order Book",
+    "abi": "GMXOrderBook.json",
+    "type": "dApp",
+    "image": "https://altcoinsbox.com/wp-content/uploads/2023/03/gmx-logo.png"
+  },
+  "0x22199a49a999c351ef7927602cfb187ec3cae489": {
+    "name": "GMX Reader",
+    "abi": "GMXReader.json",
+    "type": "dApp",
+    "image": "https://altcoinsbox.com/wp-content/uploads/2023/03/gmx-logo.png"
+  },
+  "0x8bfb8e82ee4569aee78d03235ff465bd436d40e0": {
+    "name": "GMX Reward Reader",
+    "abi": "GMXRewardReader.json",
+    "type": "dApp",
+    "image": "https://altcoinsbox.com/wp-content/uploads/2023/03/gmx-logo.png"
+  },
+  "0xb87a436b93ffe9d75c5cfa7bacfff96430b09868": {
+    "name": "GMX Position Router",
+    "abi": "GMXPositionRouter.json",
+    "type": "dApp",
+    "image": "https://altcoinsbox.com/wp-content/uploads/2023/03/gmx-logo.png"
   }
 }
