@@ -53,7 +53,7 @@ export default function App() {
         ]
       );
 
-  console.log(chains, publicClient);
+  // console.log(chains, publicClient);
 
   // const { chains, publicClient } = configureChains(
   //   livenet ? [mainnet, arbitrum] : [sepolia, arbitrumSepolia],
@@ -72,7 +72,7 @@ export default function App() {
     connectors,
     publicClient,
   });
-  console.log(wagmiConfig);
+  // console.log(wagmiConfig);
 
   return (
     <WagmiConfig config={wagmiConfig}>

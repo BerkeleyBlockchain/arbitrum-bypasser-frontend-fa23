@@ -12,16 +12,16 @@ export async function getLastTransactions(account, num = 5, livenet) {
 
   try {
     const response = await axios.get(apiUrl, { params: queryParams });
-    console.log(response);
+    // console.log(response);
 
     if (response.status !== 200 && response.status !== 201) {
       console.error("Response from scanner failed:", response);
       return [];
     }
-    console.log(response.data);
+    // console.log(response.data);
 
     const transactions = response.data.message?.result;
-    console.log(transactions);
+    // console.log(transactions);
     return transactions;
   } catch (error) {
     console.error("Error fetching transactions:", error);

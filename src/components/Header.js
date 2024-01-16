@@ -34,7 +34,7 @@ export default function Header() {
 
   const toggleNetwork = () => {
     setLivenet(!livenet);
-    console.log(livenet);
+    // console.log(livenet);
   };
 
   return (

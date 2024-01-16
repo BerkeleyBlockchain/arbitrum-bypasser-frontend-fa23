@@ -193,7 +193,7 @@ export default function SwapPage() {
 
     const walletClient = useWalletClient();
     const { data: clientData, isSuccess, isLoading, isError } = walletClient;
-    console.log(walletClient);
+    // console.log(walletClient);
 
     async function handleExecuteClick() {
       if (isDisconnected || !isSuccess || isError || isLoading) {
@@ -216,7 +216,7 @@ export default function SwapPage() {
       };
 
       // Debugging: Log the user inputs before attempting the transaction
-      console.log("Attempting transaction with inputs:", userInputs);
+      // console.log("Attempting transaction with inputs:", userInputs);
 
       try {
         setIsSwapped(2);

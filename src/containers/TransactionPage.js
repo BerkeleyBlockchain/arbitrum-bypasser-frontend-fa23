@@ -57,7 +57,7 @@ export default function TransactionPage() {
   }, [address, livenet]);
 
   useEffect(() => {
-    console.log(currentTransaction);
+    // console.log(currentTransaction);
     if (
       transactions.length > 0 &&
       currentTransaction &&
