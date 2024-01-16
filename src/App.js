@@ -19,46 +19,46 @@ import { GlobalContext } from "./ContextProvider";
 export default function App() {
   const { livenet } = useContext(GlobalContext);
 
-  // const { chains, publicClient } = !livenet
-  //   ? configureChains(
-  //       // Testnet configuration
-  //       [sepolia, arbitrumSepolia],
-  //       [
-  //         jsonRpcProvider({
-  //           rpc: (chain) => {
-  //             if (chain.id === sepolia.id) {
-  //               return { http: process.env.REACT_APP_TESTNET_L1RPC }; // L1 RPC for Sepolia
-  //             } else if (chain.id === arbitrumSepolia.id) {
-  //               return { http: process.env.REACT_APP_TESTNET_L2RPC }; // L2 RPC for Arbitrum Sepolia
-  //             }
-  //             return { http: "https://default-rpc-url.com" }; // Fallback URL
-  //           },
-  //         }),
-  //       ]
-  //     )
-  //   : configureChains(
-  //       // Mainnet configuration
-  //       [mainnet, arbitrum],
-  //       [
-  //         jsonRpcProvider({
-  //           rpc: (chain) => {
-  //             if (chain.id === mainnet.id) {
-  //               return { http: process.env.REACT_APP_MAINNET_L1RPC }; // L1 RPC for Mainnet
-  //             } else if (chain.id === arbitrum.id) {
-  //               return { http: process.env.REACT_APP_MAINNET_L2RPC }; // L2 RPC for Arbitrum
-  //             }
-  //             return { http: "https://default-rpc-url.com" }; // Fallback URL
-  //           },
-  //         }),
-  //       ]
-  //     );
+  const { chains, publicClient } = !livenet
+    ? configureChains(
+        // Testnet configuration
+        [sepolia, arbitrumSepolia],
+        [
+          jsonRpcProvider({
+            rpc: (chain) => {
+              if (chain.id === sepolia.id) {
+                return { http: process.env.REACT_APP_TESTNET_L1RPC }; // L1 RPC for Sepolia
+              } else if (chain.id === arbitrumSepolia.id) {
+                return { http: process.env.REACT_APP_TESTNET_L2RPC }; // L2 RPC for Arbitrum Sepolia
+              }
+              return { http: "https://default-rpc-url.com" }; // Fallback URL
+            },
+          }),
+        ]
+      )
+    : configureChains(
+        // Mainnet configuration
+        [mainnet, arbitrum],
+        [
+          jsonRpcProvider({
+            rpc: (chain) => {
+              if (chain.id === mainnet.id) {
+                return { http: process.env.REACT_APP_MAINNET_L1RPC }; // L1 RPC for Mainnet
+              } else if (chain.id === arbitrum.id) {
+                return { http: process.env.REACT_APP_MAINNET_L2RPC }; // L2 RPC for Arbitrum
+              }
+              return { http: "https://default-rpc-url.com" }; // Fallback URL
+            },
+          }),
+        ]
+      );
 
-  // console.log(chains, publicClient);
+  console.log(chains, publicClient);
 
-  const { chains, publicClient } = configureChains(
-    livenet ? [mainnet, arbitrum] : [sepolia, arbitrumSepolia],
-    [publicProvider()]
-  );
+  // const { chains, publicClient } = configureChains(
+  //   livenet ? [mainnet, arbitrum] : [sepolia, arbitrumSepolia],
+  //   [publicProvider()]
+  // );
 
   const connectors = connectorsForWallets([
     {
