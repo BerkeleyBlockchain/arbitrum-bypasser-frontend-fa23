@@ -11,6 +11,42 @@
     "type": "DEX",
     "image": "https://upload.wikimedia.org/wikipedia/commons/thumb/e/e7/Uniswap_Logo.svg/1026px-Uniswap_Logo.svg.png"
   },
+  "0x1f98431c8ad98523631ae4a59f267346ea31f984": {
+    "name": "Uniswap V3 Factory",
+    "abi": "UniswapV3Factory.json",
+    "type": "DEX",
+    "image": "https://upload.wikimedia.org/wikipedia/commons/thumb/e/e7/Uniswap_Logo.svg/1026px-Uniswap_Logo.svg.png"
+  },
+  "0x5BA1e12693Dc8F9c48aAD8770482f4739bEeD696": {
+    "name": "Uniswap V3 Multicall",
+    "abi": "UniswapV3Multicall.json",
+    "type": "DEX",
+    "image": "https://upload.wikimedia.org/wikipedia/commons/thumb/e/e7/Uniswap_Logo.svg/1026px-Uniswap_Logo.svg.png"
+  },
+  "0xc36442b4a4522e871399cd717abdd847ab11fe88": {
+    "name": "Uniswap Nonfungible Position Manager",
+    "abi": "UniswapNFTManager.json",
+    "type": "DEX",
+    "image": "https://upload.wikimedia.org/wikipedia/commons/thumb/e/e7/Uniswap_Logo.svg/1026px-Uniswap_Logo.svg.png"
+  },
+  "0x68b3465833fb72a70ecdf485e0e4c7bd8665fc45": {
+    "name": "Uniswap V2 Router",
+    "abi": "UniswapV2Router.json",
+    "type": "DEX",
+    "image": "https://upload.wikimedia.org/wikipedia/commons/thumb/e/e7/Uniswap_Logo.svg/1026px-Uniswap_Logo.svg.png"
+  },
+  "0x000000000022d473030f116ddee9f6b43ac78ba3": {
+    "name": "Uniswap Permit2",
+    "abi": "UniswapPermit2.json",
+    "type": "DEX",
+    "image": "https://upload.wikimedia.org/wikipedia/commons/thumb/e/e7/Uniswap_Logo.svg/1026px-Uniswap_Logo.svg.png"
+  },
+  "0x3fc91a3afd70395cd496c647d5a6cc9d4b2b7fad": {
+    "name": "Uniswap Universal Router",
+    "abi": "UniswapUniversalRouter.json",
+    "type": "DEX",
+    "image": "https://upload.wikimedia.org/wikipedia/commons/thumb/e/e7/Uniswap_Logo.svg/1026px-Uniswap_Logo.svg.png"
+  },
   "0xabbc5f99639c9b6bcb58544ddf04efa6802f4064": {
     "name": "GMX Router",
     "abi": "GMXRouterMainnet.json",
