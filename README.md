@@ -1,6 +1,8 @@
+CURRENTLY DEPLOYED ON: https://vercel.com/imatomster/arbitrum-bypasser-frontend-fa23/deployments
+
 # Adding Inputs to .env file
 
-Make sure to add the relevant https API keys from Alchemy as well as our test private key to the .env file before running. 
+Make sure to add the relevant https API keys from Alchemy as well as our test private key to the .env file before running.
 
 # Getting Started with Create React App
 
