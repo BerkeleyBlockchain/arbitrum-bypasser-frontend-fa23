@@ -8,6 +8,7 @@ import "@rainbow-me/rainbowkit/styles.css";
 import {
   RainbowKitProvider,
   connectorsForWallets,
+  getDefaultWallets,
 } from "@rainbow-me/rainbowkit";
 import { metaMaskWallet } from "@rainbow-me/rainbowkit/wallets";
 import { configureChains, createConfig, WagmiConfig } from "wagmi";
@@ -60,12 +61,19 @@ export default function App() {
   //   [publicProvider()]
   // );
 
-  const connectors = connectorsForWallets([
-    {
-      groupName: "Recommended",
-      wallets: [metaMaskWallet({ chains })],
-    },
-  ]);
+  // const connectors = connectorsForWallets([
+  //   {
+  //     groupName: "Recommended",
+  //     wallets: [metaMaskWallet({ chains })],
+  //   },
+  // ]);
+
+  const projectId = '81256d8be5dfe7ed9e7bbf82ff6942c1';
+  const { connectors } = getDefaultWallets({
+    appName: 'Arbitrum One Sequencer Bypasser',
+    projectId,
+    chains,
+  });
 
   const wagmiConfig = createConfig({
     autoConnect: true,
