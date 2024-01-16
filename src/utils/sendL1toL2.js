@@ -9,9 +9,6 @@ const {
 const { InboxTools } = require("@arbitrum/sdk");
 const { arbitrum, arbitrumSepolia } = require("wagmi/chains");
 
-// ******************* Grab Custom Node RPCS for Eth and Goerli *******************
-const l2Provider = new providers.JsonRpcProvider(process.env.REACT_APP_L2RPC);
-
 export const sendL1toL2 = async (
   contractAddress,
   contractName,
@@ -96,14 +93,16 @@ export const sendL1toL2 = async (
 };
 
 // ******************* Checking Transaction Completion *******************
-export const checkTx = async (l2Txhash) => {
-  const l2TxReceipt = await l2Provider.waitForTransaction(l2Txhash);
-  const status = l2TxReceipt.status;
-  if (status === true) {
-    console.log(`L2 Txn Accepted!`);
-  } else {
-    console.log(`L2 Txn Failed...`);
-  }
 
-  return l2TxReceipt;
-};
+// const l2Provider = new providers.JsonRpcProvider(process.env.REACT_APP_L2RPC);
+// export const checkTx = async (l2Txhash) => {
+//   const l2TxReceipt = await l2Provider.waitForTransaction(l2Txhash);
+//   const status = l2TxReceipt.status;
+//   if (status === true) {
+//     console.log(`L2 Txn Accepted!`);
+//   } else {
+//     console.log(`L2 Txn Failed...`);
+//   }
+
+//   return l2TxReceipt;
+// };
