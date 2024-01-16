@@ -484,7 +484,7 @@ export const L1TransactionBox = ({ selectedFunction }) => {
       }}
     >
       <div className="text-white text-center text-xl text-shadow text-gray-400 font-bold mb-10">
-        Waiting for User Signatures and L1 Transaction...
+        Waiting for L1 Transaction ~ DON'T LEAVE THE PAGE...
         <br />
         <span className="text-yellow-500">
           Time Elapsed: {formatTime(hours)}:{formatTime(minutes)}:

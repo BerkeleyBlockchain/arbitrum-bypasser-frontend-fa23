@@ -2,21 +2,29 @@ import { React } from "react";
 import axios from "axios";
 // const axios = require("axios");
 
-export async function getLastTransactions(account, num = 5, livenet) {
-  // change url if not using sepolia
-  // const apiKey = process.env.REACT_APP_ETHERSCAN;
-  // const url = `https://api-sepolia.etherscan.io/api?module=account&action=txlist&address=${account}&startblock=0&endblock=99999999&page=1&offset=${num}&sort=desc&apikey=${apiKey}`;
+const apiUrl = `${process.env.REACT_APP_BACKEND_URL}/v1/scanner/getTransactions`;
 
-  const apiKey = process.env.REACT_APP_ARBISCAN;
-  const url = `https://${
-    livenet ? "api" : "api-sepolia"
-  }.arbiscan.io/api?module=account&action=txlist&address=${account}&startblock=0&endblock=99999999&page=1&offset=10&sort=desc&apikey=${apiKey}`;
+export async function getLastTransactions(account, num = 5, livenet) {
+  const queryParams = {
+    account: account,
+    livenet: livenet, // Use a boolean value
+  };
+
   try {
-    const response = await axios.get(url);
-    const transactions = response.data.result;
+    const response = await axios.get(apiUrl, { params: queryParams });
+    console.log(response);
+
+    if (response.status !== 200 && response.status !== 201) {
+      console.error("Response from scanner failed:", response);
+      return [];
+    }
+    console.log(response.data);
+
+    const transactions = response.data.message?.result;
     console.log(transactions);
-    return transactions.slice(0, num); // Return the last 5 transactions
+    return transactions;
   } catch (error) {
     console.error("Error fetching transactions:", error);
+    return [];
   }
 }

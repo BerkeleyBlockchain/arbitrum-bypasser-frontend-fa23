@@ -13,6 +13,7 @@ import { metaMaskWallet } from "@rainbow-me/rainbowkit/wallets";
 import { configureChains, createConfig, WagmiConfig } from "wagmi";
 import { sepolia, arbitrumSepolia, arbitrum, mainnet } from "wagmi/chains";
 import { jsonRpcProvider } from "@wagmi/core/providers/jsonRpc";
+import { publicProvider } from "wagmi/providers/public";
 import { GlobalContext } from "./ContextProvider";
 
 export default function App() {
@@ -52,9 +53,10 @@ export default function App() {
         ]
       );
 
-  // When using livenet
+  console.log(chains, publicClient);
+
   // const { chains, publicClient } = configureChains(
-  //   [ethereum, arbitrum],
+  //   livenet ? [mainnet, arbitrum] : [sepolia, arbitrumSepolia],
   //   [publicProvider()]
   // );
 
@@ -70,6 +72,7 @@ export default function App() {
     connectors,
     publicClient,
   });
+  console.log(wagmiConfig);
 
   return (
     <WagmiConfig config={wagmiConfig}>
