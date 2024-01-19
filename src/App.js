@@ -68,7 +68,7 @@ export default function App() {
   //   },
   // ]);
 
-  const projectId = '81256d8be5dfe7ed9e7bbf82ff6942c1';
+  const projectId = '81256d8be5dfe7ed9e7bbf82ff6942c1'; //might need to go into .env or backend secrets section
   const { connectors } = getDefaultWallets({
     appName: 'Arbitrum One Sequencer Bypasser',
     projectId,
