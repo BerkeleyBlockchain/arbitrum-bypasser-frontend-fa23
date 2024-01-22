@@ -1,8 +1,8 @@
 import { useEffect, useState, useContext } from "react";
+import "./SwapPage.css";
 import { useNavigate } from "react-router-dom";
 import { getLastTransactions } from "../utils/getTransactions";
 import { useStopwatch } from "react-timer-hook";
-import Button from "@mui/material/Button";
 import Snackbar from "@mui/material/Snackbar";
 import Alert from "@mui/material/Alert";
 

@@ -3,10 +3,9 @@ import React, { useState, useContext, useEffect } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import { ConnectButton } from "@rainbow-me/rainbowkit";
 import arbLogo from "../assets/arblogo.svg";
-import { GlobalContext } from "../ContextProvider";
+import NetworkSwitch from "./NetworkSwitch";
 
 export default function Header() {
-  const { livenet, setLivenet } = useContext(GlobalContext);
   const [disabled, setDisabled] = useState(false);
   const location = useLocation();
 
@@ -30,11 +29,6 @@ export default function Header() {
 
   const handleAddABI = () => {
     navigate("/add-abi"); // This will navigate to the Add ABI page
-  };
-
-  const toggleNetwork = () => {
-    setLivenet(!livenet);
-    // console.log(livenet);
   };
 
   return (
@@ -64,7 +58,8 @@ export default function Header() {
         {/* <MetaMaskSignMessageComponent message="Your default message or pass a message prop" /> */}
       </div>
       <div className="flex items-center">
-        <button
+        <NetworkSwitch />
+        {/* <button
           onClick={toggleNetwork} //MAINNET TESTNET BUTTON
           disabled={disabled}
           className={`${disabled ? "cursor-not-allowed opacity-50" : ""} ${
@@ -74,8 +69,8 @@ export default function Header() {
           } text-white font-thin py-2 px-4 rounded flex items-center transition-colors mr-3 duration-300`}
         >
           {livenet ? "Mainnet" : "Testnet"}
-        </button>
-        <ConnectButton showBalance={false} chainStatus="icon" />
+        </button> */}
+        <ConnectButton showBalance={false} chainStatus="name" />
       </div>
     </nav>
   );

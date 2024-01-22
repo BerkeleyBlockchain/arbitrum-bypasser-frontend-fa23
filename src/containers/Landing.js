@@ -29,7 +29,7 @@ export default function Landing() {
   );
 
   return (
-    <div className="flex-grow landing-bg bg-cover bg-no-repeat h-full text-white py-24">
+    <div className="landing-bg bg-cover bg-fixed bg-no-repeat text-white flex-grow py-24">
       <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
         <h1 className="text-6xl font-bold mb-3">
           Arbitrum One Sequencer Bypasser
@@ -40,7 +40,7 @@ export default function Landing() {
           transaction inclusion. (This is a community prototype so use at your
           own risk*!)
         </p>
-        {/* ...other content */}
+
         <div className="flex gap-4 mb-10">
           <SearchBar
             onSearch={handleSearchChange}
