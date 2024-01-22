@@ -1,4 +1,4 @@
-import React, { useState, useContext, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 
 import { useNavigate, useLocation } from "react-router-dom";
 import { ConnectButton } from "@rainbow-me/rainbowkit";
@@ -58,18 +58,7 @@ export default function Header() {
         {/* <MetaMaskSignMessageComponent message="Your default message or pass a message prop" /> */}
       </div>
       <div className="flex items-center">
-        <NetworkSwitch />
-        {/* <button
-          onClick={toggleNetwork} //MAINNET TESTNET BUTTON
-          disabled={disabled}
-          className={`${disabled ? "cursor-not-allowed opacity-50" : ""} ${
-            livenet
-              ? "bg-green-500 hover:bg-green-600"
-              : "bg-gray-500 hover:bg-gray-600"
-          } text-white font-thin py-2 px-4 rounded flex items-center transition-colors mr-3 duration-300`}
-        >
-          {livenet ? "Mainnet" : "Testnet"}
-        </button> */}
+        <NetworkSwitch disabledVar={disabled} />
         <ConnectButton showBalance={false} chainStatus="name" />
       </div>
     </nav>

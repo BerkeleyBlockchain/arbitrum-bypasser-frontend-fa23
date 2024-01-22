@@ -62,7 +62,7 @@ const StyledSwitch = styled(Switch)(({ theme }) => ({
   },
 }));
 
-export default function NetworkSwitch({ disabled }) {
+export default function NetworkSwitch({ disabledVar }) {
   const { livenet, setLivenet } = useContext(GlobalContext);
 
   const toggleNetwork = () => {
@@ -76,9 +76,21 @@ export default function NetworkSwitch({ disabled }) {
       onChange={toggleNetwork}
       name="networkSwitch"
       inputProps={{ "aria-label": "secondary checkbox" }}
-      className={`${
-        disabled ? "cursor-not-allowed opacity-50" : ""
-      } text-white font-thin py-2 px-4 rounded flex items-center mr-3`}
+      disabled={disabledVar} // Disable the switch based on the 'disabled' variable
+      style={
+        disabledVar
+          ? { ...disabledStyles } // Merge disabled styles if it is disabled
+          : {}
+      }
+      className={`text-white font-thin py-2 px-4 rounded flex items-center mr-3 ${
+        disabledVar ? "additional-disabled-class" : ""
+      }`}
     />
   );
 }
+
+const disabledStyles = {
+  opacity: 0.3, // Adjust this value to control the darkness
+  cursor: "not-allowed",
+  // Add any other styles you want to apply when the switch is disabled
+};
