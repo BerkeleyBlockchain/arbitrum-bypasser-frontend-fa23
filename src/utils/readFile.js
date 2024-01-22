@@ -26,7 +26,12 @@ export const readABIFunctions = async (fileName, livenet) => {
 
     data.forEach((object) => {
       if (object.type === "function") {
-        reorg[object.name] = { ...object };
+        if (
+          object.stateMutability === "nonpayable" ||
+          object.stateMutability === "payable"
+        ) {
+          reorg[object.name] = { ...object };
+        }
       }
     });
 

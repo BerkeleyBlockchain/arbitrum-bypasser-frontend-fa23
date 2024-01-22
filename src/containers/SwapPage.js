@@ -96,6 +96,7 @@ export default function SwapPage() {
     });
   };
 
+  // ******************* Fetching Function Inputs *******************
   const renderFunctionInputs = (functionName, inputs) => {
     return inputs.map((input, index) => {
       if (input.type === "tuple" && input.components) {
