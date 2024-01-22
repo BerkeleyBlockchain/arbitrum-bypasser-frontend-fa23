@@ -29,7 +29,7 @@ export default function Landing() {
   );
 
   return (
-    <div className="landing-bg bg-cover bg-fixed bg-no-repeat text-white flex-grow py-24">
+    <div className="landing-bg bg-cover bg-fixed bg-no-repeat text-white flex-grow py-24 pb-40 ">
       <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
         <h1 className="text-6xl font-bold mb-3">
           Arbitrum One Sequencer Bypasser
