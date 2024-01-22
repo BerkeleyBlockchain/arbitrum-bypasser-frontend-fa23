@@ -1,7 +1,7 @@
 {
   "0x5c69bee701ef814a2b6a3edd4b1652cb9cc5aa6f": {
     "name": "Uniswap V2 Factory",
-    "abi": "UniswapV2FactoryMain.json",
+    "abi": "UniswapV2Factory.json",
     "type": "DEX",
     "image": "https://upload.wikimedia.org/wikipedia/commons/thumb/e/e7/Uniswap_Logo.svg/1026px-Uniswap_Logo.svg.png"
   },
