@@ -17,12 +17,6 @@
     "type": "DEX",
     "image": "https://upload.wikimedia.org/wikipedia/commons/thumb/e/e7/Uniswap_Logo.svg/1026px-Uniswap_Logo.svg.png"
   },
-  "0x5BA1e12693Dc8F9c48aAD8770482f4739bEeD696": {
-    "name": "Uniswap V3 Multicall",
-    "abi": "UniswapV3Multicall.json",
-    "type": "DEX",
-    "image": "https://upload.wikimedia.org/wikipedia/commons/thumb/e/e7/Uniswap_Logo.svg/1026px-Uniswap_Logo.svg.png"
-  },
   "0xc36442b4a4522e871399cd717abdd847ab11fe88": {
     "name": "Uniswap Nonfungible Position Manager",
     "abi": "UniswapNFTManager.json",
