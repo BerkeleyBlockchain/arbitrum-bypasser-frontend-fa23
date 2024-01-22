@@ -4,11 +4,15 @@
  * @param {string} file_name - name of file
  * @returns {object} abi of that file
  */
-export const readABI = async (fileName) => {
+export const readABI = async (fileName, livenet) => {
   try {
     // Dynamically import the JSON file based on the file name
-    const data = await import(`../contractABIs/testnet/${fileName}`);
-    return data.default;
+    const rawData = await import(
+      `../contractABIs/${livenet ? "mainnet" : "testnet"}/${fileName}`
+    );
+    const data = rawData.default;
+
+    return data;
   } catch (error) {
     console.error("Error importing JSON file: ", error);
     return null;

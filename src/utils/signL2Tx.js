@@ -41,7 +41,7 @@ export const signL2Tx = async (
     console.log("ETH Window:", window.ethereum);
     console.log("Provider:", provider);
     const signer = provider.getSigner();
-    console.log("Signer:", signer)
+    console.log("Signer:", signer);
 
     // ******************* Connect to Contract *******************
     const icontract = new ethers.utils.Interface(abi);
@@ -54,21 +54,39 @@ export const signL2Tx = async (
 
     // ******************* Estimate Gas and Nonce *******************
     const nonceNumber = await provider.getTransactionCount(account);
-    const estGas = await provider.estimateGas({
-      to: contractAddress,
-      data: idata,
-      value: ethers.utils.parseEther(userValue),
-    });
-    const multiplier = ethers.utils.parseUnits((1 + gasBuffer).toString(), 18);
-    const adjustedGas = estGas
-      .mul(multiplier)
-      .div(ethers.utils.parseUnits("1", 18));
-    console.log(estGas.toString(), adjustedGas.toString());
+    console.log(nonceNumber);
+    let adjustedGas;
+    try {
+      const estGas = await provider.estimateGas({
+        to: contractAddress,
+        data: idata,
+        value: ethers.utils.parseEther(userValue),
+      });
+      const multiplier = ethers.utils.parseUnits(
+        (1 + gasBuffer).toString(),
+        18
+      );
+      adjustedGas = estGas
+        .mul(multiplier)
+        .div(ethers.utils.parseUnits("1", 18));
+      console.log(estGas.toString(), adjustedGas.toString());
+    } catch (err) {
+      console.log("COULDN'T ESTIMATE GAS, USING DEFAULT");
+      const estGas = ethers.utils.parseEther("0.00000000000005");
+      const multiplier = ethers.utils.parseUnits(
+        (1 + gasBuffer).toString(),
+        18
+      );
+      adjustedGas = estGas
+        .mul(multiplier)
+        .div(ethers.utils.parseUnits("1", 18));
+      console.log(estGas.toString(), adjustedGas.toString());
+    }
 
     // ******************* Create TX Object *******************
     let transaction = {
       to: contractAddress,
-      value: ethers.utils.parseEther(userValue),
+      value: ethers.utils.parseEther(userValue.toString()),
       data: idata,
       gasLimit: adjustedGas,
       maxPriorityFeePerGas: (await provider.getFeeData()).maxPriorityFeePerGas,

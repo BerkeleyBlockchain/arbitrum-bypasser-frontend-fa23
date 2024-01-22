@@ -212,7 +212,7 @@ export default function SwapPage() {
       const userInputs = {
         functionName: selectedFunction,
         gasBuffer: gasBuffer * 0.01,
-        value: payableValue,
+        value: payableValue ? payableValue !== "" : "0",
         idata: functionInputs[selectedFunction] || {},
       };
 
@@ -222,7 +222,13 @@ export default function SwapPage() {
       try {
         setIsSwapped(2);
         // Additional validation if needed
-        if (!userInputs.idata || Object.keys(userInputs.idata).length === 0) {
+        const length = Object.keys(
+          functionList[selectedFunction]?.inputs
+        ).length;
+        if (
+          length !== 0 &&
+          (!userInputs.idata || Object.keys(userInputs.idata).length === 0)
+        ) {
           throw new Error("Input data is not properly formatted or is missing");
         }
 
