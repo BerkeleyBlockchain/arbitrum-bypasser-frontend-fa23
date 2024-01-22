@@ -10,7 +10,7 @@ export default function AddABI() {
     <div className="p-4" style={{ color: 'white' }}>
       <h1 className="text-2xl font-bold mb-4">Add ABI</h1>
       <h2 className="text-lg font-bold mb-4">Add a new smart contract ABI from your favorite protocol. After submitting, we will review and let you know if it is approved.</h2>
-      <form method="POST" action="https://script.google.com/macros/s/AKfycbxy78SBMMM2G-hyqj1aZxvOOAfwHgy05pGULhRvVPvIcUZEOnO8S6CUmDyoHFF_VCfs/exec">
+      <form method="POST" action="https://script.google.com/a/macros/berkeley.edu/s/AKfycbzRlA56i6hIDHkAiQrhXUgB3V2jKqkevcEADTkLaVkyyUazfUUczA8Cu2W7UE9CJmDe/exec">
         <div className="mb-3">
           <label
             htmlFor="protocolName"
