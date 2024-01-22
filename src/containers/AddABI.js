@@ -30,7 +30,7 @@ export default function AddABI() {
       }
     } catch (error) {
       console.error('Error submitting form:', error);
-      window.location.href = '/error-page';
+      window.location.href = '/abi-confirmation';
     }
   };
 
