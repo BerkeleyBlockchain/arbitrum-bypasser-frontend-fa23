@@ -1,76 +1,59 @@
-CURRENTLY DEPLOYED ON: https://vercel.com/imatomster/arbitrum-bypasser-frontend-fa23/deployments
+## ArbPasser - Execute transactions on Arbitrum L2 using your ETH account
 
-# Adding Inputs to .env file
+### Description
 
-Make sure to add the relevant https API keys from Alchemy as well as our test private key to the .env file before running.
+ArbPasser is a groundbreaking tool in the blockchain space, designed as part of the Blockchain at Berkeley Fall 2023 consulting project with Arbitrum. This innovative application provides an alternative method for users to interact with Arbitrum through execution on a Layer 1 network like Ethereum. By enabling users to execute and sign their transactions with their MetaMask wallet while remaining on the Ethereum network, ArbPasser offers a unique approach to blockchain interactions.
 
-# Getting Started with Create React App
+In the blockchain domain, network reliability and trust in nodes are significant concerns. Issues like censorship by an RPC node or sequencer downtime can inhibit transactions during bridging or switching between chain-specific applications. ArbPasser addresses these challenges by:
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+- **Transaction Inclusion**: Allowing users to send their presigned Layer 2 (L2) transactions to a contract on Ethereum, which then bridges these transactions to a delayed inbox on Arbitrum One.
+- **Transaction Submission**: Providing users with the option to force include their transaction, thus bypassing potential barriers.
 
-## Available Scripts
+ArbPasser is currently deployed and hosted at [Arbitrum Bypasser](https://arbitrum-bypasser.vercel.app) on Vercel.
 
-In the project directory, you can run:
+### Installation and Setup
 
-### `npm start`
+#### Prerequisites
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+Ensure you have `npm` installed on your machine. For installation instructions, visit [npm's official site](https://www.npmjs.com/get-npm).
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+#### Steps
 
-### `npm test`
+1. **Clone the repository**:
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+   ```
+   git clone https://github.com/your-organization/arb-passer.git
+   cd arb-passer
+   ```
 
-### `npm run build`
+2. **Install dependencies**:
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+   ```
+   npm install
+   ```
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+3. **Set up environment variables**:
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+   - Copy the `.env.example` file to a new file named `.env`.
+   - Contact Tommy or Jay for the secret keys and fill them in the `.env` file.
 
-### `npm run eject`
+4. **Start the application locally**:
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+   ```
+   npm start
+   ```
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+   The application should now be running on `localhost:3000`.
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
+### Contributors
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
+Key contributors to ArbPasser include Mehdi, Hunter, Fred, Dhruv, Arjun, Rishi, Jessica, and Vardhan. Their collective efforts and expertise have been instrumental in bringing this innovative solution to the blockchain community.
 
-## Learn More
+### Notes
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+- ArbPasser is part of a collaborative effort with Blockchain at Berkeley and Arbitrum for their Fall 2023 consulting project.
+- For any further queries or contributions, feel free to contact the project maintainers.
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+---
 
-### Code Splitting
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
-
-### Analyzing the Bundle Size
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+This README provides a basic overview of ArbPasser. For more detailed documentation, refer to the project wiki or contact the project maintainers.
