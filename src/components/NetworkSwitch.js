@@ -12,30 +12,31 @@ const StyledSwitch = styled(Switch)(({ theme }) => ({
     color: "#818181",
     padding: "2px", // Slightly increased padding
     "&.Mui-checked": {
-      color: "#818181",
+      color: "#818181", // Color for the thumb when checked
       transform: "translateX(66px) translateY(-1px)", // Adjusted for the new width and thumb size
       "& + .MuiSwitch-track": {
-        color: "#818181",
+        backgroundColor: "#818181", // Gray background when checked
         "&:after": {
-          content: '"Testnet"', // Show 'Mainnet' when checked
+          content: '"Testnet"', // Show 'Testnet' when checked
           right: "40px", // Adjusted positioning
           visibility: "visible",
           pointerEvents: "none", // Allow click events to pass through
         },
         "&:before": {
-          visibility: "hidden", // Hide 'Testnet' when checked
+          visibility: "hidden", // Hide 'Mainnet' when checked
         },
       },
     },
     "&:not(.Mui-checked) + .MuiSwitch-track": {
+      backgroundColor: "#23bf58", // Gray background for 'Testnet' (non-checked)
       "&:before": {
-        content: '"Mainnet"', // Show 'Testnet' when not checked
+        content: '"Mainnet"', // Show 'Mainnet' when not checked
         visibility: "visible",
         left: "36px", // Adjusted to shift the text to the right
         pointerEvents: "none", // Allow click events to pass through
       },
       "&:after": {
-        visibility: "hidden", // Hide 'Mainnet' when not checked
+        visibility: "hidden", // Hide 'Testnet' when not checked
       },
     },
   },
@@ -47,7 +48,7 @@ const StyledSwitch = styled(Switch)(({ theme }) => ({
   },
   "& .MuiSwitch-track": {
     borderRadius: "32px", // Adjusted for larger height
-    backgroundColor: "#23bf58",
+    backgroundColor: "#23bf58", // Green background for 'Mainnet' (non-checked)
     opacity: 1,
     "&:after, &:before": {
       color: "white",
