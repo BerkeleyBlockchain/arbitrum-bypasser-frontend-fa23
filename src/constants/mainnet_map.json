@@ -55,7 +55,7 @@
   },
   "0x7f90122BF0700F9E7e1F688fe926940E8839F353": {
     "name": "Curve 2Pool (StableSwap)",
-    "abi": "Curve2Pool.json",
+    "abi": "Curve2PoolMain.json",
     "type": "dApp",
     "image": "https://cryptologos.cc/logos/curve-dao-token-crv-logo.png"
   },
