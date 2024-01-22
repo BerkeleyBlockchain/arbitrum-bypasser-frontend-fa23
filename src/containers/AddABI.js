@@ -6,17 +6,41 @@ export default function AddABI() {
   const [abiType, setABIType] = useState('');
   const [email, setEmail] = useState('');
 
+  const handleSubmit = async (event) => {
+    event.preventDefault();
+
+    const formData = new FormData();
+    formData.append('Protocol Name', protocolName);
+    formData.append('Contract (address)', contractAddress);
+    formData.append('Type', abiType);
+    formData.append('Email (Optional)', email);
+
+    try {
+      const response = await fetch('https://script.google.com/a/macros/berkeley.edu/s/AKfycbzRlA56i6hIDHkAiQrhXUgB3V2jKqkevcEADTkLaVkyyUazfUUczA8Cu2W7UE9CJmDe/exec', {
+        method: 'POST',
+        body: formData,
+      });
+
+      if (response.ok) {
+        // Redirect on successful submission
+        window.location.href = '/abi-confirmation';
+      } else {
+        // Handle errors or redirect to an error page
+        window.location.href = '/error-page';
+      }
+    } catch (error) {
+      console.error('Error submitting form:', error);
+      window.location.href = '/error-page';
+    }
+  };
+
   return (
     <div className="p-4" style={{ color: 'white' }}>
       <h1 className="text-2xl font-bold mb-4">Add ABI</h1>
       <h2 className="text-lg font-bold mb-4">Add a new smart contract ABI from your favorite protocol. After submitting, we will review and let you know if it is approved.</h2>
-      <form method="POST" action="https://script.google.com/a/macros/berkeley.edu/s/AKfycbzRlA56i6hIDHkAiQrhXUgB3V2jKqkevcEADTkLaVkyyUazfUUczA8Cu2W7UE9CJmDe/exec">
+      <form onSubmit={handleSubmit}>
         <div className="mb-3">
-          <label
-            htmlFor="protocolName"
-            className="block mb-2 text-sm font-medium"
-            style={{ color: 'white' }}
-          >
+          <label htmlFor="protocolName" className="block mb-2 text-sm font-medium" style={{ color: 'white' }}>
             Protocol Name
           </label>
           <input
@@ -32,11 +56,7 @@ export default function AddABI() {
         </div>
 
         <div className="mb-3">
-          <label
-            htmlFor="contractAddress"
-            className="block mb-2 text-sm font-medium"
-            style={{ color: 'white' }}
-          >
+          <label htmlFor="contractAddress" className="block mb-2 text-sm font-medium" style={{ color: 'white' }}>
             Contract (address)
           </label>
           <input
@@ -50,12 +70,9 @@ export default function AddABI() {
             required
           />
         </div>
+
         <div className="mb-3">
-          <label
-            htmlFor="abiType"
-            className="block mb-2 text-sm font-medium"
-            style={{ color: 'white' }}
-          >
+          <label htmlFor="abiType" className="block mb-2 text-sm font-medium" style={{ color: 'white' }}>
             Type
           </label>
           <input
@@ -70,13 +87,8 @@ export default function AddABI() {
           />
         </div>
 
-        {/* Email (Optional) input field */}
         <div className="mb-3">
-          <label
-            htmlFor="email"
-            className="block mb-2 text-sm font-medium"
-            style={{ color: 'white' }}
-          >
+          <label htmlFor="email" className="block mb-2 text-sm font-medium" style={{ color: 'white' }}>
             Email (Optional)
           </label>
           <input
