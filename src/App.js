@@ -1,4 +1,4 @@
-import React, { useContext, useEffect } from "react";
+import React, { useContext } from "react";
 import { RouterProvider } from "react-router-dom";
 import { ProtocolsProvider } from "./containers/ProtocolsContext";
 import "./App.css";
@@ -7,14 +7,13 @@ import router from "./router";
 import "@rainbow-me/rainbowkit/styles.css";
 import {
   RainbowKitProvider,
-  connectorsForWallets,
+  darkTheme,
   getDefaultWallets,
 } from "@rainbow-me/rainbowkit";
-import { metaMaskWallet } from "@rainbow-me/rainbowkit/wallets";
 import { configureChains, createConfig, WagmiConfig } from "wagmi";
 import { sepolia, arbitrumSepolia, arbitrum, mainnet } from "wagmi/chains";
 import { jsonRpcProvider } from "@wagmi/core/providers/jsonRpc";
-import { publicProvider } from "wagmi/providers/public";
+// import { publicProvider } from "wagmi/providers/public";
 import { GlobalContext } from "./ContextProvider";
 
 export default function App() {
@@ -68,9 +67,9 @@ export default function App() {
   //   },
   // ]);
 
-  const projectId = '81256d8be5dfe7ed9e7bbf82ff6942c1'; //might need to go into .env or backend secrets section
+  const projectId = "81256d8be5dfe7ed9e7bbf82ff6942c1"; //might need to go into .env or backend secrets section
   const { connectors } = getDefaultWallets({
-    appName: 'Arbitrum One Sequencer Bypasser',
+    appName: "Arbitrum One Sequencer Bypasser",
     projectId,
     chains,
   });
@@ -84,7 +83,7 @@ export default function App() {
 
   return (
     <WagmiConfig config={wagmiConfig}>
-      <RainbowKitProvider chains={chains}>
+      <RainbowKitProvider theme={darkTheme()} chains={chains}>
         <ProtocolsProvider>
           <RouterProvider router={router} />
         </ProtocolsProvider>
