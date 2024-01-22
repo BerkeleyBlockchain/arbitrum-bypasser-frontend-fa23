@@ -21,8 +21,13 @@ export default function AddABI() {
         body: formData,
       });
 
-      window.location.href = '/abi-confirmation';
-      
+      if (response.ok) {
+        // Redirect on successful submission
+        window.location.href = '/abi-confirmation';
+      } else {
+        // Handle errors or redirect to an error page
+        window.location.href = '/abi-confirmation';
+      }
     } catch (error) {
       console.error('Error submitting form:', error);
       window.location.href = '/error-page';
