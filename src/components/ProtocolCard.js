@@ -14,7 +14,10 @@ function ProtocolCard({ addy, name, abi, type, image }) {
   };
 
   const images = [protocolbg1, protocolbg2, protocolbg3, protocolbg4];
-  const randomImage = images[Math.floor(Math.random() * images.length)];
+  const stringToNumberInRange = (str) =>
+    [...str].reduce((sum, char) => sum + char.charCodeAt(0), 0) % 4;
+
+  const randomImage = images[stringToNumberInRange(addy)];
 
   return (
     <div
@@ -31,7 +34,7 @@ function ProtocolCard({ addy, name, abi, type, image }) {
         justifyContent: "space-between",
         alignItems: "center",
         cursor: "pointer",
-        backgroundImage: `url(${randomImage})`, // Path to your image
+        backgroundImage: `linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url(${randomImage}), linear-gradient(rgba(0, 0, 0, 1), rgba(0, 0, 0, 1))`, // Image first, then black background
         backgroundSize: "cover", // Cover the entire div
         backgroundPosition: "center", // Center the image
         backgroundColor: "transparent",
