@@ -88,5 +88,71 @@
     "abi": "GMXPositionRouter.json",
     "type": "dApp",
     "image": "https://altcoinsbox.com/wp-content/uploads/2023/03/gmx-logo.png"
+  },
+  "0x53bf833a5d6c4dda888f69c22c88c9f356a41614": {
+    "name": "Stargate Router",
+    "abi": "StargateRouter.json",
+    "type": "dApp",
+    "image": "https://avatars.githubusercontent.com/u/101737707?s=200&v=4"
+  },
+  "0x352d8275aae3e0c2404d9f68f6cee084b5beb3dd": {
+    "name": "Stargate Bridge",
+    "abi": "StargateBridge.json",
+    "type": "dApp",
+    "image": "https://avatars.githubusercontent.com/u/101737707?s=200&v=4"
+  },
+  "0x55bdb4164d28fbaf0898e0ef14a589ac09ac9970": {
+    "name": "Stargate Factory",
+    "abi": "StargateFactory.json",
+    "type": "dApp",
+    "image": "https://avatars.githubusercontent.com/u/101737707?s=200&v=4"
+  },
+  "0x1cf31666c06ac3401ed0c1c6346c4a9425dd7de4": {
+    "name": "Stargate Fee Library",
+    "abi": "StargateFeeLibrary.json",
+    "type": "dApp",
+    "image": "https://avatars.githubusercontent.com/u/101737707?s=200&v=4"
+  },
+  "0x9774558534036ff2e236331546691b4eb70594b1": {
+    "name": "Stargate LP Staking Time",
+    "abi": "StargateLPStakingTime.json",
+    "type": "dApp",
+    "image": "https://avatars.githubusercontent.com/u/101737707?s=200&v=4"
+  },
+  "0xecc19e177d24551aa7ed6bc6fe566eca726cc8a9": {
+    "name": "Stargate Composer",
+    "abi": "StargateComposer.json",
+    "type": "dApp",
+    "image": "https://avatars.githubusercontent.com/u/101737707?s=200&v=4"
+  },
+  "0x892785f33cdee22a30aef750f285e18c18040c3e": {
+    "name": "Stargate USDC Pool",
+    "abi": "StargateUSDCPool.json",
+    "type": "dApp",
+    "image": "https://avatars.githubusercontent.com/u/101737707?s=200&v=4"
+  },
+  "0x1a3c9b1d2f0529d97f2afc5136cc23e58f1fd35b": {
+    "name": "Camelot Factory",
+    "abi": "CamelotFactory.json",
+    "type": "DEX",
+    "image": "https://avatars.githubusercontent.com/u/101737707?s=200&v=4"
+  },
+  "0x00c7f3082833e796a5b3e4bd59f6642ff44dcd15": {
+    "name": "Camelot NFT Position Manager",
+    "abi": "CamelotNFTPositionManager.json",
+    "type": "DEX",
+    "image": "https://avatars.githubusercontent.com/u/101737707?s=200&v=4"
+  },
+  "0x1f721e2e82f6676fce4ea07a5958cf098d339e18": {
+    "name": "Camelot Router",
+    "abi": "CamelotRouter.json",
+    "type": "DEX",
+    "image": "https://avatars.githubusercontent.com/u/101737707?s=200&v=4"
+  },
+  "0x0fc73040b26e9bc8514fa028d998e73a254fa76e": {
+    "name": "Camelot Quoter",
+    "abi": "CamelotQuoter.json",
+    "type": "DEX",
+    "image": "https://avatars.githubusercontent.com/u/101737707?s=200&v=4"
   }
 }
