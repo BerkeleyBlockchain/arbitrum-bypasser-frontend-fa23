@@ -36,7 +36,7 @@ export default function DemoModal({ open, handleClose }) {
         },
       }}
     >
-      <Fade in={open} timeout={750}>
+      <Fade in={open} timeout={500}>
         <Box sx={style}>
           <h1 className="text-5xl font-bold mb-2">
             How do you use{" "}
