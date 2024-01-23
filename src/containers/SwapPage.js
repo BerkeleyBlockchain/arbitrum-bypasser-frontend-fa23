@@ -219,7 +219,7 @@ export default function SwapPage() {
       const userInputs = {
         functionName: selectedFunction,
         gasBuffer: gasBuffer * 0.01,
-        value: payableValue ? payableValue !== "" : "0",
+        value: payableValue !== "" ? payableValue : "0",
         idata: functionInputs[selectedFunction] || {},
       };
 

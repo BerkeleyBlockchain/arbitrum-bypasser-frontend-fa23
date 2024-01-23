@@ -84,6 +84,7 @@ export const signL2Tx = async (
     }
 
     // ******************* Create TX Object *******************
+    console.log(userValue);
     let transaction = {
       to: contractAddress,
       value: ethers.utils.parseEther(userValue.toString()),
@@ -95,6 +96,7 @@ export const signL2Tx = async (
       type: 2,
       chainId: livenet ? 42161 : 421614, // TODO: this is arb sepolia curretnyl make it dynamic
     };
+    console.log("Transaction Created");
     console.log(transaction);
 
     const transactionRequest = await signer.populateTransaction(transaction);
