@@ -6,6 +6,8 @@ import _ from "lodash";
 
 import "./SwapPage.css";
 import GasSlider from "../components/GasSlider";
+import DemoModal from "../components/DemoModal";
+
 import { readABIFunctions } from "../utils/readFile";
 
 import { sendL1toL2 } from "../utils/sendL1toL2";
@@ -94,6 +96,11 @@ export default function SwapPage() {
 
       return newInputs;
     });
+  };
+  // ******************* Demo Modal Setup *******************
+  const [isModalOpen, setIsModalOpen] = useState(true);
+  const handleCloseModal = () => {
+    setIsModalOpen(false);
   };
 
   // ******************* Fetching Function Inputs *******************
@@ -462,6 +469,7 @@ export default function SwapPage() {
   // ******************* SWAP PAGE CONTENTS *******************
   return (
     <div className="landing-bg bg-cover bg-no-repeat text-white flex-grow pt-24">
+      <DemoModal open={isModalOpen} handleClose={handleCloseModal} />
       {/* Header */}
       <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
         <h1 className="text-5xl font-bold mb-2">
