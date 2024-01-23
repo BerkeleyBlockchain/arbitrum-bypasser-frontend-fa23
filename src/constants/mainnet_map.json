@@ -154,5 +154,29 @@
     "abi": "CamelotQuoter.json",
     "type": "DEX",
     "image": "https://assets-global.website-files.com/614c99cf4f23700c8aa3752a/63b7320c768e1e30bf7c79dc_public.png"
+  },
+  "0xac2ee06a14c52570ef3b9812ed240bce359772e7": {
+    "name": "ZyberSwap Factory",
+    "abi": "ZyberSwapFactory.json",
+    "type": "DEX",
+    "image": "https://s2.coinmarketcap.com/static/img/coins/200x200/23419.png"
+  },
+  "0x16e71b13fe6079b4312063f7e81f76d165ad32ad": {
+    "name": "ZyberSwap Router",
+    "abi": "ZyberSwapRouter.json",
+    "type": "DEX",
+    "image": "https://s2.coinmarketcap.com/static/img/coins/200x200/23419.png"
+  },
+  "0x9cb8ed8102b6c65d8cae931394352d7a676ce12a": {
+    "name": "ZyberSwap Vault",
+    "abi": "ZyberSwapVault.json",
+    "type": "DEX",
+    "image": "https://s2.coinmarketcap.com/static/img/coins/200x200/23419.png"
+  },
+  "0x9ba666165867e916ee7ed3a3ae6c19415c2fbddd": {
+    "name": "ZyberChef",
+    "abi": "ZyberChef.json",
+    "type": "DEX",
+    "image": "https://s2.coinmarketcap.com/static/img/coins/200x200/23419.png"
   }
 }
