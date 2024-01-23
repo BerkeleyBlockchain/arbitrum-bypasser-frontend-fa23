@@ -135,24 +135,24 @@
     "name": "Camelot Factory",
     "abi": "CamelotFactory.json",
     "type": "DEX",
-    "image": "https://avatars.githubusercontent.com/u/101737707?s=200&v=4"
+    "image": "https://assets-global.website-files.com/614c99cf4f23700c8aa3752a/63b7320c768e1e30bf7c79dc_public.png"
   },
   "0x00c7f3082833e796a5b3e4bd59f6642ff44dcd15": {
     "name": "Camelot NFT Position Manager",
     "abi": "CamelotNFTPositionManager.json",
     "type": "DEX",
-    "image": "https://avatars.githubusercontent.com/u/101737707?s=200&v=4"
+    "image": "https://assets-global.website-files.com/614c99cf4f23700c8aa3752a/63b7320c768e1e30bf7c79dc_public.png"
   },
   "0x1f721e2e82f6676fce4ea07a5958cf098d339e18": {
     "name": "Camelot Router",
     "abi": "CamelotRouter.json",
     "type": "DEX",
-    "image": "https://avatars.githubusercontent.com/u/101737707?s=200&v=4"
+    "image": "https://assets-global.website-files.com/614c99cf4f23700c8aa3752a/63b7320c768e1e30bf7c79dc_public.png"
   },
   "0x0fc73040b26e9bc8514fa028d998e73a254fa76e": {
     "name": "Camelot Quoter",
     "abi": "CamelotQuoter.json",
     "type": "DEX",
-    "image": "https://avatars.githubusercontent.com/u/101737707?s=200&v=4"
+    "image": "https://assets-global.website-files.com/614c99cf4f23700c8aa3752a/63b7320c768e1e30bf7c79dc_public.png"
   }
 }
