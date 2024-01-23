@@ -151,7 +151,7 @@ const TransactionBox = ({
     const forceInclusionTx = await forceInclude(hash, livenet);
     if (!forceInclusionTx) {
       console.log("Force Inclusion Failed");
-      setForceIncludeContent("Force Inclusion Failed!");
+      setForceIncludeContent("Force Inclusion Not Applicable!");
       setOpen(true);
     } else {
       setForceIncludeContent("Refresh and wait for force inclusion!");
@@ -285,7 +285,7 @@ const MostRecentTransactionBox = ({
     const forceInclusionTx = await forceInclude(hash, livenet);
     if (!forceInclusionTx) {
       console.log("Force Inclusion Failed");
-      setForceIncludeContent("Force Inclusion Failed!");
+      setForceIncludeContent("Force Inclusion Not Applicable!");
       setOpen(true);
     } else {
       setForceIncludeContent("Refresh and wait for force inclusion!");
