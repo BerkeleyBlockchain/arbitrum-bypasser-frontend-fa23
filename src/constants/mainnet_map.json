@@ -1,4 +1,10 @@
 {
+  "0x0000000000000000000000000000000000000064": {
+    "name": "Arbitrum System Factory",
+    "abi": "arbSystemABI.json",
+    "type": "Bridge",
+    "image": "https://strapi.mewapi.io/uploads/large_arbitrum_shield_3f24102a28.png"
+  },
   "0x5c69bee701ef814a2b6a3edd4b1652cb9cc5aa6f": {
     "name": "Uniswap V2 Factory",
     "abi": "UniswapV2FactoryMain.json",
@@ -47,7 +53,7 @@
     "type": "dApp",
     "image": "https://altcoinsbox.com/wp-content/uploads/2023/03/gmx-logo.png"
   },
-  "0xfc506aaa1340b4dedffd88be278bee058952d674":{
+  "0xfc506aaa1340b4dedffd88be278bee058952d674": {
     "name": "SushiSwap Router",
     "abi": "GMXRouterMainnet.json",
     "type": "DEX",
