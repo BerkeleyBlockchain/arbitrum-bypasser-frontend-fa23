@@ -1,6 +1,11 @@
 ## ArbPasser - Execute transactions on Arbitrum L2 using your ETH account
 ArbPasser is currently deployed and hosted at [Arbitrum Bypasser](https://arbitrum-bypasser.vercel.app) on Vercel. 
 
+Publication:
+- [Arbitrum Tweet](https://x.com/arbitrum/status/1765642536985805241?s=20)
+- [CalBlockchain Tweet](https://x.com/CalBlockchain/status/1765558030207516875?s=20)
+- [Arbitrum Forum Proposal](https://forum.arbitrum.foundation/t/proposal-front-end-interface-to-force-transaction-inclusion-during-sequencer-downtime/21247/12?u=hkalodner)
+
 
 <img width="1548" alt="arbpasser-landing" src="https://github.com/BerkeleyBlockchain/arbitrum-bypasser-frontend-fa23/assets/47396265/6d9bc994-b5eb-4708-812f-d07e62d9460a">
 <img width="1567" alt="arbpasser-swap" src="https://github.com/BerkeleyBlockchain/arbitrum-bypasser-frontend-fa23/assets/47396265/b79cf75a-9e3a-48db-bcb3-5af2a44cebcf">
